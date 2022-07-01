@@ -20,12 +20,13 @@ exceptions:
   - macOS
   - Marketplace
   - MongoDB
+  - ProviderConfig
   - REPL
   - Studio
   - TypeScript
+  - Universal Control Plane
+  - Upbound
   - URLs
   - Visual
   - VS
   - Windows
-  - Upbound
-  - Universal Control Plane
