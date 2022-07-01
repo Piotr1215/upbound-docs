@@ -6,5 +6,8 @@ scope: heading
 tokens:
   - '[A-Z]{2,4}'
 exceptions:
-  - AWS
   - API
+  - AWS
+  - GCP
+  - JSON
+  - Up
