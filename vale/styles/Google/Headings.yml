@@ -8,7 +8,6 @@ indicators:
   - ':'
 exceptions:
   - Azure
-  - CLI
   - Code
   - Cosmos
   - Docker
@@ -25,6 +24,7 @@ exceptions:
   - Studio
   - TypeScript
   - Universal Control Plane
+  - Up
   - Upbound
   - URLs
   - Visual
