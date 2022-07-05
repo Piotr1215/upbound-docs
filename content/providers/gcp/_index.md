@@ -83,7 +83,7 @@ Using the **user token** generated earlier and the control plane ID from `up con
 
 `up controlplane kubeconfig get --token <token> <control plane ID>`
 
-Verify that a new context is available in `kubectl` and is set as the `CURRENT` context.
+Verify that a new context is available in `kubectl` and is the `CURRENT` context.
 
 ```shell
 $ kubectl config get-contexts
@@ -131,7 +131,7 @@ Apply this configuration with `kubectl apply -f`.
 After installing the provider, verify the install with `kubectl get providers`.   
 
 ```shell
-$ kubectl get provider
+$ kubectl get providers
 NAME           INSTALLED   HEALTHY   PACKAGE                                           AGE
 provider-gcp   True        True      xpkg.upbound.io/crossplane/provider-gcp:v0.20.0   10s
 ```
@@ -191,10 +191,10 @@ Apply this configuration with `kubectl apply -f`.
 
 **Note:** the `Providerconfig` value `spec.secretRef.key` must match the name of the secret.
 
-Verify the `ProviderConfig` with `kubectl describe providerconfigs.gcp.crossplane.io`. 
+Verify the `ProviderConfig` with `kubectl describe providerconfigs`. 
 
 ```yaml
-$ kubectl describe providerconfigs.gcp.crossplane.io
+$ kubectl describe providerconfigs
 Name:         default
 Namespace:
 API Version:  gcp.crossplane.io/v1beta1
@@ -227,7 +227,7 @@ upbound-bucket-21e85e732
 
 Use this bucket name for `metadata.annotations.crossplane.io/external-name` value.
 
-Create a `Bucket` configuration file.
+Create a `Bucket` configuration file. Replace `<BUCKET NAME>` with the `upbound-bucket-` generated name.
 
 ```yaml
 apiVersion: storage.gcp.crossplane.io/v1alpha3
