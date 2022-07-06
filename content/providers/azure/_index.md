@@ -263,11 +263,11 @@ If the `READY` or `SYNCED` are blank or `False` use `kubectl describe` to unders
 Here is an example of a failure because the `spec.providerConfigRef.name` value in the `Bucket` doesn't match the `ProviderConfig` `metadata.name`.
 
 ```shell
-$ kubectl describe bucket.s3.aws.crossplane.io/example
+$ kubectl describe resourcegroup.azure.jet.crossplane.io/example
 Name:         example
 Namespace:
 Labels:       <none>
-Annotations:  crossplane.io/external-name: example2
+Annotations:  crossplane.io/external-name: example
 API Version:  azure.jet.crossplane.io/v1alpha2
 Kind:         ResourceGroup
 # Output truncated
