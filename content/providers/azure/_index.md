@@ -80,7 +80,8 @@ Connecting to a managed control plane requires a `kubeconfig` file to connect to
 
 Using the **user token** generated earlier and the control plane ID from `up controlplane list`, generate a kubeconfig context configuration.  
 
-`up controlplane kubeconfig get --token <token> <control plane ID>`
+`up controlplane kubeconfig get --token <token> <control plane ID>`  
+
 Verify that a new context is available in `kubectl` and is the `CURRENT` context.
 
 ```shell
@@ -140,12 +141,12 @@ It may take up to 5 minutes to report `HEALTHY`.
 The provider requires credentials to create and manage Azure resources.
 
 ### Install the Azure command-line
-Generating an [authentication file](https://docs.microsoft.com/en-us/azure/developer/go/azure-sdk-authorization#use-file-based-authentication) requires the Azure command-line. [Download and install the Azure command-line](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) from Microsoft.
+Generating an [authentication file](https://docs.microsoft.com/en-us/azure/developer/go/azure-sdk-authorization#use-file-based-authentication) requires the Azure command-line. Follow the documentation from Microsoft to [Download and install the Azure command-line](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 
 ### Create an Azure service principal
-Follow the Azure documentation to find your Subscription ID from the [Azure Portal](https://docs.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id).
+Follow the Azure documentation to [find your Subscription ID](https://docs.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id) from the Azure Portal.
 
-Using the Subscription ID create a service principal and authentication file.
+Using the Azure command-line and provide your Subscription ID create a service principal and authentication file.
 
 ```
 az ad sp create-for-rbac --sdk-auth --role Owner --scopes /subscriptions/<Subscription ID> 
@@ -169,7 +170,7 @@ The command generates a JSON file like this:
 
 Save this output as `azure-credentials.json`.
 
-### Create a Kubernetes secret with Azure credentials JSON file
+### Create a Kubernetes secret with the Azure credentials JSON file
 Use `kubectl create secret -n upbound-system` to generate the Kubernetes secret object inside the managed control plane.
 
 `kubectl create secret generic azure-secret -n upbound-system --from-file=creds=./azure-credentials.json`
@@ -260,7 +261,7 @@ Upbound created the resource group when the values `READY` and `SYNCED` are `Tru
 
 If the `READY` or `SYNCED` are blank or `False` use `kubectl describe` to understand why.
 
-Here is an example of a failure because the `spec.providerConfigRef.name` value in the `Bucket` doesn't match the `ProviderConfig` `metadata.name`.
+Here is an example of a failure because the `spec.providerConfigRef.name` value in the `ResourceGroup` doesn't match the `ProviderConfig` `metadata.name`.
 
 ```shell
 $ kubectl describe resourcegroup.azure.jet.crossplane.io/example
