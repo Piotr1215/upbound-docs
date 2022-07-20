@@ -1,7 +1,7 @@
 Upbound
 Env
 stdin
-Kubeconfig
+kubeconfig
 stdout
 namespace
 Crossplane

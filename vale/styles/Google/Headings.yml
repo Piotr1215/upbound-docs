@@ -8,7 +8,6 @@ indicators:
   - ':'
 exceptions:
   - Azure
-  - CLI
   - Code
   - Cosmos
   - Docker
@@ -20,12 +19,14 @@ exceptions:
   - macOS
   - Marketplace
   - MongoDB
+  - ProviderConfig
   - REPL
   - Studio
   - TypeScript
+  - Universal Control Plane
+  - Up
+  - Upbound
   - URLs
   - Visual
   - VS
   - Windows
-  - Upbound
-  - Universal Control Plane
