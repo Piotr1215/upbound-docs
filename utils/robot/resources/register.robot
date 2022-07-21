@@ -1,7 +1,8 @@
 *** Settings ***
-Documentation     Resource file providing the methods to capture cloud.upbound account registration
-Library           SeleniumLibrary
-Library           String
+Documentation    Resource file providing the methods to capture cloud.upbound account registration
+Library          SeleniumLibrary
+Library          String
+Resource         common.robot
 
 *** Variables ***
 ${hash}
@@ -9,13 +10,6 @@ ${username}
 ${email}
 
 *** Keywords ***
-Open Browser To Login Page
-    Create a Browser
-    Go To     https://cloud.upbound.io
-    # Wait for the whole page to load
-    Wait Until Element Is Visible    id
-    # Accept Cookies
-    Click Element    hs-eu-confirmation-button
 
 Capture Sign Up
     # Continue from the Sign Up page and take a screenshot
@@ -70,22 +64,3 @@ Capture Confirm Pin
     [Arguments]    ${img}
     Execute Javascript    document.querySelector('.css-e51ts8').textContent= document.querySelector('.css-e51ts8').textContent.replace("${email}", "a.user@upbound.io")
     Capture Element Screenshot    class:css-1pc0v7v   ${img}
-
-Input Login Credentials
-    Input Text     username    ${username}
-    Input Text     password   $password
-
-Click Login
-    Click Button    auth_button-login
-    Wait Until Element Contains    class:ehhnx060    Create New Control Plane
-
-Create a Browser
-    # To make this portable we need a custom Chrome driver location
-    # Also set the window size and use headless mode
-    ${chrome_options} =  Evaluate  selenium.webdriver.ChromeOptions()
-    Call Method    ${chrome_options}    add_argument    --binary-location\=""../venv/bin/chromedriver"
-    Call Method    ${chrome_options}    add_argument    --window-size\=1700,2050
-    Call Method    ${chrome_options}    add_argument    --headless
-    Create WebDriver    Chrome    chrome_options=${chrome_options}
-    Set Selenium Speed    0
-    Set Screenshot Directory    images
