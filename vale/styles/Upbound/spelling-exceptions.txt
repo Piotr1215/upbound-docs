@@ -1,7 +1,0 @@
-Upbound
-Env
-stdin
-kubeconfig
-stdout
-namespace
-Crossplane

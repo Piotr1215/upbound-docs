@@ -79,7 +79,11 @@ node_modules
 
 /build
 /public
-
-orig.html
-
 scratch/*
+
+# Ignore robot framework generated files #
+######################
+log.html
+output.xml
+report.html
+static/images/selenium-*screenshot-*
