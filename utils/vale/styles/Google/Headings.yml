@@ -14,6 +14,7 @@ exceptions:
   - Emmet
   - gRPC
   - I
+  - imagePullSecret
   - Kubernetes
   - Linux
   - macOS
