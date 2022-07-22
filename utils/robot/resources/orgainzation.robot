@@ -30,6 +30,7 @@ Capture Create Organization
 
 Capture Organization Left Menu
     Click User Menu
+    Sleep    1
     Capture Element Screenshot    class:react-tiny-popover-container    accounts/account-menu-with-org.png
     # Click "Example Organization"
     Click Element    org-link-docsb118edafc
