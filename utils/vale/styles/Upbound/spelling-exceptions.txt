@@ -1,7 +1,9 @@
-Upbound
-Env
-stdin
-kubeconfig
-stdout
-namespace
 Crossplane
+Env
+kubeconfig
+namespace
+namespaces
+semver
+stdin
+stdout
+Upbound
