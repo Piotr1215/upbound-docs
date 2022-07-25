@@ -2,22 +2,42 @@
 title: "AWS Provider Configuration"
 weight: 100
 ---
+Install official providers either as hosted control planes in Upbound Cloud or as self-hosted control planes using Universal Crossplane (`UXP`).
 
 ## Install the provider
+Official providers require a Kubernetes `imagePullSecret` to install. 
+<!-- vale gitlab.Substitutions = NO --> 
+Details on creating an `imagePullSecret` are available in the [generic provider documentation]({{<ref "providers/_index.md#create-a-kubernetes-imagepullsecret" >}})
+<!-- vale gitlab.Substitutions = YES --> 
+
 Install the Upbound official AWS provider with the following configuration file
 
 ```yaml
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-    name: provider-aws
+  name: provider-aws
 spec:
-    package: "crossplane/provider-aws:master"
+  package: xpkg.upbound.io/upbound/provider-aws:v0.5.0
+  packagePullSecrets:
+    - name: upbound-robot-token
 ```
 
-Apply the configuration with `kubectl apply -f`
+Define the provider version with `spec.package`. This example uses version `v0.5.0`.
 
-View the [Provider CRD definition](https://doc.crds.dev/github.com/crossplane/crossplane/pkg.crossplane.io/Provider/v1@v1.8.1) to view all available `Provider` options.
+The `spec.packagePullSecrets.name` value matches the Kubernetes `imagePullSecret`. The secret must be in the same namespace as the Upbound pod.
+
+Install the provider with `kubectl apply -f`.
+
+Verify the configuration with `kubectl get provider`.
+
+```shell
+$ kubectl get providers
+NAME           INSTALLED   HEALTHY   PACKAGE                                       AGE
+provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.5.0   62s
+```
+
+View the Crossplane [Provider CRD definition](https://doc.crds.dev/github.com/crossplane/crossplane/pkg.crossplane.io/Provider/v1@v1.8.1) to view all available `Provider` options.
 
 ## Configure the provider
 The AWS provider requires credentials for authentication to AWS. The AWS provider consumes the credentials from a Kubernetes secret object.
@@ -56,4 +76,4 @@ spec:
 
 **Note:** the `spec.credentials.secretRef.name` must match the `name` in the `kubectl create secret generic <name>` command.
 
-View the [ProviderConfig CRD definition](https://doc.crds.dev/github.com/crossplane/provider-aws/aws.crossplane.io/ProviderConfig/v1beta1@v0.28.1) to view all available `ProviderConfig` options.
+View the [ProviderConfig CRD definition](https://marketplace.upbound.io/providers/upbound/provider-aws/v0.5.0/resources/aws.upbound.io/ProviderConfig/v1beta1) to view all available `ProviderConfig` options.
