@@ -13,7 +13,7 @@ Capture Create Organization
     ${hash} =     Generate Random String    chars=[LETTERS]
     ${org} =     Catenate    SEPARATOR=    docs    ${hash}
     # Capture the left nav without the Teams and Robots options
-    Capture Element Screenshot    class:css-111qlur    accounts/left-menu-no-robots.png
+    Capture Element Screenshot    class:css-111qlur    accounts/left-menu-personal.png
     Click User Menu
     # Without the sleep the menu doesn't load completely before the screenshot is taken
     Sleep     1
@@ -38,7 +38,7 @@ Capture Organization Left Menu
     Click Element    //span[text()='Admin Console']
     # Wait until "Robots" icon is visible
     Wait Until Element Is Visible    //p[text()='Robots']
-    Capture Element Screenshot    class:css-111qlur    accounts/left-menu-with-robots.png
+    Capture Element Screenshot    class:css-111qlur    accounts/left-menu-organization.png
     # Hide the "Upbound Inc" org
     # Execute Javascript    document.getElementById("org-link-upbound").remove()
     # # Rename the "Upbound Docs" org

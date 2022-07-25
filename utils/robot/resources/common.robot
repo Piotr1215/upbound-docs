@@ -5,15 +5,16 @@ Library           OperatingSystem
 
 *** Keywords ***
 Login to Upbound
-    [Arguments]    ${username}    ${password}
+    [Arguments]    ${username}    ${password}    ${size}=1700,2050
     [Documentation]     Pass login information to the Upbound login page and login. Username and password is required
-    Open Browser To Login Page
+    Open Browser To Login Page    ${size}
     Input Login Credentials    ${username}    ${password}
     Click Login
 
 Open Browser To Login Page
+    [Arguments]    ${size}=1700,2050
     [Documentation]    Create a browser, go to Upbound login and wait until it's loaded.
-    Create a Browser
+    Create a Browser    ${size}
     Go To     https://cloud.upbound.io
     # Wait for the whole page to load
     Wait Until Element Is Visible    id
@@ -30,14 +31,16 @@ Click Login
     Click Button    auth_button-login
     Wait Until Element Contains    class:ehhnx060    Create New Control Plane
     Wait Until Element Is Visible    class:e1qqtum60
+    Run Keyword And Ignore Error    Click Button    class:css-10twlew
 
 Create a Browser
-    [Documentation]    Create a Chrome browswer set to screenshot standards.
+    [Arguments]    ${size}=1700,2050
+    [Documentation]    Create a Chrome browswer set to screenshot standards. Custom window sizes are optionally supported.
     # To make this portable we need a custom Chrome driver location
     # Also set the window size and use headless mode
     ${chrome_options} =  Evaluate  selenium.webdriver.ChromeOptions()
     Call Method    ${chrome_options}    add_argument    --binary-location\=""../venv/bin/chromedriver"
-    Call Method    ${chrome_options}    add_argument    --window-size\=1700,2050
+    Call Method    ${chrome_options}    add_argument    --window-size\=${size}
     # Comment out the next line to view the windows and operations.
     Call Method    ${chrome_options}    add_argument    --headless
     Create WebDriver    Chrome    chrome_options=${chrome_options}
