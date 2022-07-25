@@ -10,6 +10,7 @@ exceptions:
   - Azure
   - Code
   - Cosmos
+  - Crossplane
   - Docker
   - Emmet
   - gRPC
@@ -27,6 +28,7 @@ exceptions:
   - Universal Control Plane
   - Up
   - Upbound
+  - Upbound Cloud
   - URLs
   - Visual
   - VS
