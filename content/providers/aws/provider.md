@@ -20,7 +20,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws:v0.5.0
   packagePullSecrets:
-    - name: upbound-robot-token
+    - name: package-pull-secret
 ```
 
 Define the provider version with `spec.package`. This example uses version `v0.5.0`.
