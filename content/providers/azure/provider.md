@@ -3,19 +3,40 @@ title: "Azure Provider Configuration"
 weight: 200
 ---
 
+Install official providers either as hosted control planes in Upbound Cloud or as self-hosted control planes using Universal Crossplane (`UXP`).
+
 ## Install the provider
+Official providers require a Kubernetes `imagePullSecret` to install. 
+<!-- vale gitlab.Substitutions = NO --> 
+Details on creating an `imagePullSecret` are available in the [generic provider documentation]({{<ref "providers/_index.md#create-a-kubernetes-imagepullsecret" >}})
+<!-- vale gitlab.Substitutions = YES --> 
+
 Install the Upbound official Azure provider with the following configuration file
 
 ```yaml
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: crossplane-provider-jet-azure
+  name: provider-azure
 spec:
-  package: crossplane/provider-jet-azure:v0.11.0
+  package: xpkg.upbound.io/upbound/provider-azure:v0.5.1
+  packagePullSecrets:
+    - name: package-pull-secret
 ```
 
-Apply the configuration with `kubectl apply -f`
+Define the provider version with `spec.package`. This example uses version `v0.5.0`.
+
+The `spec.packagePullSecrets.name` value matches the Kubernetes `imagePullSecret`. The secret must be in the same namespace as the Upbound pod.
+
+Install the provider with `kubectl apply -f`.
+
+Verify the configuration with `kubectl get provider`.
+
+```shell
+$ kubectl get providers
+NAME             INSTALLED   HEALTHY   PACKAGE                                         AGE
+provider-azure   True        True      xpkg.upbound.io/upbound/provider-azure:v0.5.1   11m
+```
 
 View the [Provider CRD definition](https://doc.crds.dev/github.com/crossplane-contrib/provider-jet-azure@v0.11.0) to view all available `Provider` options.
 
@@ -27,6 +48,11 @@ Generate an [authentication JSON file](https://docs.microsoft.com/en-us/azure/de
 
 ### Create an Azure service principal
 Follow the Azure documentation to [find your Subscription ID](https://docs.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id) from the Azure Portal.
+
+Log in to the Azure command-line
+```shell
+az login
+```
 
 Using the Azure command-line and provide your Subscription ID create a service principal and authentication file.
 
@@ -60,10 +86,10 @@ Use the JSON file to generate a Kubernetes secret.
 Apply the secret in a `ProviderConfig` Kubernetes configuration file.
 
 ```yaml
-apiVersion: azure.jet.crossplane.io/v1alpha1
-kind: ProviderConfig
+apiVersion: azure.upbound.io/v1beta1
 metadata:
   name: default
+kind: ProviderConfig
 spec:
   credentials:
     source: Secret
@@ -75,4 +101,4 @@ spec:
 
 **Note:** the `spec.credentials.secretRef.name` must match the `name` in the `kubectl create secret generic <name>` command.
 
-View the [ProviderConfig CRD definition](https://doc.crds.dev/github.com/crossplane-contrib/provider-jet-azure/azure.jet.crossplane.io/ProviderConfig/v1alpha1@v0.11.0) to view all available `ProviderConfig` options.
+View the [ProviderConfig CRD definition](https://marketplace.upbound.io/providers/upbound/provider-azure/v0.5.1/resources/azure.upbound.io/ProviderConfig/v1beta1) to view all available `ProviderConfig` options.
