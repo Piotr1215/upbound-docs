@@ -143,16 +143,16 @@ Official providers require a Kubernetes `imagePullSecret` to download and instal
 Using the **robot token** generated earlier create an `imagePullSecret` with the command `kubectl create secret docker-registry package-pull-secret`.
 
 ```shell
-kubectl create secret docker-registry upbound-robot-token --namespace=crossplane-system --docker-server=xpkg.upbound.io --docker-username=<robot token access ID> --docker-password=<robot token value>
+kubectl create secret docker-registry package-pull-secret --namespace=crossplane-system --docker-server=xpkg.upbound.io --docker-username=<robot token access ID> --docker-password=<robot token value>
 ```
 
 Replace `<robot token access ID>` with the `Access ID` of the robot token and `<robot token value>` with the value of the robot token.
 
 Verify the secret with `kubectl get secrets`
 ```shell
-$ kubectl get secrets -n crossplane-system upbound-robot-token
+$ kubectl get secrets -n crossplane-system package-pull-secret
 NAME                  TYPE                             DATA   AGE
-upbound-robot-token   kubernetes.io/dockerconfigjson   1      23s
+package-pull-secret   kubernetes.io/dockerconfigjson   1      23s
 ```
 
 ## Install the official AWS provider in to the managed control plane
@@ -168,7 +168,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws:v0.5.0
   packagePullSecrets:
-    - name: upbound-robot-token
+    - name: package-pull-secret
 ```
 
 Apply this configuration with `kubectl apply -f`.
@@ -363,7 +363,7 @@ The output indicates the `Bucket` is using `ProviderConfig` named `default`. The
 ```shell
 $ kubectl get providerconfig
 NAME        AGE
-my-config   114s
+providerconfig.aws.upbound.io/my-config   114s
 ```
 
 ## Delete the managed resource
