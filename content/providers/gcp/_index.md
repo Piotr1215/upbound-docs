@@ -5,30 +5,37 @@ weight: 30
 
 The Upbound GCP Provider is the officially supported provider for Google Compute Platform (GCP).
 
-View the [GCP Provider Documentation](provider) for details and configuration options. 
+View the [GCP Provider Documentation]({{<ref "provider.md" >}}) for details and configuration options. 
 
+<!-- omit in toc -->
 ## Quickstart
+This guide walks through the process to create an Upbound managed control plane and install the GCP official provider.
 
 To use this official provider, install it into your Upbound control plane, apply a `ProviderConfiguration`, and create a *managed resource* in GCP via Kubernetes.
 
-This guide walks through the process to create an Upbound managed control plane and install the GCP official provider.
-* [Create an Upbound.io user account.](#create-an-upboundio-user-account)
-* [Create an Upbound user token.](#create-an-upbound-user-token)
-* [Install the `up` command-line.](#install-the-up-command-line)
-* [Log in to Upbound.](#log-in-to-upbound)
-* [Connect to the managed control plane.](#connect-to-the-managed-control-plane)
-* [Install the official GCP provider.](#install-the-official-gcp-provider-in-to-the-managed-control-plane)
-* [Generate a Kubernetes secret with your GCP credentials.](#create-a-kubernetes-secret)
-* [Create and install a `ProviderConfiguration` for the official GCP provider.](#create-a-providerconfig)
-* [Create a *managed resource* and verify GCP connectivity.](#create-a-managed-resource)
+- [Create an Upbound.io user account](#create-an-upboundio-user-account)
+- [Create an Upbound user token](#create-an-upbound-user-token)
+- [Create a robot account and robot token](#create-a-robot-account-and-robot-token)
+- [Install the Up command-line](#install-the-up-command-line)
+- [Log in to Upbound](#log-in-to-upbound)
+- [Create a managed control plane](#create-a-managed-control-plane)
+- [Connect to the managed control plane](#connect-to-the-managed-control-plane)
+- [Create a Kubernetes imagePullSecret for Upbound](#create-a-kubernetes-imagepullsecret-for-upbound)
+- [Install the official GCP provider in to the managed control plane](#install-the-official-gcp-provider-in-to-the-managed-control-plane)
+- [Create a Kubernetes secret](#create-a-kubernetes-secret)
+  - [Generate a GCP JSON key file](#generate-a-gcp-json-key-file)
+  - [Create a Kubernetes secret with GCP credentials](#create-a-kubernetes-secret-with-gcp-credentials)
+- [Create a ProviderConfig](#create-a-providerconfig)
+- [Create a managed resource](#create-a-managed-resource)
+- [Delete the managed resource](#delete-the-managed-resource)
 
 ## Create an Upbound.io user account
 Create an account on [Upbound.io](https://cloud.upbound.io/register). 
 
-Find detailed instructions in the [Upbound documentation](https://cloud.upbound.io/docs/getting-started/create-account).
+Find detailed instructions in the [account documentation]({{<ref "getting-started/create-account.md" >}}).
 
 ## Create an Upbound user token
-Authentication to an Upbound managed control plane requires a unique authentication token.
+Authentication to an Upbound managed control plane requires a unique user authentication token.
 
 Generate a user token through the [Upbound Universal Console](https://cloud.upbound.io/).
 
@@ -36,7 +43,7 @@ Generate a user token through the [Upbound Universal Console](https://cloud.upbo
 
 To generate a user token in the Upbound Universal Console:
 *<!-- vale Microsoft.FirstPerson = NO -->*
-1. Log in to the [Upbound Universal Console](https://cloud.upbound.io) and select **My Account**.
+1. Log in to the [Upbound Universal Console](https://cloud.upbound.io) and select **My Account** from the account menu.
 2. Select **API Tokens**.
 3. Select the **Create New Token** button.
 4. Provide a token name.
@@ -44,6 +51,25 @@ To generate a user token in the Upbound Universal Console:
 *<!-- vale Microsoft.FirstPerson = Yes -->*
 
 The Console generates a new token and displays it on screen. Save this token. The Console can't print the token again.
+
+## Create a robot account and robot token
+Installing an Official Provider requires an Upbound account and associated _Robot Token_.
+
+To create a robot account and robot token in the Upbound Universal Console:
+1. Log in to the [Upbound Universal Console](https://cloud.upbound.io) and select **Create New Organization** from the account menu.
+2. Provide a unique **Organization ID** and **Display Name**.
+3. Select the organization from the account menu.
+4. Select **Admin Console**.
+5. Select **Robots** from the left-hand navigation. 
+6. Select **Create Robot Account**.
+7. Provide a **Name** and optional description.
+8. Select **Create Robot**.
+9. Select **Create Token**.
+10. Provide a **Name** for the token.
+
+The console generates an `Access ID` and `Token` on screen. Save this token. The Console can't print the token again.
+
+Find detailed instructions in the [Robot account and Robot Token]({{<ref "upbound-cloud/robot-accounts.md" >}}) documentation. 
 
 ## Install the Up command-line
 Install the [Up command-line](https://cloud.upbound.io/docs/cli/install) to connect to Upbound managed control planes.
@@ -71,11 +97,10 @@ Verify control plane creation with the command
 The `STATUS` starts as `provisioning` and moves to `ready`.
 
 ```shell
-$ up controlplane list
-NAME                  ID                                     SELF-HOSTED   STATUS
-my-gcp-controlplane   322e3c8f-0073-4c01-a7fe-f5cf3202cc1d   false         ready
+$ $ up controlplane list
+NAME                  ID                                     STATUS
+my-gcp-controlplane   4fbada32-08f8-4deb-8db6-19e585db5f28   ready
 ```
-
 ## Connect to the managed control plane
 Connecting to a managed control plane requires a `kubeconfig` file to connect to the remote cluster.  
 
@@ -89,7 +114,7 @@ Verify that a new context is available in `kubectl` and is the `CURRENT` context
 $ kubectl config get-contexts
 CURRENT   NAME                                           CLUSTER                                        AUTHINFO                                       NAMESPACE
           kubernetes-admin@kubernetes                    kubernetes                                     kubernetes-admin
-*         upbound-322e3c8f-0073-4c01-a7fe-f5cf3202cc1d   upbound-322e3c8f-0073-4c01-a7fe-f5cf3202cc1d   upbound-322e3c8f-0073-4c01-a7fe-f5cf3202cc1d
+*         upbound-4fbada32-08f8-4deb-8db6-19e585db5f28   upbound-4fbada32-08f8-4deb-8db6-19e585db5f28   upbound-4fbada32-08f8-4deb-8db6-19e585db5f28
 ```
 
 **Note:** change the `CURRENT` context with `kubectl config use-context <context name>`.
@@ -98,18 +123,36 @@ Confirm your token's access with any `kubectl` command.
 
 ```shell
 $ kubectl get pods -A
-NAMESPACE        NAME                                       READY   STATUS    RESTARTS   AGE
-upbound-system   crossplane-745cc78565-lsmb5                1/1     Running   0          80s
-upbound-system   crossplane-rbac-manager-766657bc6d-qkqm7   1/1     Running   0          80s
-upbound-system   upbound-agent-66d7c4f88f-gkqst             1/1     Running   0          77s
-upbound-system   upbound-bootstrapper-c5dccc8fd-lk68n       1/1     Running   0          80s
-upbound-system   xgql-6f56c847c7-7nchz                      1/1     Running   2          80s
+NAMESPACE        NAME                                      READY   STATUS    RESTARTS   AGE
+upbound-system   crossplane-6cc78c56df-vbxxc               1/1     Running   0          117s
+upbound-system   crossplane-rbac-manager-c5b5c44c4-x4l5s   1/1     Running   0          117s
+upbound-system   upbound-agent-6cf5cfc5bc-x7d8v            1/1     Running   0          115s
+upbound-system   upbound-bootstrapper-5b96cf657d-whv7v     1/1     Running   0          117s
+upbound-system   xgql-7fbc547668-78j6q                     1/1     Running   1          117s
 ```
 
 **Note:** if the token is incorrect the `kubectl` command returns an error.
 ```
 $ kubectl get pods -A
 Error from server (BadRequest): the server rejected our request for an unknown reason
+```
+
+## Create a Kubernetes imagePullSecret for Upbound
+Official providers require a Kubernetes `imagePullSecret` to download and install. The credentials for the `imagePullSecret` are from an Upbound robot token. 
+
+Using the **robot token** generated earlier create an `imagePullSecret` with the command `kubectl create secret docker-registry package-pull-secret`.
+
+```shell
+kubectl create secret docker-registry package-pull-secret --namespace=crossplane-system --docker-server=xpkg.upbound.io --docker-username=<robot token access ID> --docker-password=<robot token value>
+```
+
+Replace `<robot token access ID>` with the `Access ID` of the robot token and `<robot token value>` with the value of the robot token.
+
+Verify the secret with `kubectl get secrets`
+```shell
+$ kubectl get secrets -n crossplane-system package-pull-secret
+NAME                  TYPE                             DATA   AGE
+package-pull-secret   kubernetes.io/dockerconfigjson   1      23s
 ```
 
 ## Install the official GCP provider in to the managed control plane
@@ -123,7 +166,9 @@ kind: Provider
 metadata:
   name: provider-gcp
 spec:
-  package: xpkg.upbound.io/crossplane/provider-gcp:v0.20.0
+  package: xpkg.upbound.io/upbound/provider-gcp:v0.4.1
+  packagePullSecrets:
+    - name: package-pull-secret
 ```
 
 Apply this configuration with `kubectl apply -f`.
@@ -132,11 +177,25 @@ After installing the provider, verify the install with `kubectl get providers`.
 
 ```shell
 $ kubectl get providers
-NAME           INSTALLED   HEALTHY   PACKAGE                                           AGE
-provider-gcp   True        True      xpkg.upbound.io/crossplane/provider-gcp:v0.20.0   10s
+NAME           INSTALLED   HEALTHY   PACKAGE                                       AGE
+provider-gcp   True        True      xpkg.upbound.io/upbound/provider-gcp:v0.4.1   15s
 ```
 
 It may take up to 5 minutes to report `HEALTHY`.
+
+If the `packagePullSecrets` is incorrect the provider returns a `401 Unauthorized` error. View the status and error with `kubectl describe provider`.
+
+```yaml
+$ kubectl describe provider
+Name:         provider-gcp
+API Version:  pkg.crossplane.io/v1
+Kind:         Provider
+# Output truncated
+Events:
+  Type     Reason         Age              From                                 Message
+  ----     ------         ----             ----                                 -------
+  Warning  UnpackPackage  1s (x2 over 3s)  packages/provider.pkg.crossplane.io  cannot unpack package: failed to fetch package digest from remote: GET https://xpkg.upbound.io/service/token?scope=repository%!A(MISSING)upbound%!F(MISSING)provider-gcp%!A(MISSING)pull&service=xpkg.upbound.io: unexpected status code 401 Unauthorized
+```
 
 ## Create a Kubernetes secret
 The provider requires credentials to create and manage GCP resources.
@@ -167,13 +226,27 @@ Use `kubectl create secret -n upbound-system` to generate the Kubernetes secret 
 
 `kubectl create secret generic gcp-secret -n upbound-system --from-file=creds=./gcp-credentials.json`
 
+View the secret with `kubectl describe secret`
+```shell
+$ kubectl describe secret gcp-secret -n upbound-system
+Name:         gcp-secret
+Namespace:    upbound-system
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+creds:  2334 bytes
+```
 ## Create a ProviderConfig
 Create a `ProviderConfig` Kubernetes configuration file to attach the GCP credentials to the installed official provider.
 
 **Note:** the `ProviderConfg` must contain the correct GCP project ID. The project ID must match the `project_id` from the JSON key file.
 
 ```yaml
-apiVersion: gcp.crossplane.io/v1beta1
+apiVersion: gcp.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: default
@@ -189,7 +262,7 @@ spec:
 
 Apply this configuration with `kubectl apply -f`.
 
-**Note:** the `Providerconfig` value `spec.secretRef.key` must match the name of the secret.
+**Note:** the `Providerconfig` value `spec.secretRef.name` must match the `name` of the secret in `kubectl get secrets -n upbound-system` and `spec.SecretRef.key` must match the value in the `Data` section of the secret.
 
 Verify the `ProviderConfig` with `kubectl describe providerconfigs`. 
 
@@ -197,7 +270,7 @@ Verify the `ProviderConfig` with `kubectl describe providerconfigs`.
 $ kubectl describe providerconfigs
 Name:         default
 Namespace:
-API Version:  gcp.crossplane.io/v1beta1
+API Version:  gcp.upbound.io/v1beta1
 Kind:         ProviderConfig
 # Output truncated
 Spec:
@@ -230,16 +303,17 @@ Use this bucket name for `metadata.annotations.crossplane.io/external-name` valu
 Create a `Bucket` configuration file. Replace `<BUCKET NAME>` with the `upbound-bucket-` generated name.
 
 ```yaml
-apiVersion: storage.gcp.crossplane.io/v1alpha3
+apiVersion: storage.gcp.upbound.io/v1beta1
 kind: Bucket
 metadata:
   name: example
   labels:
   annotations:
-    crossplane.io/external-name: <BUCKET NAME>
+    crossplane.io/external-name: upbound-bucket-4a917c947
 spec:
-  location: US
-  storageClass: MULTI_REGIONAL
+  forProvider:
+    location: US
+    storageClass: MULTI_REGIONAL
   providerConfigRef:
     name: default
   deletionPolicy: Delete
@@ -252,9 +326,9 @@ Apply this configuration with `kubectl apply -f`.
 Use `kubectl get managed` to verify bucket creation.
 
 ```shell
-$ kubectl get managed
-NAME                                       READY   SYNCED   STORAGE_CLASS    LOCATION   AGE
-bucket.storage.gcp.crossplane.io/example   True    True     MULTI_REGIONAL   US         5s
+$ kubectl get bucket
+NAME      READY   SYNCED   EXTERNAL-NAME              AGE
+example   True    True     upbound-bucket-4a917c947   90s
 ```
 
 Upbound created the bucket when the values `READY` and `SYNCED` are `True`.
@@ -264,72 +338,47 @@ If the `READY` or `SYNCED` are blank or `False` use `kubectl describe` to unders
 Here is an example of a failure because the `Bucket` `spec.providerConfigRef.name` value doesn't match the `ProviderConfig` `metadata.name`.
 
 ```shell
-$ kubectl get managed
-NAME                                       READY   SYNCED   STORAGE_CLASS    LOCATION   AGE
-bucket.storage.gcp.crossplane.io/example           False    MULTI_REGIONAL   US         24s
-
-$ kubectl describe bucket.storage.gcp.crossplane.io/example
+$ kubectl describe bucket
 Name:         example
 Namespace:
 Labels:       <none>
-Annotations:  crossplane.io/external-name: crossplane-example-bucket-d1690f7f4cec26513794
-API Version:  storage.gcp.crossplane.io/v1alpha3
+Annotations:  crossplane.io/external-name: upbound-bucket-4a917c947
+API Version:  storage.gcp.upbound.io/v1beta1
 Kind:         Bucket
-Metadata:
-  Creation Timestamp:  2022-07-01T13:06:15Z
-  Generation:          1
-  Managed Fields:
-    API Version:  storage.gcp.crossplane.io/v1alpha3
-    Fields Type:  FieldsV1
-    fieldsV1:
-      f:status:
-        .:
-        f:attributes:
-        f:conditions:
-    Manager:      crossplane-gcp-provider
-    Operation:    Update
-    Subresource:  status
-    Time:         2022-07-01T13:06:15Z
-    API Version:  storage.gcp.crossplane.io/v1alpha3
-    Fields Type:  FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:annotations:
-          .:
-          f:crossplane.io/external-name:
-          f:kubectl.kubernetes.io/last-applied-configuration:
-      f:spec:
-        .:
-        f:deletionPolicy:
-        f:location:
-        f:providerConfigRef:
-          .:
-          f:name:
-        f:storageClass:
-    Manager:         kubectl-client-side-apply
-    Operation:       Update
-    Time:            2022-07-01T13:06:15Z
-  Resource Version:  1932
-  UID:               f5dece85-774d-48ae-acec-f91218eb6622
+# Output truncated
 Spec:
   Deletion Policy:  Delete
-  Location:         US
+  For Provider:
+    Location:       US
+    Storage Class:  MULTI_REGIONAL
   Provider Config Ref:
-    Name:         gcp-provider
-  Storage Class:  MULTI_REGIONAL
+    Name:  default
 Status:
-  Attributes:
+  At Provider:
   Conditions:
-    Last Transition Time:  2022-07-01T13:06:15Z
-    Message:               connect failed: ProviderConfig.gcp.crossplane.io "gcp-provider" not found
+    Last Transition Time:  2022-07-26T19:29:35Z
+    Message:               connect failed: cannot get terraform setup: cannot get referenced ProviderConfig: ProviderConfig.gcp.upbound.io "default" not found
     Reason:                ReconcileError
     Status:                False
     Type:                  Synced
 Events:
-  Type     Reason                   Age               From                                      Message
-  ----     ------                   ----              ----                                      -------
-  Warning  CannotConnectToProvider  3s (x6 over 32s)  managed/bucket.storage.gcp.crossplane.io  ProviderConfig.gcp.crossplane.io "gcp-provider" not found
+  Type     Reason                   Age               From                                                 Message
+  ----     ------                   ----              ----                                                 -------
+  Warning  CannotConnectToProvider  7s (x5 over 20s)  managed/storage.gcp.upbound.io/v1beta1, kind=bucket  cannot get terraform setup: cannot get referenced ProviderConfig: ProviderConfig.gcp.upbound.io "default" not found
+```
+
+The output indicates the `Bucket` is using `ProviderConfig` named `default`. The applied `ProviderConfig` is `my-config`. 
+
+```shell
+$ kubectl get providerconfigs
+NAME        AGE
+my-config   56s
 ```
 
 ## Delete the managed resource
-Remove the managed resource by using `kubectl delete -f` with the same `Bucket` object file.
+Remove the managed resource by using `kubectl delete -f` with the same `Bucket` object file. Verify the removal of the bucket with `kubectl get bucket`.
+
+```shell
+$ kubectl get bucket
+No resources found
+```
