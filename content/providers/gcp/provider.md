@@ -2,8 +2,16 @@
 title: "GCP Provider Configuration"
 weight: 300
 ---
+Install official providers either as hosted control planes in Upbound Cloud or as self-hosted control planes using Universal Crossplane (`UXP`).
 
 ## Install the provider
+Official providers require a Kubernetes `imagePullSecret` to install. 
+<!-- vale gitlab.Substitutions = NO --> 
+Details on creating an `imagePullSecret` are available in the [generic provider documentation]({{<ref "providers/_index.md#create-a-kubernetes-imagepullsecret" >}})
+<!-- vale gitlab.Substitutions = YES --> 
+
+_Note:_ if you already installed an official provider using an `imagePullSecret` a new secret isn't required.
+
 Install the Upbound official GCP provider with the following configuration file
 
 ```yaml
@@ -12,12 +20,20 @@ kind: Provider
 metadata:
   name: provider-gcp
 spec:
-  package: xpkg.upbound.io/crossplane/provider-gcp:v0.20.0
+  package: xpkg.upbound.io/upbound/provider-gcp:v0.4.1
+  packagePullSecrets:
+    - name: package-pull-secret
 ```
 
 Apply the configuration with `kubectl apply -f`
 
-View the [Provider CRD definition](https://doc.crds.dev/github.com/crossplane-contrib/provider-jet-gcp@v0.2.0) to view all available `Provider` options.
+```shell
+$ kubectl get providers
+NAME           INSTALLED   HEALTHY   PACKAGE                                       AGE
+provider-gcp   True        True      xpkg.upbound.io/upbound/provider-gcp:v0.4.1   15s
+```
+
+View the Crossplane [Provider CRD definition](https://doc.crds.dev/github.com/crossplane/crossplane/pkg.crossplane.io/Provider/v1@v1.8.1) to view all available `Provider` options.
 
 ## Configure the provider
 The GCP provider requires credentials for authentication to Google Cloud Platform. The GCP provider consumes the credentials from a Kubernetes secret object.
@@ -50,7 +66,7 @@ Use the JSON file to generate a Kubernetes secret.
 Apply the secret in a `ProviderConfig` Kubernetes configuration file.
 
 ```yaml
-apiVersion: gcp.crossplane.io/v1beta1
+apiVersion: gcp.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: default
@@ -66,4 +82,4 @@ spec:
 
 **Note:** the `spec.credentials.secretRef.name` must match the `name` in the `kubectl create secret generic <name>` command.
 
-View the [ProviderConfig CRD definition](https://doc.crds.dev/github.com/crossplane-contrib/provider-jet-gcp/gcp.jet.crossplane.io/ProviderConfig/v1alpha1@v0.2.0) to view all available `ProviderConfig` options.
+View the [ProviderConfig CRD definition](https://marketplace.upbound.io/providers/upbound/provider-gcp/v0.4.1/resources/gcp.upbound.io/ProviderConfig/v1beta1) to view all available `ProviderConfig` options.

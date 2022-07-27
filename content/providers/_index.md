@@ -34,6 +34,8 @@ upbound/crossplane:v1.8.1-up.2
 ## Install an official provider
 The [Upbound Marketplace](https://marketplace.upbound.io/) hosts official providers. Official providers are only available to registered Upbound users. Official providers require a _robot token_ to authenticate to the Upbound Marketplace and install.
 
+_Note:_ if you already installed an official provider using an `imagePullSecret` a new secret isn't required.
+
 ### Create a Kubernetes imagePullSecret
 Official providers require a Kubernetes `imagePullSecret` to download and install. 
 
