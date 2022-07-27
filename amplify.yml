@@ -1,0 +1,14 @@
+version: 1
+frontend:
+  phases:
+    build:
+      commands:
+        # Run Hugo and build the site. Render draft pages for staging
+        - if [ "${AWS_BRANCH}" = "staging" ]; hugo -D ; fi
+        - if [ "${AWS_BRANCH}" = "main" ]; hugo ; fi
+        # Print the full file list for build troubleshooting
+        - tree
+  artifacts:
+    files:
+      - '**/*'
+    baseDirectory: public
