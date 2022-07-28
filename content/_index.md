@@ -12,7 +12,6 @@ infrastructure management that is automated, reliable, efficient and empowers
 application teams to self-service and deliver software faster, accelerating
 innovation.
 
-`youtube: https://www.youtube.com/embed/jyv0SBXoVXA`
 
 Our products help customers deploy control plane architectures to production and
 manage them at scale. We offer plans which meet the needs of both individual
