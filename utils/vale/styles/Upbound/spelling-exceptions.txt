@@ -6,4 +6,5 @@ namespaces
 semver
 stdin
 stdout
+tolerations
 Upbound
