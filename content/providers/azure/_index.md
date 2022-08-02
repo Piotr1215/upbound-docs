@@ -43,7 +43,7 @@ Authentication to an Upbound managed control plane requires a unique user authen
 
 Generate a user token through the [Upbound Universal Console](https://cloud.upbound.io/).
 
-![Create an API Token](https://static.upbound.io/docs/static/9633d6fc697cab806a211982cb4af46a/create-api-token.gif)
+![Create an API Token](/images/upbound/create-api-token.gif)
 
 To generate a user token in the Upbound Universal Console:
 *<!-- vale Microsoft.FirstPerson = NO -->*
