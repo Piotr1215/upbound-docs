@@ -1,6 +1,8 @@
 ---
 title: "Official Providers"
 weight: 610
+cascade:
+  kind: page
 ---
 Upbound creates, maintains, and fully supports a set of Crossplane providers called *official providers*. Both cloud hosted Upbound managed control planes and self-hosted Universal Crossplane (`UXP`) support official providers.  
 
