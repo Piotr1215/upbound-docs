@@ -1,11 +1,14 @@
 ---
-title: "Official AWS Provider"
+title: "Quickstart"
 weight: 10
+cascade:
+  geekdocHidden: True
+  provider: "aws"
 ---
 
 The Upbound AWS Provider is the officially supported provider for Amazon Web Services (AWS).
 
-View the [AWS Provider Documentation]({{<ref "provider.md" >}}) for details and configuration options. 
+View the [AWS Provider Documentation](provider) for details and configuration options. 
 
 <!-- omit in toc -->
 ## Quickstart
@@ -32,7 +35,7 @@ To use this official provider, install it into your Upbound control plane, apply
 ## Create an Upbound.io user account
 Create an account on [Upbound.io](https://cloud.upbound.io/register). 
 
-Find detailed instructions in the [account documentation]({{<ref "getting-started/create-account.md" >}}).
+<!-- Find detailed instructions in the [account documentation](/getting-started/create-account). -->
 
 ## Create an Upbound user token
 Authentication to an Upbound managed control plane requires a unique user authentication token.
@@ -69,7 +72,7 @@ To create a robot account and robot token in the Upbound Universal Console:
 
 The console generates an `Access ID` and `Token` on screen. Save this token. The Console can't print the token again.
 
-Find detailed instructions in the [Robot account and Robot Token]({{<ref "upbound-cloud/robot-accounts.md" >}}) documentation. 
+<!-- Find detailed instructions in the [Robot account and Robot Token](/upbound-cloud/robot-accounts) documentation.  -->
 
 ## Install the Up command-line
 Install the [Up command-line](https://cloud.upbound.io/docs/cli/install) to connect to Upbound managed control planes.
