@@ -4,29 +4,6 @@ languageCode: "en-us"
 title: "Upbound Documentation"
 theme: "hugo-geekdoc"
 
-mediaTypes:
-  application/json:
-    suffixes:
-      - "json"
-  text/markdown:
-    suffixes:
-      - "md"
-
-outputFormats:
-  Markdown:
-    name: "MARKDOWN"
-    isPlainText: true
-    mediaType: "text/markdown"
-
-outputs:
-  section:
-    - HTML
-    - JSON
-    - Markdown
-  page:
-    - HTML
-    - Markdown
-
 # Required to get well formatted code blocks
 pygmentsUseClasses: true
 pygmentsCodeFences: true
