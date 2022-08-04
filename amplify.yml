@@ -11,9 +11,10 @@ frontend:
     build:
       commands:
         # Run Hugo and build the site. Render draft pages for staging
-        - if [ "${AWS_BRANCH}" = "staging" ]; then hugo -D ; fi
-        - if [ "${AWS_BRANCH}" = "main" ]; then hugo ; fi
+        - if [ "${AWS_BRANCH}" = "staging" ]; then hugo -D --baseURL $baseURL ; fi
+        - if [ "${AWS_BRANCH}" = "main" ]; then hugo --baseURL $baseURL ; fi
         # Print the full file list for build troubleshooting
+        - echo $AWS_APP_ID
         - tree
   artifacts:
     files:
