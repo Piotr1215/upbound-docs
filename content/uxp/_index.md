@@ -45,8 +45,10 @@ Install a specific version of UXP with `up uxp install <version>`.
 
 The list of available versions is in the [charts.upbound.io/stable](https://charts.upbound.io/stable/) listing.
 
-_Note:_ don't include the `universal-crossplane-` name when using `up uxp install <version>`. 
+{{< hint type="note" >}}
+Don't include the `universal-crossplane-` name when using `up uxp install <version>`. 
 For example, `up uxp install 1.8.1-up.1`
+{{< /hint >}}
 
 ### Install Upbound Universal Crossplane in a custom namespace
 Install UXP into a specific namespace using the `-n <NAMESPACE>` option.
@@ -69,13 +71,17 @@ Install the latest unofficial release with the `--unstable` flag.
 
 Install a specific release with `up uxp install --unstable <version>`
 
-_Note:_ don't include the `universal-crossplane-` name when using `up uxp install --unstable <version>`. 
+{{< hint type="note" >}}
+Don't include the `universal-crossplane-` name when using `up uxp install --unstable <version>`. 
 For example, `up uxp install --unstable 1.9.0-up.1.rc.1.6.g3b4985a`
+{{< /hint >}}
 
 ### Customize install options 
 Change default install settings via the command-line with `--set <key>=<value>` or a settings file with `-f <file>`.
 
-_Note:_ a configuration file is the recommended method to customize the UXP install.
+{{< hint type="tip" >}}
+A configuration file is the recommended method to customize the UXP install.
+{{< /hint >}}
 
 Provide file-based configurations as a [Helm values file](https://helm.sh/docs/chart_template_guide/values_files/). 
 
@@ -161,8 +167,9 @@ For example, to upgrade to version `v1.7.0-up.1` use the command
 up uxp upgrade v1.7.0-up.1 -n upbound-system
 ```
 
-*Note:* you must provide the current UXP namespace.
-
+{{< hint type="note" >}}
+You must provide the current UXP namespace.
+{{< /hint >}}
 
 ### Upgrade from open source Crossplane
 UXP supports upgrading from open source Crossplane to UXP with identical version numbers.  
@@ -176,9 +183,9 @@ Use `up uxp upgrade <VERSION>` to upgrade from Crossplane to UXP.
 ```console
 up uxp upgrade v1.7.0-up.1 -n crossplane-system
 ```
-
-*Note:* you must install UXP in the same namespace as the existing Crossplane install.
-
+{{< hint type="note" >}}
+You must install UXP in the same namespace as the existing Crossplane install.
+{{< /hint >}}
 
 To upgrade Crossplane to UXP find the current version of Crossplane installed.
 ```console
@@ -220,7 +227,9 @@ Uninstall UXP with `up uxp uninstall`.
 up uxp uninstall
 ```
 
-*Note:* the `uninstall` command assumes UXP is in the `upbound-system` namespace. 
+{{< hint type="important" >}}
+The `uninstall` command assumes UXP is in the `upbound-system` namespace. 
+{{< /hint >}}
 
 Uninstall UXP from a specific namespace with `up uxp uninstall -n <NAMESPACE>`
 
@@ -231,7 +240,9 @@ up: error: uninstall: Release not loaded: universal-crossplane: release: not fou
 $ up uxp uninstall -n upbound-test
 ```
 
+{{< hint type="warning" >}}
 A UXP install upgraded from Crossplane doesn't support `up uxp uninstall`.
-
 *<!-- TOTO: Tracked by issue https://github.com/upbound/up/issues/187 -->* 
+{{< /hint >}}
+
 *<!-- TOTO: Provide manual uninstall steps based on Crossplane docs https://crossplane.io/docs/v1.8/reference/uninstall.html -->* 

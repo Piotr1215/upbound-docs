@@ -36,8 +36,9 @@ upbound/crossplane:v1.8.1-up.2
 ## Install an official provider
 The [Upbound Marketplace](https://marketplace.upbound.io/) hosts official providers. Official providers are only available to registered Upbound users. Official providers require a _robot token_ to authenticate to the Upbound Marketplace and install.
 
-_Note:_ if you already installed an official provider using an `imagePullSecret` a new secret isn't required.
-
+{{< hint type="tip" >}}
+If you already installed an official provider using an `imagePullSecret` a new secret isn't required.
+{{< /hint >}}
 ### Create a Kubernetes imagePullSecret
 Official providers require a Kubernetes `imagePullSecret` to download and install. 
 
@@ -82,7 +83,8 @@ NAME                  TYPE                             DATA   AGE
 package-pull-secret   kubernetes.io/dockerconfigjson   1      3d3h
 ```
 
-_Note:_ for cloud-hosted control planes the `name` is `package-pull-secret` and the `namespace` is `crossplane-system`.
+{{< hint type="note" >}}
+For cloud-hosted control planes the `name` is `package-pull-secret` and the `namespace` is `crossplane-system`.
 Providers can't use secrets created in other namespaces and print an error in the Event log.
 ```yaml
 $ kubectl describe provider
@@ -98,7 +100,7 @@ Events:
   ----     ------         ----               ----                                 -------
   Warning  UnpackPackage  2s (x8 over 2m5s)  packages/provider.pkg.crossplane.io  cannot unpack package: failed to fetch package digest from remote: secrets "package-pull-secret" not found
 ```
-
+{{< /hint >}}
 
 ### Install the provider resource
 Install a provider by creating a `Provider` Kubernetes resource. Provide the `spec.package` location of the official provider. Provide `spec.packagePullSecrets.name` of the imagePullSecret to use.
