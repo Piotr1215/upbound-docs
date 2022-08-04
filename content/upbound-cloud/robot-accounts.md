@@ -26,8 +26,9 @@ Select the icon in the bottom left to access the user menu.
 
 Select the organization name and Admin Console.
 
-
-_Note:_ only organizations can have robot accounts. Personal accounts can't create robot accounts.
+{{< hint type="important" >}}
+Only organizations can have robot accounts. Personal accounts can't create robot accounts.
+{{< /hint >}}  
 
 <img src="/images/accounts/left-menu-organization.png" alt="Left-hand menu with Robots option" /> 
 
@@ -54,6 +55,8 @@ Provide a name for the robot token and select _Create Token_.
 
 The next screen shows the `Access ID` and `Token` values. These values are the "username" and "password" equivalents for the new token. 
 
-_Note:_ the `Token` is unrecoverable after this screen.
+{{< hint type="warning" >}}
+The `Token` is unrecoverable after this screen.
+{{< /hint >}}
 
 <img src="/images/robots/token-credentials.png" alt="Example token credentials" />

@@ -14,19 +14,20 @@ Enterprise], and [Universal Crossplane (UXP)].
 `up` can be downloaded by using the official installation script, or can be
 installed via a variety of common package managers.
 
-### Install Script:
+{{< tabs "up-install" >}}
+{{<tab "Bash" >}}
 
 ```console
 curl -sL https://cli.upbound.io | sh
 ```
-
-### Homebrew
+{{< /tab >}}
+{{< tab "Homebrew" >}}
 
 ```console
 brew install upbound/tap/up
 ```
-
-### Deb/RPM Packages
+{{< /tab >}}
+{{< tab "Deb/RPM Packages" >}}
 
 Deb and RPM packages are available for Linux platforms, but currently require
 manual download and install.
@@ -35,10 +36,14 @@ manual download and install.
 curl -sLo up.deb https://cli.upbound.io/stable/${VERSION}/deb/linux_${ARCH}/up.deb
 ```
 
+<br />
+
 ```console
 curl -sLo up.rpm https://cli.upbound.io/stable/${VERSION}/rpm/linux_${ARCH}/up.rpm
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
 ## Setup
 
 Users typically begin by either logging in to Upbound or installing [UXP].
