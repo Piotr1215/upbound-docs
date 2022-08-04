@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.Language.Lang }}" class="color-toggle-hidden">
+<html lang="{{ .Site.Language.Lang }}" class="color-toggle-light">
   <head>
     {{ partial "head/meta" . }}
     <title>
@@ -27,8 +27,9 @@
       <input type="checkbox" class="hidden" id="menu-control" />
       <input type="checkbox" class="hidden" id="menu-header-control" />
       {{ $navEnabled := default true .Page.Params.GeekdocNav }}
-      {{ partial "site-header" (dict "Root" . "MenuEnabled" $navEnabled) }}
+      {{ partial "site-header" . }}
 
+      {{ partial "product-nav" . }}
 
       <main class="container flex flex-even">
         {{ if $navEnabled }}

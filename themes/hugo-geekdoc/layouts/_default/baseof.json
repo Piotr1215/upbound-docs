@@ -1,6 +1,0 @@
-{
-	"providers": {
-		{{ block "response" .}}
-		{{ end }}
-	}
-}
