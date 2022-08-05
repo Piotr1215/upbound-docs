@@ -2,7 +2,8 @@
   <div class="container">
     <div class="sub-nav">
       <ul>
-        <li>
+        {{- $product := .Page.Params.product | default "Upbound" -}}
+        <li {{- if eq $product "Upbound" }} class="active" {{- end -}}>
           <a href="{{.Site.BaseURL}}">Upbound</a>
         </li>
       </ul>
