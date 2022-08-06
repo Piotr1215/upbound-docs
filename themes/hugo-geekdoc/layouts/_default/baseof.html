@@ -2,6 +2,7 @@
 <html lang="{{ .Site.Language.Lang }}" class="color-toggle-light">
   <head>
     {{ partial "head/meta" . }}
+    {{ partial "head/google-analytics" . }}
     <title>
       {{- if eq .Kind "home" -}}
         {{ .Site.Title }}
