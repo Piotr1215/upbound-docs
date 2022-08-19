@@ -4,9 +4,7 @@ weight: 610
 cascade:
   kind: page
 ---
-Upbound creates, maintains, and fully supports a set of Crossplane providers called *official providers*. Both cloud hosted Upbound managed control planes and self-hosted Universal Crossplane (`UXP`) support official providers.  
-
-Official providers aren't supported with open source Crossplane.
+Upbound creates, maintains, and fully supports a set of Crossplane providers called *official providers*. Official providers are supported on [Universal Crossplane (`UXP`)](https://github.com/upbound/universal-crossplane). Official providers aren't supported with Crossplane.
 
 ## Required software versions
 
@@ -44,7 +42,6 @@ Official providers require a Kubernetes `imagePullSecret` to download and instal
 
 The credentials for the `imagePullSecret` are from an authorized Upbound robot token. Find details on creating robot tokens in the [robot accounts documentation]({{<ref "upbound-cloud/robot-accounts.md" >}}).
 
-#### Universal Crossplane
 Create an imagePull Secret with `kubectl create secret docker-registry` command with the following options:
 * `--namespace` the same namespace as Upbound. By default this is `upbound-system`.
 * `--docker-server` as `xpkg.upbound.io`
@@ -62,45 +59,6 @@ $ kubectl get secrets -n upbound-system upbound-robot-token
 NAME                  TYPE                             DATA   AGE
 upbound-robot-token   kubernetes.io/dockerconfigjson   1      23s
 ```
-
-#### Upbound Cloud hosted control planes
-Create an imagePull Secret with `kubectl create secret docker-registry` command with the following options:
-* `<name>` must be `package-pull-secret`
-* `--namespace` as `crossplane-system`.
-* `--docker-server` as `xpkg.upbound.io`
-* `--docker-username` the _Access ID_ value of the robot token
-* `--docker-password` the _Token_ value of the robot token
-
-For example, create an imagePullSecret with the name `package-pull-secret`
-```shell
-kubectl create secret docker-registry package-pull-secret --namespace=crossplane-system --docker-server=xpkg.upbound.io --docker-username=42bde5f3-81c1-4243-ab53-e301c71acc90 --docker-password=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0MmJkZTVmMy04MWMxLTQyNDMtYWI1My1lMzAxYzcxYWNjOTAiLCJzdWIiOiJyb2JvdHxhYWQ0MTk4NC0wOWFmLTQxYWEtYjcxYi0zZGZlNjI0MDI2YTUifQ.bqcW3UZGIFL2yU0rkKbLRhU_TfK4HCi4ckgjtHVT4rLGip5I0lFXTcr7VLdCnNO2c2q_nU7Bf7r05G_ZPBT3yZB85UQhzp7COFHjH5YIQbQFqT3354YS4DMHV_tLp0dtLj-3ojbUbVDtHV2RScqUPaD2s--S6m9Jz7xLuCRnqqYKFeSyyo_4aNrH4AVp--ER8VVzF3tc0WkAgkZ9aGEsbhnDHjECNp0krPMop1Nl6RvJ5KUSGPKZe_yptZMD82JtxcULjPo1sWd8i4G4jd8m567rGW1MzutUtfETNFpjd8BWAwLakZwEyIkfb6B8u6OvgOd0RK-cMCfCPoKvVRxHFQ
-```
-
-Verify the secret with `kubectl get secrets`
-```shell
-$ kubectl get secrets -n upbound-system package-pull-secret
-NAME                  TYPE                             DATA   AGE
-package-pull-secret   kubernetes.io/dockerconfigjson   1      3d3h
-```
-
-{{< hint type="note" >}}
-For cloud-hosted control planes the `name` is `package-pull-secret` and the `namespace` is `crossplane-system`.
-Providers can't use secrets created in other namespaces and print an error in the Event log.
-```yaml
-$ kubectl describe provider
-Name:         provider-aws
-Namespace:
-Labels:       <none>
-Annotations:  <none>
-API Version:  pkg.crossplane.io/v1
-Kind:         Provider
-# Output truncated
-Events:
-  Type     Reason         Age                From                                 Message
-  ----     ------         ----               ----                                 -------
-  Warning  UnpackPackage  2s (x8 over 2m5s)  packages/provider.pkg.crossplane.io  cannot unpack package: failed to fetch package digest from remote: secrets "package-pull-secret" not found
-```
-{{< /hint >}}
 
 ### Install the provider resource
 Install a provider by creating a `Provider` Kubernetes resource. Provide the `spec.package` location of the official provider. Provide `spec.packagePullSecrets.name` of the imagePullSecret to use.
