@@ -4,7 +4,11 @@ weight: 610
 cascade:
   kind: page
 ---
-Upbound creates, maintains, and fully supports a set of Crossplane providers called *official providers*. Official providers are supported on [Universal Crossplane (`UXP`)](https://github.com/upbound/universal-crossplane). Official providers aren't supported with Crossplane.
+Upbound creates, maintains, and fully supports a set of Crossplane providers called *official providers*. Only [Universal Crossplane (`UXP`)](https://github.com/upbound/universal-crossplane) supports official providers.   
+
+{{<hint type="caution">}}
+Official providers aren't supported with open source Crossplane.
+{{< /hint >}}
 
 ## Required software versions
 
@@ -26,7 +30,7 @@ UXP supports official providers on the following [releases](https://github.com/u
 
 Inspect the `crossplane` deployment to confirm the version of Universal Crossplane.
 
-```
+```shell
 $ kubectl get deployment crossplane -n upbound-system -o 'jsonpath={@.spec.template.spec.containers.*.image}{"\n"}'
 upbound/crossplane:v1.8.1-up.2
 ```
@@ -37,12 +41,13 @@ The [Upbound Marketplace](https://marketplace.upbound.io/) hosts official provid
 {{< hint type="tip" >}}
 If you already installed an official provider using an `imagePullSecret` a new secret isn't required.
 {{< /hint >}}
+
 ### Create a Kubernetes imagePullSecret
 Official providers require a Kubernetes `imagePullSecret` to download and install. 
 
 The credentials for the `imagePullSecret` are from an authorized Upbound robot token. Find details on creating robot tokens in the [robot accounts documentation]({{<ref "upbound-cloud/robot-accounts.md" >}}).
 
-Create an imagePull Secret with `kubectl create secret docker-registry` command with the following options:
+Create an `imagePull` Secret with `kubectl create secret docker-registry` command with the following options:
 * `--namespace` the same namespace as Upbound. By default this is `upbound-system`.
 * `--docker-server` as `xpkg.upbound.io`
 * `--docker-username` the _Access ID_ value of the robot token
@@ -50,7 +55,11 @@ Create an imagePull Secret with `kubectl create secret docker-registry` command 
 
 For example, create an imagePullSecret with the name `upbound-robot-token`
 ```shell
-kubectl create secret docker-registry upbound-robot-token --namespace=upbound-system --docker-server=xpkg.upbound.io --docker-username=42bde5f3-81c1-4243-ab53-e301c71acc90 --docker-password=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0MmJkZTVmMy04MWMxLTQyNDMtYWI1My1lMzAxYzcxYWNjOTAiLCJzdWIiOiJyb2JvdHxhYWQ0MTk4NC0wOWFmLTQxYWEtYjcxYi0zZGZlNjI0MDI2YTUifQ.bqcW3UZGIFL2yU0rkKbLRhU_TfK4HCi4ckgjtHVT4rLGip5I0lFXTcr7VLdCnNO2c2q_nU7Bf7r05G_ZPBT3yZB85UQhzp7COFHjH5YIQbQFqT3354YS4DMHV_tLp0dtLj-3ojbUbVDtHV2RScqUPaD2s--S6m9Jz7xLuCRnqqYKFeSyyo_4aNrH4AVp--ER8VVzF3tc0WkAgkZ9aGEsbhnDHjECNp0krPMop1Nl6RvJ5KUSGPKZe_yptZMD82JtxcULjPo1sWd8i4G4jd8m567rGW1MzutUtfETNFpjd8BWAwLakZwEyIkfb6B8u6OvgOd0RK-cMCfCPoKvVRxHFQ
+kubectl create secret docker-registry upbound-robot-token \
+--namespace=upbound-system \
+--docker-server=xpkg.upbound.io \
+--docker-username=42bde5f3-81c1-4243-ab53-e301c71acc90 \
+--docker-password=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0MmJkZTVmMy04MWMxLTQyNDMtYWI1My1lMzAxYzcxYWNjOTAiLCJzdWIiOiJyb2JvdHxhYWQ0MTk4NC0wOWFmLTQxYWEtYjcxYi0zZGZlNjI0MDI2YTUifQ.bqcW3UZGIFL2yU0rkKbLRhU_TfK4HCi4ckgjtHVT4rLGip5I0lFXTcr7VLdCnNO2c2q_nU7Bf7r05G_ZPBT3yZB85UQhzp7COFHjH5YIQbQFqT3354YS4DMHV_tLp0dtLj-3ojbUbVDtHV2RScqUPaD2s--S6m9Jz7xLuCRnqqYKFeSyyo_4aNrH4AVp--ER8VVzF3tc0WkAgkZ9aGEsbhnDHjECNp0krPMop1Nl6RvJ5KUSGPKZe_yptZMD82JtxcULjPo1sWd8i4G4jd8m567rGW1MzutUtfETNFpjd8BWAwLakZwEyIkfb6B8u6OvgOd0RK-cMCfCPoKvVRxHFQ
 ```
 
 Verify the secret with `kubectl get secrets`
