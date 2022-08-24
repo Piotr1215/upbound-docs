@@ -1,0 +1,10 @@
+---
+more:
+  - name: Contributor guide
+    ref: "contributing"
+    external: false
+    icon: "gdoc_bookmark"
+  - name: "View Source"
+    ref: "https://github.com/upbound/docs"
+    external: true
+    icon: "gdoc_github"
