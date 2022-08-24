@@ -1,6 +1,7 @@
 ---
 title: "Contributing to the Upbound Documentation"
 weight: 10
+type: "contributing"
 ---
 
 The Upbound documentation welcomes contributions from the anyone in the Upbound community. 
@@ -65,7 +66,6 @@ Use [GitHub Issues](https://github.com/upbound/docs/issues/new/choose) to report
 * **Other** - For any other issues, content requests or you're not sure then a template isn't required. The documentation team manages classification and labeling.
 
 ## Contributing
-
 ### Branching and pull requests
 Upbound docs use two branches: `main` and `staging`. The `main` branch is the current content of docs.upbound.io and is never directly modified.
 
@@ -74,6 +74,42 @@ Create all branches and PRs from the `staging` branch.
 ## Authoring
 The `/content` directory contains all documentation pages.  
 A unique directory inside `/content` creates a new "section" in the documentation. The root of the section is the `_index.md` page inside that directory.
+
+### Content types
+They're two types of documentation content: knowledge base articles and user documentation.
+
+#### Knowledge base articles
+Knowledge base (KB) articles include tutorials, how-tos and third-party integrations. Example KB articles could be:
+* Integration of Crossplane with ArgoCD
+* Troubleshooting Crossplane provider IAM
+* How-to migrate from community to providers to Upbound official providers
+
+{{<hint type="tip">}}
+Docs issues [tagged as `Knowledge Base`](https://github.com/upbound/docs/issues?q=is%3Aissue+is%3Aopen+label%3A%22Knowledge+Base%22) are KB article ideas.  
+ Contributed content doesn't need an existing issue. 
+{{</hint >}}
+
+Create knowledge base articles in the `/content/knowledge-base/` directory.  
+All content in this directory is automatically added to the knowledge base table of contents menu.
+
+Knowledge base articles are at [{{<ref "knowledge-base" >}}]({{<ref "knowledge-base" >}})
+
+{{<hint type="note">}}
+The knowledge base is still a work in progress. Docs [issue #40](https://github.com/upbound/docs/issues/40) tracks the update to the site design to support the knowledge base.
+
+Upbound accepts KB contributions today. KB articles are publicly viewable at [{{<ref "knowledge-base" >}}]({{<ref "knowledge-base" >}}).
+{{</hint >}}
+
+#### User documentation
+User documentation includes both conceptual documentation and procedural documentation.    
+* `Conceptual docs` describe the background, theory and concepts of the technology. Conceptual documentation is useful to explain the "why."  
+* `Procedural docs` are the step-by-step instructions for a feature or technology. Procedural docs are the "how" documentation.
+
+User docs cover Upbound products, technologies and concepts. Required third-party integrations are an exception. For example, `ProviderConfig` objects require some description of the implementation details of the provider.
+
+All content that isn't in the knowledge base is user documentation. All files and folders under `/content` except `/content/knowledge-base/` are user documentation. 
+
+The table of contents menu for user documentation is automatically generated from everything under `/content` that isn't inside `/content/knowledge-base/`.
 
 ### Front matter
 Each page contains metadata called [front matter](https://gohugo.io/content-management/front-matter/). Each page requires front matter to render.
@@ -101,7 +137,6 @@ For example, to link to the "Official Providers" page create a markdown link lik
 ```markdown
 [a link to the Official Providers page]({{</* ref "providers/_index.md" */>}})
 ```
-
 
 {{<hint type="note">}}
 The `ref` value is of the markdown file, including `.md` extension. Don't link to a web address.
@@ -318,7 +353,7 @@ Today, there is no distinction between Vale errors and warnings.
 Upbound docs use Vale as a git submodule. Clone and run Vale locally from the [upbound/vale](https://github.com/upbound/vale) repository.
 
 {{<hint type="tip" >}}
-A [Vale plug-in](https://marketplace.visualstudio.com/items?itemName=errata-ai.vale-server) exists for VSCode users.
+A [Vale plug-in](https://marketplace.visualstudio.com/items?itemName=errata-ai.vale-server) exists for Visual Studio Code users.
 {{< /hint >}}
 
 It's recommended to manually run Vale against any contribution before opening a PR. 
