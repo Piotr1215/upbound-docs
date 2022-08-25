@@ -59,11 +59,11 @@ For example, to install UXP into the upbound-test namespace use the command
 up uxp install -n upbound-test
 ```
 
-### Install unofficial Upbound Universal Crossplane versions
+### Install unreleased Upbound Universal Crossplane versions
 
-Install unofficial releases for testing or troubleshooting. Don't install unofficial versions for production use without explicit guidance from Upbound.
+Install unreleased versions of UXP for testing or troubleshooting. Don't install unreleased versions for production use without explicit guidance from Upbound.
 
-Find available unofficial releases in the [charts.upbound.io/main](https://charts.upbound.io/main/) listing. 
+Find available unreleased releases in the [charts.upbound.io/main](https://charts.upbound.io/main/) listing. 
 
 Install the latest unofficial release with the `--unstable` flag.
 
