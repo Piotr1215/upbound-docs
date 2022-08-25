@@ -1,5 +1,7 @@
 ---
 title: "up robot"
+geekdocCollapseSection: true
+geekdocFileTreeSortBy: title
 ---
 Upbound `robots` are identities used for authentication that are independent from a single user and aren't tied to specific usernames or passwords.
 
