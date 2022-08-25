@@ -2,7 +2,8 @@
 title: "Installing from Rancher Catalog"
 metaTitle: "Installing from Rancher Catalog"
 metaDescription: "Installing from Rancher Catalog"
-rank: 13
+rank: 203
+draft: true
 ---
 
 UXP is available to install into Kubernetes clusters managed by Rancher via the 

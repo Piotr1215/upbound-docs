@@ -1,12 +1,12 @@
 ---
 title: "Upbound Universal Crossplane (UXP)"
-rank: 10
+rank: 200
 ---
 
 Upbound Universal Crossplane (UXP) is the Upbound official enterprise-grade
 distribution of Crossplane for self-hosted control planes. 
 
-Install UXP into an existing Kubernetes cluster to access Upbound features like [official providers]({{<ref "../providers/_index.md" >}}) or community Crossplane features.
+Install UXP into an existing Kubernetes cluster to access Upbound features like [official providers]({{<ref "../upbound-marketplace/providers.md" >}}) or community Crossplane features.
 
 ## Quickstart
 * Install the [Up command-line]({{<ref "../cli" >}}).
@@ -246,3 +246,63 @@ A UXP install upgraded from Crossplane doesn't support `up uxp uninstall`.
 {{< /hint >}}
 
 *<!-- TOTO: Provide manual uninstall steps based on Crossplane docs https://crossplane.io/docs/v1.8/reference/uninstall.html -->* 
+
+
+# Install Upbound Universal Crossplane
+
+The `up` command-line provides a simplified method to install Upbound Universal Crossplane (UXP) or upgrade and existing upstream Crossplane installation. 
+
+### Install a new Upbound Universal Crossplane instance
+Install the latest stable UXP release with the command  
+
+```console
+up uxp install
+```
+
+The `up` command-line uses the Upbound [UXP Helm chart repository](https://charts.upbound.io/main/) to install the latest release.
+
+#### Install a specific Universal Crossplane version
+Install any version of `UXP` listed in the Helm repository by providing the version number.
+
+```command
+up uxp install v1.2.1-up.2
+```
+
+{{<hint type="info" >}}
+Install a specific UXP version by providing a version with the install command.
+```command
+up uxp install v1.2.1-up.2
+```
+
+To install an `unstable` version use the `--unstable` flag.
+
+```command
+up uxp install v1.2.1-up.2.rc.0.7-g46c7750 --unstable
+```
+
+
+The `up` command-line creates the `upbound-system` namespace. The install also creates the required Crossplane components into the `upbound-system` namespace.
+
+Verify the UXP pods are running with `kubectl get pods -n upbound-system`
+
+```shell
+$ kubectl get pods -n upbound-system
+NAME                                        READY   STATUS    RESTARTS      AGE
+crossplane-7fdfbd897c-pmrml                 1/1     Running   0             68m
+crossplane-rbac-manager-7d6867bc4d-v7wpb    1/1     Running   0             68m
+upbound-bootstrapper-5f47977d54-t8kvk       1/1     Running   0             68m
+xgql-7c4b74c458-5bf2q                       1/1     Running   3 (67m ago)   68m
+```
+
+{{<hint type="info" >}}
+For more information about Upbound Universal Crossplane see the [UXP](../uxp) section.
+{{< /hint >}}
+
+### Upgrade Crossplane to Upbound Universal Crossplane
+To upgrade a Crossplane installation to a compatible UXP version:
+(e.g. `v1.2.1` of
+Crossplane is compatible with UXP `v1.2.1-up.N`)
+
+```console
+up uxp upgrade vX.Y.Z-up.N -n <crossplane-namespace>
+```

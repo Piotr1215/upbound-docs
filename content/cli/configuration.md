@@ -2,7 +2,7 @@
 title: "Configuration"
 metaTitle: "Upbound CLI - Configuration"
 metaDescription: "Configuration for the Upbound CLI"
-rank: 22
+weight: 105
 ---
 
 `up` interacts with a variety of systems, each of which may have information

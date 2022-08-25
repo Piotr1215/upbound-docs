@@ -3,7 +3,7 @@ title: 'Upbound Marketplace'
 icon: 'Grid'
 metaTitle: 'Upbound Marketplace'
 metaDescription: 'Upbound Marketplace'
-rank: 30
+rank: 300
 ---
 
 Upbound Marketplace is where developers publish and discover the building blocks

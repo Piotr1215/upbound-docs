@@ -2,7 +2,7 @@
 title: "Publishing to Upbound Marketplace" 
 metaTitle: "Publishing to Upbound Marketplace" 
 metaDescription: "Publishing to Upbound Marketplace" 
-rank: 31
+rank: 302
 ---
 
 ## Requirements

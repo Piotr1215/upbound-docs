@@ -2,7 +2,7 @@
 title: "Build a Configuration"
 metaTitle: "Build a Configuration"
 metaDescription: "Build a Configuration"
-rank: 12
+rank: 201
 ---
 
 In the [previous section] our app team was able to create a PostgreSQL database

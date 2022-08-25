@@ -1,6 +1,6 @@
 ---
 title: "Official Providers"
-weight: 610
+weight: 301
 cascade:
   kind: page
 ---
@@ -45,7 +45,8 @@ If you already installed an official provider using an `imagePullSecret` a new s
 ### Create a Kubernetes imagePullSecret
 Official providers require a Kubernetes `imagePullSecret` to download and install. 
 
-The credentials for the `imagePullSecret` are from an authorized Upbound robot token. Find details on creating robot tokens in the [robot accounts documentation]({{<ref "upbound-cloud/robot-accounts.md" >}}).
+<!-- TODO:
+The credentials for the `imagePullSecret` are from an authorized Upbound robot token. Find details on creating robot tokens in the [robot accounts documentation] -->
 
 Create an `imagePull` Secret with `kubectl create secret docker-registry` command with the following options:
 * `--namespace` the same namespace as Upbound. By default this is `upbound-system`.
@@ -117,7 +118,7 @@ Upbound attempts to ensure a stable CRD API but may require breaking changes in 
 ## Support
 Official providers are available to all paid Upbound customers. Support for official providers follows the same support model for other Upbound components. 
 
-More information is available on the [support page]({{<ref "getting-started/support.md" >}}).
+More information is available on the [support page]({{<ref "../support.md" >}}).
 
 <!-- TODO
 ## Coverage
