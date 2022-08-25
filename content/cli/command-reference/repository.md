@@ -1,31 +1,59 @@
 ---
 title: "up repository"
 ---
+_Alias_: `up repo`  
 
+Commands under `up repository` create and manage Upbound repository accounts.
+
+### `up repository create`
+
+<!-- omit in toc -->
+#### Arguments
+_None_
+
+Create a repository with the given name.  
+
+<!-- omit in toc -->
+#### Examples
+```shell
+$ up repository create my-org
 ```
-agrant@kubecontroller-01:~$ up repo -h
-Usage: up repository (repo) <command>
 
-Interact with repositories.
+### `up repository list`
 
-Flags:
-  -h, --help                         Show context-sensitive help.
-  -v, --version                      Print version and exit.
-  -q, --quiet                        Suppress all output.
-      --pretty                       Pretty print output.
+<!-- omit in toc -->
+#### Arguments
+_None_
 
-      --domain=https://upbound.io    Root Upbound domain ($UP_DOMAIN).
-      --profile=STRING               Profile used to execute command ($UP_PROFILE).
-  -a, --account=STRING               Account used to execute command ($UP_ACCOUNT).
-      --insecure-skip-tls-verify     [INSECURE] Skip verifying TLS certificates ($UP_INSECURE_SKIP_TLS_VERIFY).
+List all repository associated to the current user.
 
-Commands:
-  repository (repo) create <name>
-    Create a repository.
+<!-- omit in toc -->
+#### Examples
+```shell
+$ up repo list
+NAME      TYPE      PUBLIC   UPDATED
+my-repo   unknown   false    n/a
+```
 
-  repository (repo) delete <name>
-    Delete a repository.
+### `up repository delete`
 
-  repository (repo) list
-    List repositories for the account
+<!-- omit in toc -->
+#### Arguments
+* <repository name> _(required)_ - the name of the repository to delete
+
+Deletes the given repository.
+
+{{<hint type="warning" >}}
+Deleting a repository removes all packages from the repository and impacts all users in an organization.
+
+This can not be undone.
+{{< /hint >}}
+
+<!-- omit in toc -->
+#### Examples
+```shell
+$ up repository delete my-repo
+Are you sure you want to delete this repository? [y/n]: y
+Deleting repository my-repo. This cannot be undone.
+my-repo deleted
 ```
