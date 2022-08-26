@@ -118,4 +118,4 @@ sessions".
 <!-- Named Links -->
 [Upbound Cloud]: ../../upbound-cloud
 [Upbound Enterprise]: ../../upbound-enterprise
-[Upbound Cloud login page]: https://cloud.upbound.io/login
+[Upbound Cloud login page]: https://accounts.upbound.io/login
