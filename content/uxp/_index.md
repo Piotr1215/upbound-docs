@@ -8,29 +8,11 @@ distribution of Crossplane for self-hosted control planes.
 
 Install UXP into an existing Kubernetes cluster to access Upbound features like [official providers]({{<ref "../upbound-marketplace/providers.md" >}}) or community Crossplane features.
 
-## Quickstart
-* Install the [Up command-line]({{<ref "../cli" >}}).
-```shell
-$ curl -sL "https://cli.upbound.io" | sh
-$ sudo mv up /usr/local/bin/
-```
-* Install UXP
-```shell
-$ up uxp install
-```
-* Verify UXP pods in the upbound-system namespace
-```shell
-$ kubectl get pods -n upbound-system
-NAME                                      READY   STATUS    RESTARTS      AGE
-crossplane-7c5c7d98b-qvl64                1/1     Running   0             50s
-crossplane-rbac-manager-6596d6678-8bmkl   1/1     Running   0             50s
-upbound-bootstrapper-744957b859-stw7t     1/1     Running   0             50s
-xgql-8549b948c5-xprzb                     1/1     Running   2 (48s ago)   50s
-```
+Read the [Quickstart Guide]({{<ref "quickstart" >}}) for basic instructions to install UXP.
 
 ## Install Upbound Universal Crossplane
 
-Installing UXP requires the [Up command-line]({{<ref "../cli" >}}). 
+Installing UXP requires the [Up command-line]({{<ref "cli" >}}). 
 
 Use the `up uxp install` command to install UXP into the current Kubernetes cluster based on `~/.kube/config`.
 
@@ -65,7 +47,7 @@ Install unreleased versions of UXP for testing or troubleshooting. Don't install
 
 Find available unreleased releases in the [charts.upbound.io/main](https://charts.upbound.io/main/) listing. 
 
-Install the latest unofficial release with the `--unstable` flag.
+Install the latest unreleased version with the `--unstable` flag.
 
 `up uxp install --unstable`
 
@@ -180,6 +162,7 @@ For example, Crossplane `v1.3.1` and UXP `v1.3.1-up.1` are identical.
 Crossplane `v1.3.1` and UXP `v1.3.3-up.1` aren't.
 
 Use `up uxp upgrade <VERSION>` to upgrade from Crossplane to UXP.
+
 ```console
 up uxp upgrade v1.7.0-up.1 -n crossplane-system
 ```
@@ -188,6 +171,7 @@ You must install UXP in the same namespace as the existing Crossplane install.
 {{< /hint >}}
 
 To upgrade Crossplane to UXP find the current version of Crossplane installed.
+
 ```console
 $ kubectl get pods  -n crossplane-system -o jsonpath='{.items[*].spec.containers[*].image}{"\n"}'
 crossplane/crossplane:v1.7.0 crossplane/crossplane:v1.7.0

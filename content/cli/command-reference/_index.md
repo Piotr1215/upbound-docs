@@ -31,6 +31,4 @@ The following flags are available via `up -<flag>`.
 * [repository]({{<ref "repository" >}}) - Manage repositories hosted on the Upbound Cloud Platform.
 * [robot]({{<ref "robot" >}}) - Manage Upbound Cloud Platform robot accounts.
 * [uxp]({{<ref "uxp" >}}) - Install, upgrade or uninstall Upbound Universal Crossplane (`UXP`). 
-* [xpkg]({{<ref "xpkg" >}}) - Create and manage Crossplane packages (`xpkg`).
-* [xpls]({{<ref "xpls" >}}) - Start a Crossplane language server for developer IDEs.
 <!-- vale Upbound.Spelling = Yes -->

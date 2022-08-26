@@ -15,7 +15,7 @@ Install and manage Upbound Universal Crossplane (UXP) with `up uxp` commands.
 * `--kubeconfig = <path>` - path to a kubeconfig file to connect to a Kubernetes cluster to install UXP into. The default is the kubeconfig file used by `kubectl`.
 * `-n,--namespace=<namespace>` - the namespace to install UXP into. The default is the value of the environmental variable `$UXP_NAMESPACE` or `upbound-system`.
 * `--unstable` - install a version of UXP from the `unstable` channel.
-* `--set=KEY=VALUE;...` - a series of semi-colon separated key-value pairs to set UXP paramters at install time. 
+* `--set=KEY=VALUE;...` - a series of semi-colon separated key-value pairs to set UXP parameters at install time. 
 * `-f,--file = <path>` - a parameters file with key-value pairs to set UXP settings at install time.
 
 UXP installs the latest stable release by default. 
@@ -62,42 +62,26 @@ $ up uxp uninstall
 * `--kubeconfig = <path>` - path to a kubeconfig file to connect to a Kubernetes cluster to remove UXP. The default is the kubeconfig file used by `kubectl`.
 * `-n,--namespace=<namespace>` - the namespace to uninstall UXP from. The default is the value of the environmental variable `$UXP_NAMESPACE` or `upbound-system`.
 * `--unstable` - install a version of UXP from the `unstable` channel.
-* `--set=KEY=VALUE;...` - a series of semi-colon separated key-value pairs to set UXP paramters at install time. 
+* `--set=KEY=VALUE;...` - a series of semi-colon separated key-value pairs to set UXP parameters at install time. 
 * `-f,--file = <path>` - a parameters file with key-value pairs to set UXP settings at install time.
 * `--rollback` - rollback to the last installed version of UXP if the upgrade fails.
 * `--force` - upgrade UXP even if the versions are incompatible.
   
 
-<SOME DESCRIPTION ABOUT THIS>
+<!-- vale gitlab.SentenceLength = NO -->
+UXP upgrades can be from one UXP version to another or from open source Crossplane to a [compatible UXP version]({{<ref "/uxp/_index.md##upgrade-from-upbound-universal-crossplane" >}}).
+<!-- vale gitlab.SentenceLength = YES -->
 
 <!-- omit in toc -->
 #### Examples
+<!-- omit in toc -->
+##### Upgrade to `UXP` version v1.7.0-up.1
 ```shell
-$ up org create my-org
+$ up uxp upgrade v1.7.0-up.1
 ```
 
-```
-up uxp -h
-Usage: up uxp <command>
-
-Interact with UXP.
-
-Flags:
-  -h, --help                          Show context-sensitive help.
-  -v, --version                       Print version and exit.
-  -q, --quiet                         Suppress all output.
-      --pretty                        Pretty print output.
-
-      --kubeconfig=STRING             Override default kubeconfig path.
-  -n, --namespace="upbound-system"    Kubernetes namespace for UXP ($UXP_NAMESPACE).
-
-Commands:
-  uxp install [<version>]
-    Install UXP.
-
-  uxp uninstall
-    Uninstall UXP.
-
-  uxp upgrade [<version>]
-    Upgrade UXP.
+<!-- omit in toc -->
+##### Upgrade Crossplane to `UXP`
+```shell
+$ up uxp upgrade v1.7.0-up.1 -n crossplane-system
 ```
