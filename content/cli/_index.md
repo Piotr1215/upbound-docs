@@ -3,7 +3,7 @@ title: "Up Command-Line"
 icon: "Settings"
 metaTitle: "Upbound CLI"
 metaDescription: "Up - The Official Upbound CLI"
-rank: 100
+weight: 100
 ---
 
 The Upbound `up` command-line for interacting installing Universal Crossplane (UXP) and <!-- TODO -->.
@@ -32,7 +32,7 @@ Install a specific version of `up` by providing the version.
 For example, to install version `v0.12.1` use the following command:
 
 ```console
-curl -sL "https://cli.upbound.io"  VERSION=v0.12.1 sh
+curl -sL "https://cli.upbound.io" | VERSION=v0.12.1 sh
 ```
 
 Find the full list of versions in the <a href="https://cli.upbound.io/stable?prefix=stable/">Up command-line repository</a>.
