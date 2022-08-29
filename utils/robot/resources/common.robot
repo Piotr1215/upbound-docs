@@ -15,9 +15,9 @@ Open Browser To Login Page
     [Arguments]    ${size}=1700,2050
     [Documentation]    Create a browser, go to Upbound login and wait until it's loaded.
     Create a Browser    ${size}
-    Go To     https://cloud.upbound.io
+    Go To     https://accounts.upbound.io/register
     # Wait for the whole page to load
-    Wait Until Element Is Visible    id
+    Wait Until Element Is Visible    id:signup_button-email
 
 Input Login Credentials
     [Arguments]    ${username}    ${password}
