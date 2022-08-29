@@ -4,6 +4,8 @@ title: "up uxp"
 
 Install and manage Upbound Universal Crossplane (UXP) with `up uxp` commands.
 
+Read the [Upbound Universal Crossplane]({{<ref "/uxp" >}}) section more information about UXP.
+
 - [`up uxp install`](#up-uxp-install)
 - [`up uxp uninstall`](#up-uxp-uninstall)
 - [`up uxp upgrade`](#up-uxp-upgrade)
