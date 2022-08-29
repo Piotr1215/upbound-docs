@@ -4,22 +4,29 @@ weight: 301
 cascade:
   kind: page
 ---
-Upbound creates, maintains, and fully supports a set of Crossplane providers called *official providers*. Only [Universal Crossplane (`UXP`)](https://github.com/upbound/universal-crossplane) supports official providers.   
+Upbound creates, maintains, and fully supports a set of Crossplane providers called *official providers*. Only [Universal Crossplane (`UXP`)]({{<ref "uxp/" >}}) supports official providers.   
 
 {{<hint type="caution">}}
 Official providers aren't supported with open source Crossplane.
 {{< /hint >}}
 
+## Find official providers
+Identify official providers in the marketplace with the `by Upbound` gold seal.
+{{< figure src="/images/marketplace/provider-by-upbound.png" alt="example official provider with a by Upbound seal" >}}
+
+Also find official providers by filtering a [search in the marketplace](https://marketplace.upbound.io/providers?tier=official) to just `Official`.
+
+{{< figure src="/images/marketplace/official-provider-search-filter.png" alt="a marketplace search filter with Providers and Official filters set" >}}
 ## Required software versions
 
 ### Up command-line
-Official providers require Up command-line version v0.12.0 or later.  
+Official providers require [Up command-line]({{<ref "cli/" >}}) version v0.13.0 or later.  
 
 Confirm the version of Up command-line with `up --version`
 
 ```command
 $ up --version
-v0.12.0
+v0.13.0
 ```
 
 ### Universal Crossplane
@@ -42,6 +49,78 @@ The [Upbound Marketplace](https://marketplace.upbound.io/) hosts official provid
 If you already installed an official provider using an `imagePullSecret` a new secret isn't required.
 {{< /hint >}}
 
+{{< tabs "secrets" >}}
+{{< tab "Creating a secret with the Up command-line" >}}
+## Log in with the Up command-line
+Use `up login` to authenticate to the Upbound Marketplace.
+
+It's important to use `-a <your organization>` when logging in. Only accounts belonging to organizations can use official providers.
+
+```shell
+$ up login -a my-org
+username: my-user
+password: 
+my-user logged in
+```
+
+## Create an Upbound robot account
+Upbound robots are identities used for authentication that are independent from a single user and aren’t tied to specific usernames or passwords.
+
+Creating a robot account allows Kubernetes to install an official provider.
+
+Use `up robot create <robot account name>` to create a new robot account.
+
+_Note_: only users logged into an organization can create robot accounts.
+
+```shell
+$ up robot create my-robot
+my-org/my-robot created
+```
+
+## Create an Upbound robot account token
+The token associates with a specific robot account and acts as a username and password for authentication.
+
+Generate a token using `up robot token create <robot account> <token name> --output=<file>`.
+
+```shell
+$ up robot token create my-robot my-token --output=token.json
+my-org/my-robot/my-token created
+```
+
+The `output` file is a JSON file containing the robot token's `accessId` and `token`. The `accessId` is the username and `token` is the password for the token.
+
+_Note_: you can't recover a lost robot token. You must delete and recreate the token.
+
+
+## Create a Kubernetes pull secret
+Downloading and installing official providers requires Kubernetes to authenticate to the Upbound Marketplace using a Kubernetes `secret` object.
+
+Using the `up controlplane pull-secret create <secret name> -f <robot token file>` command create an [Upbound robot account](http://docs.upbound.io/cli/command-reference/robot/) account. 
+
+Provide a name for your Kubernetes secret and the robot token JSON file.
+
+_Note_: robot accounts are independent from your account. Your account information is never stored in Kubernetes.
+
+_Note_: you must provide the robot token file or you can't authenticate to install an official provider.  
+
+```shell
+$ up controlplane pull-secret create my-upbound-secret -f token.json
+my-org/my-upbound-secret created
+```
+
+`Up` creates the secret in the `upbound-system` namespace. 
+
+```shell
+$ kubectl get secret -n upbound-system
+NAME                                         TYPE                             DATA   AGE
+my-upbound-secret                            kubernetes.io/dockerconfigjson   1      8m46s
+sh.helm.release.v1.universal-crossplane.v1   helm.sh/release.v1               1      21m
+upbound-agent-tls                            Opaque                           3      21m
+uxp-ca                                       Opaque                           3      21m
+xgql-tls                                     Opaque                           3      21m
+```
+{{< /tab >}}
+{{< tab "Creating a secret with kubectl" >}}
 ### Create a Kubernetes imagePullSecret
 Official providers require a Kubernetes `imagePullSecret` to download and install. 
 
@@ -54,9 +133,9 @@ Create an `imagePull` Secret with `kubectl create secret docker-registry` comman
 * `--docker-username` the _Access ID_ value of the robot token
 * `--docker-password` the _Token_ value of the robot token
 
-For example, create an imagePullSecret with the name `upbound-robot-token`
+For example, create an imagePullSecret with the name `my-upbound-secret`
 ```shell
-kubectl create secret docker-registry upbound-robot-token \
+kubectl create secret docker-registry my-upbound-secret \
 --namespace=upbound-system \
 --docker-server=xpkg.upbound.io \
 --docker-username=42bde5f3-81c1-4243-ab53-e301c71acc90 \
@@ -65,11 +144,12 @@ kubectl create secret docker-registry upbound-robot-token \
 
 Verify the secret with `kubectl get secrets`
 ```shell
-$ kubectl get secrets -n upbound-system upbound-robot-token
+$ kubectl get secrets -n upbound-system my-upbound-secret
 NAME                  TYPE                             DATA   AGE
-upbound-robot-token   kubernetes.io/dockerconfigjson   1      23s
+my-upbound-secret   kubernetes.io/dockerconfigjson   1      23s
 ```
-
+{{< /tab >}}
+{{< /tabs >}}
 ### Install the provider resource
 Install a provider by creating a `Provider` Kubernetes resource. Provide the `spec.package` location of the official provider. Provide `spec.packagePullSecrets.name` of the imagePullSecret to use.
 
@@ -83,7 +163,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws:v0.5.0
   packagePullSecrets:
-    - name: upbound-robot-secret
+    - name: my-upbound-secret
 ```
 
 Find provider specific instructions and configurations in their individual documentation pages.
