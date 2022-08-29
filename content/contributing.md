@@ -6,6 +6,33 @@ type: "contributing"
 
 The Upbound documentation welcomes contributions from the anyone in the Upbound community. 
 
+- [Code of Conduct](#code-of-conduct)
+  - [Reporting](#reporting)
+- [Licensing](#licensing)
+- [Clone and run the documentation](#clone-and-run-the-documentation)
+  - [Directory structure](#directory-structure)
+  - [Run Hugo](#run-hugo)
+  - [Documentation issues and feature requests](#documentation-issues-and-feature-requests)
+- [Contributing](#contributing)
+  - [Branching and pull requests](#branching-and-pull-requests)
+- [Authoring](#authoring)
+  - [Content types](#content-types)
+    - [Knowledge base articles](#knowledge-base-articles)
+    - [User documentation](#user-documentation)
+  - [Front matter](#front-matter)
+  - [Links](#links)
+    - [Linking between docs pages](#linking-between-docs-pages)
+    - [Linking to external sites](#linking-to-external-sites)
+  - [Hints and alert boxes](#hints-and-alert-boxes)
+  - [Tabs](#tabs)
+  - [Hide long outputs](#hide-long-outputs)
+  - [Images](#images)
+- [Style guide](#style-guide)
+  - [Vale](#vale)
+    - [Clone the Vale repository](#clone-the-vale-repository)
+    - [Updating Vale rules](#updating-vale-rules)
+    - [Disabling Vale rules](#disabling-vale-rules)
+
 <!-- disable vale for CNCF text -->
 <!-- vale off -->
 ## Code of Conduct
@@ -363,6 +390,14 @@ If the documentation contribution incorrectly violates a Vale rule issue a PR ag
 
 #### Disabling Vale rules
 If a Vale error is an actual exception individual Vale rules can be temporarily turned off.
+
+{{<hint type="note" >}}
+Links to the `cli` and `uxp` chapters may trigger Vale errors. Prevent the errors with a trailing `/`.  
+For example:  
+<code>
+[The command-line chapter](&#123;&#123;&lt; ref &#34;cli/&#34; &gt;&#125;&#125;)
+</code>
+{{< /hint >}}
 
 To turn off Vale checking, use an HTML comment with `<!-- vale $rule = NO -->` before the text and `<!-- vale $rule = YES -->` . 
 
