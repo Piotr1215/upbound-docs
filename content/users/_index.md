@@ -1,6 +1,6 @@
 ---
 title: "Upbound User Management"
-weight: 40
+weight: 400
 ---
 Some features of Upbound, including official providers, are only available to registered Upbound users.
 

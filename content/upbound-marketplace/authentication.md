@@ -1,6 +1,6 @@
 ---
 title: "Authentication"
-weight: 6
+weight: 110
 ---
 
 Some Marketplace resources require authentication to Upbound. Authentication from your Kubernetes cluster to Upbound is with a Kubernetes [image pull secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials).

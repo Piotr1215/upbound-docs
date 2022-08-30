@@ -1,6 +1,6 @@
 ---
 title: 'Upbound Marketplace'
-weight: 300
+weight: 100
 ---
 
 Upbound marketplace is a curated home for Crossplane extensions including [Crossplane providers](https://marketplace.upbound.io/providers), [control plane configurations](https://marketplace.upbound.io/configurations) and comprehensive documentation. 

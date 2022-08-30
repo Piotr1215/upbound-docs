@@ -3,7 +3,7 @@ title: "Up Command-Line"
 icon: "Settings"
 metaTitle: "Upbound CLI"
 metaDescription: "Up - The Official Upbound CLI"
-weight: 100
+weight: 200
 ---
 
 The Upbound `up` command-line simplifies configuration and management of Upbound Universal Crossplane (UXP) and interacts with the Upbound Marketplace to manage users and accounts.

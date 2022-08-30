@@ -1,6 +1,6 @@
 ---
 title: "Upbound Universal Crossplane (UXP)"
-weight: 200
+weight: 300
 ---
 
 Upbound Universal Crossplane (UXP) is the Upbound official enterprise-grade
