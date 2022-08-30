@@ -6,7 +6,7 @@ metaDescription: "Up - The Official Upbound CLI"
 weight: 100
 ---
 
-The Upbound `up` command-line for interacting installing Universal Crossplane (UXP) and <!-- TODO -->.
+The Upbound `up` command-line simplifies configuration and management of Upbound Universal Crossplane (UXP) and interacts with the Upbound Marketplace to manage users and accounts.
 
 ## Install the Up command-line
 
