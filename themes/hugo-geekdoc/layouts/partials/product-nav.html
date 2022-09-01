@@ -1,5 +1,17 @@
 <div id="product-nav">
   <div class="container">
+    {{ if .MenuEnabled }}
+    <label for="menu-control" class="gdoc-nav__control" tabindex="0">
+      <svg class="gdoc-icon gdoc_menu">
+        <title>{{ i18n "button_nav_open" }}</title>
+        <use xlink:href="#gdoc_menu"></use>
+      </svg>
+      <svg class="gdoc-icon gdoc_arrow_back">
+        <title>{{ i18n "button_nav_close" }}</title>
+        <use xlink:href="#gdoc_arrow_back"></use>
+      </svg>
+    </label>
+    {{ end }}
     <div class="sub-nav">
       <ul>
         {{- $product := .Page.Params.product | default "Upbound" -}}

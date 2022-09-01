@@ -69,7 +69,15 @@ input:focus-visible {
   outline: none;
 }
 
-/* Landing page global styling */ 
+.flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+/* Landing page global styling */
 .upbound-docs {
   background-color: #0B1C28;
   color: #e0e4ec;
@@ -318,7 +326,7 @@ input:focus-visible {
   margin-left: 15px;
 }
 
-/* Navigation */  
+/* Navigation */
 .gdoc-header {
   border-bottom: none;
   height: 88px;
@@ -406,6 +414,12 @@ input:focus-visible {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+@media screen and (max-width: 39rem) {
+  .header-right-items {
+    margin-left: 15px;
+  }
 }
 
 .header-right-items > .header-link-items > a {
@@ -598,11 +612,18 @@ input:focus-visible {
   padding: 20px 50px;
   display: flex;
   justify-content: space-between;
+  position: relative;
+}
+
+@media screen and (max-width: 39rem) {
+  #product-nav > .container {
+    padding-right: 10px;
+  }
 }
 
 #product-nav .sub-nav {
   display: flex;
-  align-items: center;  
+  align-items: center;
 }
 
 #product-nav .sub-nav ul {
@@ -639,6 +660,13 @@ input:focus-visible {
 
 #product-nav .sub-nav ul li a:hover {
   color: #183B56;
+}
+
+#product-nav .gdoc-nav__control {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .switcher-header svg.gdoc-icon {

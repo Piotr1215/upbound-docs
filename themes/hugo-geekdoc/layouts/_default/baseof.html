@@ -26,10 +26,11 @@
     >
       <input type="checkbox" class="hidden" id="menu-control" />
       <input type="checkbox" class="hidden" id="menu-header-control" />
-      {{ $navEnabled := default true .Page.Params.GeekdocNav }}
-      {{ partial "site-header" . }}
+      {{ partial "site-header" }}
 
-      {{ partial "product-nav" . }}
+      {{ $navEnabled := default true .Page.Params.GeekdocNav }}
+
+      {{ partial "product-nav" (dict "Root" . "MenuEnabled" $navEnabled) }}
 
       <main class="container flex flex-even">
         {{ if $navEnabled }}
