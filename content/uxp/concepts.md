@@ -2,7 +2,8 @@
 title: "UXP Concepts"
 metaTitle: "Concepts"
 metaDescription: "UXP Concepts"
-rank: 11
+rank: 202
+draft: true
 ---
 
 Our belief at Upbound is that among the many innovations brought about by

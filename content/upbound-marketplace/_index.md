@@ -1,17 +1,10 @@
 ---
 title: 'Upbound Marketplace'
-icon: 'Grid'
-metaTitle: 'Upbound Marketplace'
-metaDescription: 'Upbound Marketplace'
-rank: 30
+weight: 100
 ---
 
-Upbound Marketplace is where developers publish and discover the building blocks
-for their internal cloud platforms.
+Upbound marketplace is a curated home for Crossplane extensions including [Crossplane providers](https://marketplace.upbound.io/providers), [control plane configurations](https://marketplace.upbound.io/configurations) and comprehensive documentation. 
 
-With an Upbound account, users can [publish](./publishing-a-listing) Providers
-and Configurations to the Upbound Marketplace to share with the rest of the
-community. Customers with [Upbound Business or Enterprise plans] can publish
-private listings exclusively for team members in their organization.
+Find Upbound's [official providers]({{<ref "providers" >}}) in the Upbound Marketplace.
 
-[upbound business or enterprise plans]: https://upbound.io/pricing
+The Upbound Marketplace is at [marketplace.upbound.io](https://marketplace.upbound.io)

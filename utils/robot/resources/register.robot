@@ -14,8 +14,7 @@ ${email}
 Capture Sign Up
     # Continue from the Sign Up page and take a screenshot
     [Arguments]    ${img}
-    Click Link    class:e19vr18b1
-    Capture Element Screenshot    class:css-1pc0v7v    ${img}
+    Capture Element Screenshot    class:e13dycp82    ${img}
 
 Generate Email
     # Helper function to create a random string to create a docs+<string>@upbound.io email
