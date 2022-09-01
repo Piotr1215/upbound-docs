@@ -10,17 +10,17 @@ The Upbound `up` command-line simplifies configuration and management of Upbound
 
 ## Install the Up command-line
 
-Install the `up` command-line via Bash, Homebrew or Linux package.
+Install the `up` command-line via shell, Homebrew or Linux package.
 
 {{< tabs "up-install" >}}
-{{<tab "Bash" >}}
-Install the latest version of the `up` command-line via Bash script by downloading the install script from [Upbound](https://cli.upbound.io).  
+{{<tab "Shell" >}}
+Install the latest version of the `up` command-line via shell script by downloading the install script from [Upbound](https://cli.upbound.io).  
 
 {{< hint type="tip" >}}
-Bash install is the preferred method for installing the `up` command-line.
+Shell install is the preferred method for installing the `up` command-line.
 {{< /hint >}}
 
-The Bash install script automatically determines the operating system and platform architecture an installs the correct binary. 
+The shell install script automatically determines the operating system and platform architecture an installs the correct binary. 
 
 ```console
 curl -sL "https://cli.upbound.io" | sh
