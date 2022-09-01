@@ -66,7 +66,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws:v0.5.0
   packagePullSecrets:
-    - name: my-upbound-secret
+    - name: package-pull-secret
 ```
 
 Find provider specific instructions and configurations in their individual documentation pages within the Upbound Marketplace.
