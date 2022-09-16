@@ -1,50 +1,45 @@
 <div class="gdoc-header">
-  <nav class="navbar navbar-expand-xl">
-    <div class="container"> 
-      <div style="flex: 1 1 0%;">
-        <a class="gdoc-brand gdoc-header__link" href="{{ .Site.BaseURL }}">
+  <nav id="navbar">
+    <div class="nav-container">
+      <div id="brand">
+        <a class="gdoc-brand gdoc-header__link" href="/">
           <span class="flex align-center">
             <img class="gdoc-brand__img" src="/img/upbound-logo-white.svg" alt="">
             <span class="gdoc-brand__title">| DOCS</span>
           </span>
         </a>
       </div>
+      <input type="checkbox" id="chkToggle"></input>
+      <label id="#hamburgerIcon" class="navbar-toggle" for="chkToggle">
+          <span class="bars"></span>
+      </label>
 
-      <div class="menu--toggle" data-toggle="collapse" data-target="#navbarDocs">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      
-      <div class="collapse navbar-collapse" id="navbarDocs">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a href="https://www.upbound.io/products/universal-cloud-platform" target="_blank">
-              Products
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="https://marketplace.upbound.io/" target="_blank">
-              Marketplace
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="https://blog.upbound.io/" target="_blank">
-              Learn
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="https://www.upbound.io/about" target="_blank">
-              About
-            </a>
-          </li>
-        </ul>
+      <ul id="menu" class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a href="https://www.upbound.io/products/universal-cloud-platform" target="_blank">
+            Products
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://marketplace.upbound.io/" target="_blank">
+            Marketplace
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://blog.upbound.io/" target="_blank">
+            Learn
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://www.upbound.io/about" target="_blank">
+            About
+          </a>
+        </li>
         <div class="mobile-btns d-xl-none d-flex">
           <a class="btn" href="https://accounts.upbound.io/register">Try For Free</a>
           <a class="btn" href="https://accounts.upbound.io/login">Sign in</a>
         </div>  
-      </div>
+      </ul>
 
       <div class="header-right-items d-none d-xl-flex">
         <div class="header-link-items">
@@ -76,6 +71,7 @@
           <a href="https://accounts.upbound.io/register" class="btn" target="_blank">Try For Free</a>
         </div>
       </div>
+
     </div>
   </nav>
 </div>
