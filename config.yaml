@@ -3,12 +3,13 @@ enableRobotsTXT: True
 languageCode: "en-us"
 title: "Documentation"
 theme: "hugo-geekdoc"
-
-# Required to get well formatted code blocks
-pygmentsUseClasses: true
-pygmentsCodeFences: true
+enableGitInfo: true
 disablePathToLower: true
-enableGitInfo: false
+disableKinds:
+  - RSS
+
+sitemap:
+  changefreq: weekly
 
 markup:
   goldmark:
@@ -18,9 +19,13 @@ markup:
   tableOfContents:
     startLevel: 1
     endLevel: 9
+  highlight:
+    noClasses: false
+    linenos: true
+    LineNumbersInTable: true
+    anchorLineNos: true
+    style: swapoff
 
-taxonomies:
-  tag: tags
 
 params:
   # (Optional, default 6) Set how many table of contents levels to be showed on page.
