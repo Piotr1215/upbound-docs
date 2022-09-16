@@ -1355,3 +1355,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 code.language-shell::before {
   content: "$ ";
 }
+
+pre.chroma > code {
+  min-height: 3rem;
+}
