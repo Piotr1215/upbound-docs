@@ -16,7 +16,7 @@ Create a repository with the given name.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up repository create my-org
+up repository create my-org
 ```
 
 ### `up repository list`
@@ -30,7 +30,7 @@ List all repository associated to the current user.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up repo list
+up repo list
 NAME      TYPE      PUBLIC   UPDATED
 my-repo   unknown   false    n/a
 ```
@@ -52,7 +52,7 @@ This can not be undone.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up repository delete my-repo
+up repository delete my-repo
 Are you sure you want to delete this repository? [y/n]: y
 Deleting repository my-repo. This cannot be undone.
 my-repo deleted

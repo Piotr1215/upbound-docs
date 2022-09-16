@@ -79,7 +79,7 @@ To add or update a profile, users can execute `up login` with the appropriate
 credentials and a profile name specified. For instance, the following command
 would add a new profile named `test`:
 
-```console
+```shell
 up login --profile test -u hasheddan -p cool-password
 ```
 

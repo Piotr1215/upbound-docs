@@ -58,13 +58,13 @@ Verify the state of `login` with `up organization list`.
 When logged in the list of organizations the user belongs to.
 
 ```shell
-$ up organization list
+up organization list
 NAME           ROLE
 my_org        owner
 ```
 
 If not logged in, the command returns an error.
 ```shell
-$ up org list
+up org list
 up: error: permission denied: {"message":"Unauthorized"}
 ```

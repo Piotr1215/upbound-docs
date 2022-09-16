@@ -25,12 +25,12 @@ Supply a JSON file of settings for bulk changes.
 #### Examples
 ##### Set a key-value pair
 ```shell
-$ up profile config set color blue
+up profile config set color blue
 ```
 
 ##### Unset a key-value pair
 ```shell
-$ up profile config unset color
+up profile config unset color
 ```
 
 
@@ -68,7 +68,7 @@ List all configured profiles.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up profile list
+up profile list
 CURRENT   NAME      TYPE   ACCOUNT
 *         default   user   my-org
 ```
@@ -80,7 +80,7 @@ CURRENT   NAME      TYPE   ACCOUNT
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up profile use test
+up profile use test
 ```
 
 ### `up profile view`

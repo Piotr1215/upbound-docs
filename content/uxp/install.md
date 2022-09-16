@@ -14,7 +14,7 @@ Installing UXP requires the [Up command-line]({{<ref "cli/" >}}).
 
 Use the `up uxp install` command to install UXP into the current Kubernetes cluster based on `~/.kube/config`.
 
-```console
+```shell
 up uxp install
 ```
 
@@ -72,7 +72,7 @@ For example to configure two Crossplane pod replicas and increase the pod memory
 To provide a `customAnnotation` of `a8r.io/owner: "@upbound"` with `-f`
 
 ```shell
-$ cat settings.yaml
+cat settings.yaml
 replicas: 2
 
 image:

@@ -38,12 +38,12 @@ There's no way to recover the `token` value if it's lost.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up robot token create my-robot my-token ~/my-robot-token.json
+up robot token create my-robot my-token ~/my-robot-token.json
 my-org/my-robot/my-token created
 ```
 
 ```shell
-$ cat ~/my-robot-token.json
+cat ~/my-robot-token.json
 vagrant@kubecontroller-01:~$ cat token.json
 {"accessId":"a857e667-526a-8424-8dff-d29d3204adae","token":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhODU3ZTY2Ny01MjZhLTQwNDItOGRlMy1kMjlkMzIwNGFkYWUiLCJzdWIiOiJyb2JvdHwzZjc2ZWVjNS1iN2UwLTRmNmUtYWVlYy04YWRiZWMyYzQ0YTYifQ.F00nFGsINl3wrRvI6YQd4AlwevdiZZZeiJFZXi7QxZ3pYEhDjeL0pLw-ln-qyFLQXNX42jw-n0sAlmV6T1IVU9fLjQOaPIiFbhovlf4uNlPL51ih3qwswMC7kgdzCpg3e4l3HngEsHsIhnv_5ipliJXx7Pk7eRfybDQyGM7nodbd5Zk-bOI9MMRJPrwxanlRoPnt3oiUhSBcmHaJh7GbSs_8bCKq1hSK1HK6nj8nHgS2zOI3oe1Xrk1SKnNw2wC_MpPDxpoW9xitMapjzhKdzdl5T3peIrsEW9z2i-Sm1yKFpe80a6wRKNgiK1caxj7gjPVuvEoVop-uKayN9DMViQ"}
 ```
@@ -64,7 +64,7 @@ The command asks to confirm deleting the token.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up robot token delete my-robot my-token
+up robot token delete my-robot my-token
 Are you sure you want to delete this robot token? [y/n]: y
 Deleting robot token my-org/my-robot/my-token. This cannot be undone.
 my-org/my-robot/my-token deleted
@@ -81,7 +81,7 @@ Lists all robot tokens associated with the given robot account.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up robot token list my-robot
+up robot token list my-robot
 NAME       ID                                     CREATED
 my-token   a857e667-526a-8424-8dff-d29d3204adae   28m
 ```

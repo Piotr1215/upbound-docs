@@ -33,7 +33,7 @@ The Upbound Cloud Platform requires authentication with [`up login`]({{<ref "log
 
 <!-- omit in toc -->
 #### Example 
-```command
+```shell
 up alpha controlplane create my-controlplane
 ```
 
@@ -54,7 +54,7 @@ The Upbound Cloud Platform requires authentication with [`up login`]({{<ref "log
 
 <!-- omit in toc -->
 #### Example
-```command
+```shell
 up alpha controlplane delete 1d6f3556-85cc-4ccd-936c-7722baad8d45
 ```
 
@@ -74,7 +74,8 @@ The Upbound Cloud Platform requires authentication with [`up login`]({{<ref "log
 
 <!-- omit in toc -->
 #### Example
-```command
+```shell
+up alpha controlplane list
 NAME                                           ID                                     SELF-HOSTED    STATUS
 upbound-1d6f3556-85cc-4ccd-936c-7722baad8d45   1d6f3556-85cc-4ccd-936c-7722baad8d45   false          ready
 ```

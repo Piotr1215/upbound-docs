@@ -11,7 +11,7 @@ UXP supports upgrading from any older UXP release to any newer UXP release versi
 Use `up uxp upgrade <VERSION>` to upgrade UXP.
 
 For example, to upgrade to version `v1.7.0-up.1` use the command 
-```console
+```shell
 up uxp upgrade v1.7.0-up.1 -n upbound-system
 ```
 
@@ -29,7 +29,7 @@ Crossplane `v1.3.1` and UXP `v1.3.3-up.1` aren't.
 
 Use `up uxp upgrade <VERSION>` to upgrade from Crossplane to UXP.
 
-```console
+```shell
 up uxp upgrade v1.7.0-up.1 -n crossplane-system
 ```
 {{< hint type="note" >}}
@@ -38,14 +38,14 @@ You must install UXP in the same namespace as the existing Crossplane install.
 
 To upgrade Crossplane to UXP find the current version of Crossplane installed.
 
-```console
-$ kubectl get pods  -n crossplane-system -o jsonpath='{.items[*].spec.containers[*].image}{"\n"}'
+```shell
+kubectl get pods  -n crossplane-system -o jsonpath='{.items[*].spec.containers[*].image}{"\n"}'
 crossplane/crossplane:v1.7.0 crossplane/crossplane:v1.7.0
 ```
 
 View the current Crossplane related pods.
-```console
-$ kubectl get pods -n crossplane-system
+```shell
+kubectl get pods -n crossplane-system
 NAME                                       READY   STATUS    RESTARTS   AGE
 crossplane-7db56bd5c6-85z8s                1/1     Running   0          25m
 crossplane-rbac-manager-78469fcfcf-6df5g   1/1     Running   0          25m
@@ -54,14 +54,14 @@ crossplane-rbac-manager-78469fcfcf-6df5g   1/1     Running   0          25m
 Find the correct version of UXP to upgrade to from the [UXP releases page](https://github.com/upbound/universal-crossplane/releases).
 
 Upgrade to the compatible version of UXP.
-```console
+```shell
 up uxp upgrade v1.7.0-up.1 -n crossplane-system
 ```
 
 Upgrading to UXP replaces the `crossplane` and `crossplane-rbac-manager` pods and adds two new pods to the cluster.
 
-```console
-$ kubectl get pods -n crossplane-system
+```shell
+kubectl get pods -n crossplane-system
 NAME                                       READY   STATUS    RESTARTS     AGE
 crossplane-797c7cd8b6-csp8h                1/1     Running   0            2m7s
 crossplane-rbac-manager-744b86cbcd-c45tk   1/1     Running   0            2m7s

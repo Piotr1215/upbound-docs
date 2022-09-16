@@ -32,7 +32,7 @@ Use `up login` to authenticate to the Upbound Marketplace.
 It's important to use `-a <your organization>` when logging in. Only accounts belonging to organizations can access Upbound Marketplace resources.
 
 ```shell
-$ up login -a my-org
+up login -a my-org
 username: my-user
 password: 
 my-user logged in
@@ -51,7 +51,7 @@ Only users logged into an organization can create robot accounts.
 {{< /hint >}}
 
 ```shell
-$ up robot create my-robot
+up robot create my-robot
 my-org/my-robot created
 ```
 <br />
@@ -62,7 +62,7 @@ The robot token acts as a username and password for a robot account.
 Generate a token using `up robot token create <robot account> <token name> --output=<file>`.
 
 ```shell
-$ up robot token create my-robot my-token --output=token.json
+up robot token create my-robot my-token --output=token.json
 my-org/my-robot/my-token created
 ```
 
@@ -80,14 +80,14 @@ Using the `up controlplane pull-secret create <secret name> -f <robot token file
 Provide a name for your Kubernetes secret and the path to the robot token JSON file.
 
 ```shell
-$ up controlplane pull-secret create my-upbound-secret -f token.json
+up controlplane pull-secret create my-upbound-secret -f token.json
 my-org/my-upbound-secret created
 ```
 
 `Up` creates the secret in the `upbound-system` namespace. 
 
 ```shell
-$ kubectl get secret -n upbound-system
+kubectl get secret -n upbound-system
 NAME                                         TYPE                             DATA   AGE
 my-upbound-secret                            kubernetes.io/dockerconfigjson   1      8m46s
 sh.helm.release.v1.universal-crossplane.v1   helm.sh/release.v1               1      21m
@@ -117,7 +117,7 @@ kubectl create secret docker-registry my-upbound-secret \
 
 Verify the secret with `kubectl get secrets`
 ```shell
-$ kubectl get secret -n upbound-system
+kubectl get secret -n upbound-system
 NAME                                         TYPE                             DATA   AGE
 my-upbound-secret                            kubernetes.io/dockerconfigjson   1      8m46s
 sh.helm.release.v1.universal-crossplane.v1   helm.sh/release.v1               1      21m

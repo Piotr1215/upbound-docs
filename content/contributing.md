@@ -173,6 +173,7 @@ If the `ref` value points to a page that doesn't exist, Hugo fails to start.
 
 For example, providing `index.md` instead of `_index.md` would cause an error like the this:
 ```shell
+./hugo
 Start building sites …
 hugo v0.98.0-165d299cde259c8b801abadc6d3405a229e449f6 darwin/arm64 BuildDate=2022-04-28T10:23:30Z VendorInfo=gohugoio
 ERROR 2022/08/15 13:53:46 [en] REF_NOT_FOUND: Ref "providers/index.md": "/Users/plumbis/git/docs/content/contributing.md:64:41": page not found
@@ -188,7 +189,7 @@ For example,
 ```markdown
 [Go to Upbound](http://upbound.io)
 ```
-
+&nbsp;
 ### Hints and alert boxes
 Hint and alert boxes provide call-outs to important information to the reader. Upbound docs support five different hint box styles.
 
@@ -242,7 +243,7 @@ To create a tab set, first create a `tabs` shortcode and use multiple `tab` shor
 Each `tabs` shortcode requires a name that's unique to the page it's on. Each `tab` name is the title of the tab on the webpage. 
 
 For example
-```
+```html
 {{</* tabs "my-unique-name" */>}}
 
 {{</* tab "Command-line" */>}}
@@ -353,7 +354,7 @@ spec:
             - parameters
 ```
 {{< /expand >}}
-
+&nbsp;
 
 ### Images
 Place images in the `/static/images` directory. Reference images with [markdown](https://www.markdownguide.org/basic-syntax/#images-1) using `/images` as the root directory.
@@ -363,7 +364,7 @@ For example, to link to the image located at `/static/images/robots/create-first
 ```markdown
 ![The alt text for an example image](/images/robots/create-first-robot-token.png)
 ```
-
+&nbsp;
 ## Style guide
 The Upbound documentation style guide is still under construction, but the [Kubernetes style guide](https://kubernetes.io/docs/contribute/style/) is a safe reference. 
 

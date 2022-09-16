@@ -32,13 +32,13 @@ The [UXP]({{<ref "/uxp/_index.md#customize-install-options" >}}) guide lists all
 <!-- omit in toc -->
 ##### Install the latest version of `UXP`
 ```shell
-$ up uxp install
+up uxp install
 ```
 
 <!-- omit in toc -->
 ##### Install the latest version of `UXP` and set the image pull policy
 ```shell
-$ up uxp install --set image.pullPolicy=IfNotPresent
+up uxp install --set image.pullPolicy=IfNotPresent
 ```
 
 ### `up uxp uninstall`
@@ -53,7 +53,7 @@ Uninstall UXP from the cluster.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up uxp uninstall
+up uxp uninstall
 ```
 
 ### `up uxp upgrade`
@@ -79,11 +79,11 @@ UXP upgrades can be from one UXP version to another or from open source Crosspla
 <!-- omit in toc -->
 ##### Upgrade to `UXP` version v1.7.0-up.1
 ```shell
-$ up uxp upgrade v1.7.0-up.1
+up uxp upgrade v1.7.0-up.1
 ```
 
 <!-- omit in toc -->
 ##### Upgrade Crossplane to `UXP`
 ```shell
-$ up uxp upgrade v1.7.0-up.1 -n crossplane-system
+up uxp upgrade v1.7.0-up.1 -n crossplane-system
 ```

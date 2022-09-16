@@ -24,6 +24,6 @@ The Upbound Cloud Platform requires authentication to an organization with [`up 
 
 #### Examples
 ```shell
-$ up robot create my-robot
+up robot create my-robot
 my-org/my-robot created
 ```

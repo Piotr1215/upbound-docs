@@ -8,7 +8,7 @@ Log out of Upbound services by invalidating the current login token.
 
 
 #### Examples
-```
-$ up logout
+```shell
+up logout
 my-name logged out
 ```

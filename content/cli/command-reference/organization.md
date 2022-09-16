@@ -20,7 +20,7 @@ Create an organization with the given name.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up org create my-org
+up org create my-org
 ```
 
 ### `up organization list`
@@ -34,7 +34,7 @@ List all organizations associated to the current user.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up org list
+up org list
 NAME           ROLE
 my-org         owner
 my-other-org   owner
@@ -57,7 +57,7 @@ This can not be undone.
 <!-- omit in toc -->
 #### Examples
 ```shell
-$ up org delete my-org
+up org delete my-org
 Are you sure you want to delete this organization? [y/n]: y
 Deleting orgainzation my-org. This cannot be undone.
 my-org deleted

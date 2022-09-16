@@ -56,7 +56,7 @@ UXP creates and installs these pods into the `upbound-system` namespace.
 Verify the UXP pods are running with `kubectl get pods -n upbound-system`
 
 ```shell
-$ kubectl get pods -n upbound-system
+kubectl get pods -n upbound-system
 NAME                                        READY   STATUS    RESTARTS      AGE
 crossplane-7fdfbd897c-pmrml                 1/1     Running   0             68m
 crossplane-rbac-manager-7d6867bc4d-v7wpb    1/1     Running   0             68m
@@ -94,7 +94,7 @@ Apply this configuration with `kubectl apply -f`.
 
 After installing the provider, verify the install with `kubectl get providers`.
 ```shell
-$ kubectl get provider
+kubectl get provider
 NAME           INSTALLED   HEALTHY   PACKAGE                                           AGE
 provider-aws   True        True      xpkg.upbound.io/crossplane/provider-aws:v0.24.1   7s
 ```
@@ -125,7 +125,7 @@ Apply this configuration with `kubectl apply -f`.
 
 After installing the provider, verify the install with `kubectl get providers`.
 ```shell
-$ kubectl get provider
+kubectl get provider
 NAME             INSTALLED   HEALTHY   PACKAGE                                             AGE
 provider-azure   True        True      xpkg.upbound.io/crossplane/provider-azure:v0.18.1   9s
 ```
@@ -157,7 +157,7 @@ Apply this configuration with `kubectl apply -f`.
 
 After installing the provider, verify the install with `kubectl get providers`.
 ```shell
-$ kubectl get provider
+kubectl get provider
 NAME           INSTALLED   HEALTHY   PACKAGE                                           AGE
 provider-gcp   True        True      xpkg.upbound.io/crossplane/provider-gcp:v0.20.0   8s
 ```
@@ -212,7 +212,7 @@ kubectl create secret generic aws-secret \
 View the secret with `kubectl describe secret`
 
 ```shell
-$ kubectl describe secret aws-secret -n upbound-system
+kubectl describe secret aws-secret -n upbound-system
 Name:         aws-secret
 Namespace:    upbound-system
 Labels:       <none>
@@ -242,7 +242,7 @@ Follow the Azure documentation to find your Subscription ID from the [Azure Port
 
 Using the Subscription ID create a service principal and authentication file.
 
-```
+```shell
 az ad sp create-for-rbac --sdk-auth --role Owner --scopes /subscriptions/<Subscription ID> 
 ```
 
@@ -276,7 +276,7 @@ kubectl create secret generic azure-secret \
 
 View the secret with `kubectl describe secret`
 ```shell
-$ kubectl describe secret azure-secret -n upbound-system
+kubectl describe secret azure-secret -n upbound-system
 Name:         azure-secret
 Namespace:    upbound-system
 Labels:       <none>
@@ -320,7 +320,7 @@ Save this JSON file as `gcp-credentials.json`.
 ### Create a Kubernetes secret with GCP credentials
 Use `kubectl create secret -n upbound-system` to generate the Kubernetes secret object inside the managed control plane.
 
-```command
+```shell
 kubectl create secret generic gcp-secret \
 -n upbound-system \
 --from-file=creds=./gcp-credentials.json
@@ -507,8 +507,8 @@ Generate a unique bucket name from the command line.
 `echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 14)`
 
 For example
-```
-$ echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10)
+```shell
+echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10)
 upbound-bucket-fb8360b455dd9
 ```
 
@@ -540,7 +540,7 @@ Apply this configuration with `kubectl apply -f`.
 Use `kubectl get bucket` to verify bucket creation.
 
 ```shell
-$ kubectl get bucket
+kubectl get bucket
 NAME      READY   SYNCED   AGE
 example   True    True     3s
 ```
@@ -593,7 +593,7 @@ If the `Bucket` doesn't report `SYNCED` as `true` use `kubectl describe bucket` 
 An event log indicating `Bad Request` may be due to bad AWS credentials.
 
 ```shell
-$ kubectl get bucket -w
+kubectl get bucket -w
 NAME                           READY   SYNCED   AGE
 upbound-bucket-fb8360b455dd9           False    4s
 ```
@@ -630,7 +630,7 @@ Events:
 Remove the managed resource by using `kubectl delete -f` with the same `Bucket` object file. Verify removal of the bucket with `kubectl get bucket`
 
 ```shell
-$ kubectl get bucket
+kubectl get bucket
 No resources found
 ```
 
@@ -658,7 +658,7 @@ Apply this configuration with `kubectl apply -f`.
 Use `kubectl get resourcegroups` to verify resource group creation.
 
 ```shell
-$ kubectl get resourcegroups
+kubectl get resourcegroups
 NAME         READY   SYNCED
 example-rg   True    True
 ```
@@ -670,7 +670,7 @@ Crossplane created the resource group when the values `READY` and `SYNCED` are `
 Remove the managed resource by using `kubectl delete -f` with the same `ResourceGroup` object file. Verify removal of the resource group with `kubectl get resourcegroups`
 
 ```shell
-$ kubectl describe resourcegroups
+kubectl describe resourcegroups
 No resources found in default namespace.
 ```
 {{< /tab >}}
@@ -684,8 +684,8 @@ Generate a unique bucket name from the command line.
 `echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 14)`
 
 For example
-```
-$ echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10)
+```shell
+echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10)
 upbound-bucket-fb8360b455dd9
 ```
 
@@ -718,7 +718,7 @@ Apply this configuration with `kubectl apply -f`.
 Use `kubectl get bucket` to verify bucket creation.
 
 ```shell
-$ kubectl get bucket
+kubectl get bucket
 NAME      READY   SYNCED   STORAGE_CLASS    LOCATION   AGE
 example   True    True     MULTI_REGIONAL   US         3s
 ```
@@ -732,7 +732,7 @@ Details about the bucket are available in `kubectl describe bucket`
 Remove the managed resource by using `kubectl delete -f` with the same `Bucket` object file. Verify removal of the bucket with `kubectl get bucket`
 
 ```shell
-$ kubectl get bucket
+kubectl get bucket
 No resources found
 ```
 {{< /tab >}}

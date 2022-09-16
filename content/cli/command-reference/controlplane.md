@@ -30,7 +30,7 @@ Generating the robot token requires authenticating to the Upbound Marketplace. U
 #### Examples
 
 ##### Create a pull-secret
-```command
+```shell
 up controlplane pull-secret create my-token
 WARNING: Using temporary user credentials that will expire within 30 days.
 upbound-system/my-token created

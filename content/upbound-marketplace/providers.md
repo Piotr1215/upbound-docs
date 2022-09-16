@@ -27,7 +27,7 @@ UXP supports official providers on the following [releases](https://github.com/u
 Inspect the `crossplane` deployment to confirm the version of Universal Crossplane.
 
 ```shell
-$ kubectl get deployment crossplane -n upbound-system -o 'jsonpath={@.spec.template.spec.containers.*.image}{"\n"}'
+kubectl get deployment crossplane -n upbound-system -o 'jsonpath={@.spec.template.spec.containers.*.image}{"\n"}'
 upbound/crossplane:v1.8.1-up.2
 ```
 
