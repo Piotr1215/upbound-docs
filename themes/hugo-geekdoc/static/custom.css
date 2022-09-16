@@ -1351,3 +1351,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 :root .gdoc-markdown .gdoc-hint__title, :root .gdoc-markdown .admonitionblock table td:first-child {
   background-color: rgba(134, 142, 150, .05);
 }
+
+code.language-shell::before {
+  content: "$ ";
+}
