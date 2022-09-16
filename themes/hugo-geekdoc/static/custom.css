@@ -72,6 +72,22 @@ input:focus-visible {
 .flex {
   display: flex;
 }
+.d-flex {
+  display: flex;
+}
+.d-none {
+  display: none;
+}
+@media screen and (min-width: 1200px) {
+  .d-xl-flex {
+    display: flex;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .d-xl-none {
+    display: none;
+  }
+}
 
 .align-center {
   align-items: center;
@@ -270,9 +286,6 @@ button:focus {
 }
 
 /* Landing page */
-/* .upbound-docs nav {
-  background-color: #0B1C28;
-} */
 
 .upbound-docs header {
   padding: 120px 0;
@@ -335,25 +348,157 @@ button:focus {
 }
 
 /* Navigation */
-.gdoc-header {
-  position: relative;
-  height: 88px;
-}
+/* Mobile First Approach */
 
-.gdoc-header nav {
+#navbar .nav-container {
+  width: 100%;
+  max-width: 1440px;
+  padding: 25px 50px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0b1c28;
+  color: #fff;
+  z-index: 1200;
+
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1030;
-  background-color: #0b1c28;
-  padding: 0;
 }
 
-.gdoc-header nav .container {
-  width: 100%;
-  max-width: 1440px;
-  padding: 25px 50px;
+@media screen and (max-width: 1199px) {
+  #navbar .nav-container {
+    padding: 28px 50px;
+  }
+  #menu {
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+  }
+  #menu li {
+    text-align: center;
+    padding-bottom: 30px;
+  }
+}
+
+@media screen and (max-width: 39rem) {
+  #navbar .nav-container {
+    padding: 28px 13px 28px 15px;
+  }
+}
+
+/* Hamburger */
+
+.bars {
+  background: #fff;
+  display: block;
+  height: 2px;
+  position: relative;
+  width: 24px;
+}
+.bars::before,
+.bars::after {
+  content: '';
+  background: #fff;
+  display: block;
+  height: 2px;
+  position: absolute;
+  width: 24px;
+}
+.bars::before {
+  content: '';
+  top: 6px;
+  transition: all 0.2s ease-out;
+}
+.bars::after {
+  content: '';
+  top: -6px;
+  transition: all 0.2s ease-out;
+}
+
+/* Navbar Toggle and Animation */
+
+#navbar label.navbar-toggle {
+  cursor: pointer;
+}
+input#chkToggle:checked + label.navbar-toggle > span.bars {
+  background-color: #0b1c28;
+}
+input#chkToggle:checked + label.navbar-toggle > span.bars:before {
+  transform: rotate(-45deg);
+  top: 0;
+}
+input#chkToggle:checked + label.navbar-toggle > span.bars:after {
+  transform: rotate(45deg);
+  top: 0;
+}
+#chkToggle {
+  display: none;
+}
+#chkToggle:checked ~ ul#menu {
+  display: flex;
+  flex-direction: column;
+}
+
+/* List of Menu Links */
+
+#navbar ul#menu {
+  flex: 0 1 100%;
+  list-style: none;
+  display: none;
+  list-style: none;
+  padding-left: 0;
+  text-align: center;
+}
+
+/* Tablet Menu */
+
+@media all and (min-width: 468px) {
+  .navbar-toggle,
+  .navbar-toggle .bars {
+    float: right;
+    flex-basis: 10%;
+    cursor: pointer;
+  }
+
+  #navbar ul#menu {
+    flex-basis: 100%;
+  }
+
+  #navbar #brand,
+  .navbar-toggle {
+    justify-content: space-evenly;
+  }
+}
+
+/* Desktop */
+
+@media all and (min-width: 1200px) {
+  #navbar #brand {
+    flex-basis: 22.4%;
+  }
+  #navbar ul#menu,
+  #chkToggle:checked ~ ul#menu {
+    flex-basis: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0px;
+  }
+  .navbar-toggle,
+  .navbar-toggle .bars {
+    display: none;
+  }
+}
+
+/* Top Nav Styling */
+
+.gdoc-header {
+  position: relative;
+  border-bottom: 0;
 }
 
 .gdoc-header .gdoc-brand__img {
@@ -428,22 +573,6 @@ button:focus {
   margin: 16px 0px 0px;
 }
 
-@media screen and (max-width: 1200px) {
-  .gdoc-header nav .container {
-    padding: 28px 15px;
-  }
-  .navbar-collapse {
-    margin-top: 5rem;
-    margin-bottom: 2rem;
-  }
-  /* .navbar-collapse ul {
-    height: 100vh;
-  } */
-  .navbar-collapse ul li {
-    text-align: center;
-    padding-bottom: 30px;
-  }
-}
 @media screen and (max-width: 39rem) {
   .gdoc-brand__img {
       display: block;
@@ -451,8 +580,6 @@ button:focus {
 }
 
 .header-right-items {
-  /* flex: 1; */
-  display: flex;
   justify-content: flex-end;
   align-items: center;
 }
@@ -529,58 +656,6 @@ button:focus {
   margin-right: 8px;
 }
 
-.menu--toggle {
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  margin-left: 20px;
-  position: relative;
-  transform: rotate(0deg);
-  transition: 0.5s ease-in-out;
-}
-
-@media screen and (min-width: 1200px) {
-  .menu--toggle {
-    display: none;
-  }
-}
-
-.menu--toggle span {
-  background-color: white;
-  display: block;
-  position: absolute;
-  height: 3px;
-  width: 100%;
-  transform: rotate(0deg);
-  transition: 0.25s ease-in-out;
-}
-
-.menu--toggle span:nth-child(1) {
-  top: 0;
-}
-.menu--toggle span:nth-child(2),
-.menu--toggle span:nth-child(3) {
-  top: 8px;
-}
-.menu--toggle span:nth-child(4) {
-  top: 16px;
-}
-.menu--toggle[aria-expanded="true"] {
-  z-index: 1;
-}
-.menu--toggle[aria-expanded="true"] span:nth-child(1),
-.menu--toggle[aria-expanded="true"] span:nth-child(4) {
-  top: 8px;
-  width: 0%;
-  left: 50%;
-}
-.menu--toggle[aria-expanded="true"] span:nth-child(2) {
-  transform: rotate(45deg);
-}
-.menu--toggle[aria-expanded="true"] span:nth-child(3) {
-  transform: rotate(-45deg);
-}
-
 /* Footer */
 .gdoc-footer {
   background-color: #0B1C28;
@@ -592,7 +667,6 @@ button:focus {
   padding: 78px 140px;
   margin: 0px auto;
   max-width: 1440px;
-  /* font-family: 'Avenir-Roman', 'Arial', sans-serif; */
   letter-spacing: 0;
 }
 
@@ -724,6 +798,7 @@ button:focus {
 #product-nav {
   background-color: #fff;
   box-shadow: 0 2px 10px rgb(175 184 197 / 20%);
+  margin-top: 88px;
 }
 
 #product-nav > .container {
