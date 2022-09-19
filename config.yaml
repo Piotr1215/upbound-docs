@@ -20,11 +20,11 @@ markup:
     startLevel: 1
     endLevel: 9
   highlight:
+    codeFences: true
     noClasses: false
     linenos: true
     LineNumbersInTable: true
     anchorLineNos: true
-    style: swapoff
 
 
 params:
