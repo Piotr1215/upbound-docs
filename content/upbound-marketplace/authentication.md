@@ -21,8 +21,8 @@ Create a secret either with the `Up` command-line tool or manually in Kubernetes
 
 Confirm the version of Up command-line with `up --version`
 
-```command
-$ up --version
+```shell
+up --version
 v0.13.0
 ```
 

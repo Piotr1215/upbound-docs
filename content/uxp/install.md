@@ -77,8 +77,9 @@ replicas: 2
 
 image:
     pullPolicy: IfNotPresent
-
-$ up uxp install -f settings.yaml
+```
+```shell
+up uxp install -f settings.yaml
 ```
 <!-- vale off -->
 {{< expand "Optional install configurations">}}

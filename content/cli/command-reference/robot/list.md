@@ -18,8 +18,8 @@ _None_
   
 Lists all robots within an organization.
 
-```
-$ up robot list
+```shell
+up robot list
 NAME              ID                                     DESCRIPTION   CREATED
 my-robot          3f76eec5-b7e0-4f6e-aeec-8adbec2c44a6                 28m
 ```

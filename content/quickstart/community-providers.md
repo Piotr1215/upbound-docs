@@ -30,8 +30,7 @@ The `up` command-line relies on the `kubeconfig` file to connect to the Kubernet
 {{< /hint >}}
 
 ```shell
-curl -sL "https://cli.upbound.io" | sh
-sudo mv up /usr/local/bin/
+curl -sL "https://cli.upbound.io" | sh && sudo mv up /usr/local/bin/
 ```
 
 ## Install Upbound Universal Crossplane
@@ -203,7 +202,7 @@ Use `kubectl create secret -n upbound-system` to generate the Kubernetes secret 
 Secrets stored in Kubernetes aren't encrypted.
 {{< /hint >}}
 
-```command
+```shell
 kubectl create secret generic aws-secret \
 -n upbound-system \
 --from-file=creds=./aws-credentials.txt
