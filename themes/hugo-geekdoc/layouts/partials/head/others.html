@@ -2,19 +2,13 @@
 
 <link
   rel="preload"
-  href="{{ "custom.css" | relURL }}"
-  as="style"
-/>
-
-<link
-  rel="preload"
-  href="{{ index (index .Site.Data.assets "main.scss") "src" | relURL }}"
+  href="/main.css"
   as="style"
 />
 
 <link
   rel="stylesheet"
-  href="{{ index (index .Site.Data.assets "main.scss") "src" | relURL }}"
+  href="/main.css"
   media="all"
 />
 
