@@ -159,11 +159,11 @@ SCRIPT
 $install_cri = <<-SCRIPT
 echo "Installing containerd and Kubeadm"
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | DEBIAN_FRONTEND=noninteractive apt-key add - > /dev/null 2>&1
+curl --retry 30  -fsSL https://download.docker.com/linux/ubuntu/gpg | DEBIAN_FRONTEND=noninteractive apt-key add - > /dev/null 2>&1
 echo deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable > /etc/apt/sources.list.d/docker.list
-curl -fsSL https://baltocdn.com/helm/signing.asc | DEBIAN_FRONTEND=noninteractive sudo apt-key add - > /dev/null 2>&1
+curl --retry 30  -fsSL https://baltocdn.com/helm/signing.asc | DEBIAN_FRONTEND=noninteractive sudo apt-key add - > /dev/null 2>&1
 
-curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | DEBIAN_FRONTEND=noninteractive apt-key add - > /dev/null 2>&1
+curl --retry 30 -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | DEBIAN_FRONTEND=noninteractive apt-key add - > /dev/null 2>&1
 echo "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
 echo "deb https://baltocdn.com/helm/stable/debian/ all main" > /etc/apt/sources.list.d/helm.list
 
