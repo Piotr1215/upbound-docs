@@ -1,8 +1,6 @@
 ---
 title: "Official Providers"
-weight: 120
-cascade:
-  kind: page
+weight: 20
 ---
 Upbound creates, maintains and supports a set of Crossplane providers called *official providers*.  
 Only [Universal Crossplane (`UXP`)]({{<ref "uxp/" >}}) supports official providers.   
