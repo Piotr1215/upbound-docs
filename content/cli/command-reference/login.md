@@ -2,7 +2,7 @@
 title: "up login"
 ---
 
-Authenticates to the Upbound Marketplace and Upbound Cloud Platform.
+Authenticates to the Upbound Marketplace.
 
 ### `up login`
 
@@ -44,6 +44,10 @@ up login -t eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyYWY2NmFjMi1iY2NhLTR
 
 #### Login to an organization
 Log into an organization with either a username and password or token. 
+
+{{< hint type="tip" >}}
+To determine if you are part of any organizations or to create an organization use the [`up organization` commands]({{<ref "http://localhost:1313/cli/command-reference/organization">}}).
+{{< /hint >}}
 
 ```shell
 up login -a my_org
