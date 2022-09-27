@@ -153,7 +153,7 @@ SCRIPT
 
 $install_tools = <<-SCRIPT
 echo "Installing additional software packages"
-DEBIAN_FRONTEND=noninteractive apt-get install -y git htop chrony tree jq > /dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive apt-get install -y git htop chrony tree jq bat > /dev/null 2>&1
 SCRIPT
 
 $install_cri = <<-SCRIPT
