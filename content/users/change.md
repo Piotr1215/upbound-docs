@@ -1,5 +1,5 @@
 ---
-title: "Change existing accounts"
+title: "Change an existing account"
 weight: 42
 ---
 
