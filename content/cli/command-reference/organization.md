@@ -6,7 +6,7 @@ _Alias_: `up org`
 Commands under `up organization` create and manage Upbound organizations.
 
 {{< hint type="important" >}}
-Only organizations can create [robots]({{<ref "robot">}}). 
+Only organizations can create [repositories]({{<ref "cli/command-reference/repository">}}), [robots]({{<ref "robot">}}) or [push packages]({{<ref "upbound-marketplace/packages" >}}) to the Upbound Marketplace. 
 {{< /hint >}}
 
 ### `up organization create`
