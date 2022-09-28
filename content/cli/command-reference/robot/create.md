@@ -9,13 +9,6 @@ Robot accounts are only supported for [organizations]({{<ref "../organization" >
 User accounts can't create robots.
 {{< /hint >}}
 
-<!-- vale gitlab.SubstitutionWarning = NO-->
-<!-- don't flag an error on shortcode information argument -->
-{{< hint type="info" >}}
-<!-- vale gitlab.SubstitutionWarning = YES-->
-The Upbound Cloud Platform requires authentication to an organization with [`up login -a`]({{<ref "login" >}}) before using `up robot token create`.
-{{< /hint >}}
-
 ### `up robot create`
 
 #### Arguments
