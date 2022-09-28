@@ -20,7 +20,6 @@ Install packages using Kubernetes manifest files for the `pkg.crossplane.io` API
 
 {{< hint type="tip" >}}
 Packages hosted in the Upbound Marketplace are available from the `xpkg.upbound.io` domain.  
-For any Upbound Marketplace package, replace `marketplace.upbound.io` with `xpkg.upbound.io` for the `package` address.
 {{< /hint >}}
 
 {{< tabs "installing" >}}
@@ -52,7 +51,7 @@ configurationrevision.pkg.crossplane.io/platform-ref-aws-b15ca268431b   True    
 {{< /tab >}}
 
 {{< tab "Install a Provider Package" >}}
-Install a provider package using a `Provider` Kubernetes manifest. For example, this manifest installs the open source Crossplane provider for AWS.
+Install a provider package using a `Provider` Kubernetes manifest. For example, this manifest installs the open source [Crossplane community provider for AWS](https://marketplace.upbound.io/providers/crossplane/provider-aws/v0.24.1).
 
 ```yaml
 apiVersion: pkg.crossplane.io/v1
@@ -65,7 +64,7 @@ spec:
 
 {{< hint type="note" >}}
 Upbound Official Providers require a `PackagePullSecret` to authenticate to the Upbound Marketplace.  
-The <a href="{{<ref "upbound-marketplace/providers" >}}">Official Providers</a> section contains more information about installing and using Official Providers.
+The <a href="{{<ref "upbound-marketplace/authentication" >}}">Authentication</a> section contains more information about using and generating secrets for Official Providers.
 {{< /hint >}}
 
 Apply the manifest with `kubectl apply -f`.
@@ -91,12 +90,13 @@ provider-aws   True        True      xpkg.upbound.io/crossplane/provider-aws:v0.
 Private Upbound Marketplace repositories and Official Providers require authentication to install.
 
 You can install packages that require authentication in one of two methods:
+* Updating the `crossplane` service account to use an image pull secret.
+This method updates the `crossplane` service account to use an image pull secret across all Crossplane related authentication requests. 
+  
 * Using a `packagePullSecret` in a Kubernetes manifest.  
-This method applies a `packagePullSecret` as part of a single Kubernetes manifest to the package.
-* Updating the `crossplane` service account to use a `packagePullSecret`.
-This method updates the `crossplane` service account to use a `packagePullSecret` across all Crossplane related authentication requests. 
+This method applies an image pull secret as part of a single Kubernetes manifest to the package.
 
-The correct authentication method depends on the specific package and its dependencies.
+The recommended authentication method depends on the specific package and its dependencies.
 
 Use the following table to determine which authentication method to use.
 
@@ -105,45 +105,30 @@ Use the following table to determine which authentication method to use.
 | **Public Package Repository** | No authentication required. | [Update the `crossplane` service account.](#update-the-crossplane-service-account) | 
 | **Private Package Repository** | [Use a `packagePullSecret`.](#use-a-packagepullsecret) | [Update the `crossplane` service account.](#update-the-crossplane-service-account) | 
 
-### Use a `packagePullSecret`
+{{< tabs "pps-secret" >}}
 
-{{< hint type="tip" >}}
-More information on creating and using secrets with the Upbound Marketplace is available in the [Authentication]({{<ref "upbound-marketplace/authentication" >}}) section.
-{{< /hint >}}
-
-To provide authentication information add a `spec.packagePullSecret` to the package install manifest. For example, to add a `packagePullSecret` to the AWS reference platform manifest:
-
-```yaml
-apiVersion: pkg.crossplane.io/v1
-kind: Configuration
-metadata:
-  name: platform-ref-aws
-spec:
-  package: xpkg.upbound.io/upbound/platform-ref-aws:v0.2.3
-  packagePullSecrets:
-    - name: package-pull-secret
-```
-
-### Update the `crossplane` service account
+{{< tab "Update the Crossplane service account" >}}
 Some packages include dependencies of other packages to install. For example, a configuration package may include a provider package as a dependency. 
 
 {{< hint type="warning" >}}
-`packagePullSecrets` applied to a `Configuration` don't apply to the dependencies.
+`packagePullSecrets` applied to a `Configuration` don't apply to the dependencies. If a package's dependencies include Official Providers or resources from another private repository you **must** patch the `crossplane` service account.
+
+View dependencies on the package listing in the Marketplace.
 {{< /hint >}}
 
-To use the `packagePullSecret` for dependent resources you must patch the `crossplane` service account. Crossplane uses the service account to download and install the dependent resources. Patching the `crossplane` service account allows Crossplane to use the `packagePullSecret` across those dependent resources.
+Crossplane uses the `crossplane` service account to download and install the dependent resources. Patching the `crossplane` service account allows Crossplane to use the `packagePullSecret` across all dependent resources.
 
 To patch the service account use the following `kubectl patch` command.
-
-{{< hint type="note" >}}
-If you didn't install Upbound Universal Crossplane in the default `upbound-system` namespace, change the `-n upbound-system` command to match the UXP namespace.
-{{< /hint >}}
 
 ```shell
 kubectl patch serviceaccount crossplane \
   -p "{\"imagePullSecrets\": [{\"name\": \"package-pull-secret\"}]}" \
   -n upbound-system
 ```
+
+{{< hint type="note" >}}
+If you didn't install Upbound Universal Crossplane in the default `upbound-system` namespace, change the `-n upbound-system` command to match the UXP namespace.
+{{< /hint >}}
 
 Use `kubectl describe serviceaccount crossplane -n upbound-system` to verify the service account's `Image Pull secret` updated.
 
@@ -167,13 +152,31 @@ Mountable secrets:   <none>
 Tokens:              <none>
 Events:              <none>
 ```
-<!-- {{/* < /highlight > */}} -->
-<!-- 
-## Determine package dependencies
-Marketplace packages list their dependencies in their Marketplace listing. 
+{{< /tab >}}
 
-For example, the AWS Platform Reference depends on  `provider-aws` and `provider-helm`. 
+{{< tab "Use a packagePullSecret" >}}
+{{< hint type="tip" >}}
+Read the <a href="/upbound-marketplace/authentication">Authentication</a> section for more information on using secrets with the Marketplace.
+{{< /hint >}}
 
-![The requirements for a Configuration Package](/uxp/images/configuration-dependencies.png "Package dependencies")
- -->
+To provide authentication information add a `spec.packagePullSecret` to the package install manifest. For example, to add a `packagePullSecret` to the AWS reference platform manifest:
 
+```yaml
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: platform-ref-aws
+spec:
+  package: xpkg.upbound.io/upbound/platform-ref-aws:v0.2.3
+  packagePullSecrets:
+    - name: package-pull-secret
+```
+
+{{< hint type="note" >}}
+If you manually created a Kubernetes secret the secret must be in the `upbound-system` namespace.  
+The `spec.packagePullSecrets.name` must match the name of the Kubernetes secret. 
+{{< /hint >}}
+
+{{< /tab >}}
+
+{{< /tabs >}}
