@@ -19,6 +19,9 @@ User accounts can't create robots.
 The Upbound Cloud Platform requires authentication to an organization with [`up login -a`]({{<ref "login" >}}) before using `up robot token create`.
 {{< /hint >}}
 
+Installing Kubernetes resources from private repositories or installing Official Providers requires robot tokens.  
+Find more information on creating Kubernetes secrets with robot tokens in the [Marketplace Authentication]({{<ref "upbound-marketplace/authentication" >}}) section.
+
 ### `up robot token create`
 
 <!-- omit in toc -->
