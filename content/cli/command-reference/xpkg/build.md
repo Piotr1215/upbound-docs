@@ -4,6 +4,9 @@ title: "up xpkg build"
 
 The `up xpkg build` command builds Open Container Initiative compliant images of a set of configuration files. Use this image to create a specific Crossplane control-plane or Provider.
 
+{{<hint type="important" >}}
+For more information on the requirements to build an image read the [Creating and Pushing Pacakges]({{<ref "upbound-marketplace/packages" >}}) section. 
+{{< /hint >}}
 
 ### `up xpkg build`
 

@@ -5,8 +5,8 @@ title: "up xpkg push"
 Publishes images created by `up xpkg build` to the Upbound Marketplace. 
 
 {{<hint type="important" >}}
-Pushing images to the Upbound Marketplace requires an [Upbound account]({{<ref "/users/register.md" >}}).  
-For more information on the requirements to push an image read the [Publishing Packages]({{<ref "upbound-marketplace/packages" >}}) section. 
+Users must [authenticate to the Upbound Marketplace]({{<ref "upbound-marketplace/authentication" >}}) to push packages.  
+For more information on the requirements to push an image read the [Creating and Pushing Packages]({{<ref "upbound-marketplace/packages" >}}) section. 
 {{< /hint >}}
 
 
