@@ -1,5 +1,5 @@
 ---
-title: "Upbound User Management"
+title: "Upbound Accounts and Organizations"
 weight: 400
 ---
 Some features of Upbound, including official providers, are only available to registered Upbound users.

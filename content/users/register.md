@@ -1,5 +1,5 @@
 ---
-title: "Create an Upbound account"
+title: "Create a new account"
 weight: 41
 ---
 
