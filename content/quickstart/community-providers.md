@@ -1,6 +1,6 @@
 ---
-title: "Community Providers Quickstart"
-weight: 5
+title: "Community Providers"
+weight: 100
 ---
 
 This quickstart guide walks you through installing Upbound Universal Crossplane (UXP), installing a provider and deploying a `managed resource` to verify connectivity to the provider.
