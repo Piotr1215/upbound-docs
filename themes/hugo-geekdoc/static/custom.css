@@ -945,7 +945,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_lntable_padding: 0;
   --chroma_lntable_margin:  0;
   --chroma_lntable_border: 0;
-  --chroma_hl_background-color: #ffffcc;
+  --chroma_hl_background-color: #F1FA8C;
+  --chroma_hl_color: #44475A;
   --chroma_lnt_white_space: pre;
   --chroma_lnt_user-select:  none;
   --chroma_lnt_margin-right:  0.4em;
@@ -1226,6 +1227,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_k_color: #2c5dcd;
   --single_command_color: #000000;
   --single_command_background-color: #ffffff;
+  --chroma_hl_background-color: #F1FA8C;
+  --chroma_hl_color: #44475A;
 }
 
 
@@ -1322,6 +1325,12 @@ p>code {
   /* display: block;
   width: 100%; */
   background-color: var(--chroma_hl_background-color);
+  color: var(--chroma_hl_color);
+}
+:root .chroma .hl .nv {
+  /* The default nv color is unreadable when highlighted
+  This is a specific override to remove the style on those elements */
+  color: var(--chroma_hl_color);
 }
 :root .chroma .lnt {
   white-space: var(--chroma_lnt_white_space) ;
