@@ -93,7 +93,7 @@ You need your:
 The [create a new account]({{<ref "users/register" >}}) section has directions for creating an Upbound account.
 {{< /hint >}}
 
-{{< include file="quickstart/scripts/quickstart-common.md" >}}
+{{< include file="quickstart/scripts/quickstart-common.md" type="page" >}}
 
 ### Install the official AWS provider
 
