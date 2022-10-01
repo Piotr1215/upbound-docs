@@ -1332,6 +1332,11 @@ p>code {
   This is a specific override to remove the style on those elements */
   color: var(--chroma_hl_color);
 }
+:root .chroma .hl .s {
+  /* The default s color is unreadable when highlighted
+  This is a specific override to remove the style on those elements */
+  color: var(--chroma_hl_color);
+}
 :root .chroma .lnt {
   white-space: var(--chroma_lnt_white_space) ;
   user-select: var(--chroma_lnt_user-select);
