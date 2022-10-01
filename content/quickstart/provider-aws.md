@@ -99,7 +99,7 @@ The [create a new account]({{<ref "users/register" >}}) section has directions f
 
 Install the official provider into the Kubernetes cluster with a Kubernetes configuration file. 
 
-```shell
+```shell {label="provider"}
 cat <<EOF | kubectl apply -f -
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
@@ -112,9 +112,9 @@ spec:
 EOF
 ```
 
-The `kind: Provider` uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.  
+The {{< hover-highlight label="provider" line="3">}}kind: Provider{{< /hover-highlight >}} uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.  
 
-The `packagePullSecrets` uses the Kubernetes image pull secret to authenticate to the Upbound Marketplace repository at `xpkg.upbound.io`.
+The {{< hover-highlight label="provider" line="8">}}packagePullSecrets{{</ hover-highlight >}} uses the Kubernetes image pull secret to authenticate to the Upbound Marketplace repository at {{< hover-highlight label="provider" line="7">}}xpkg.upbound.io{{< /hover-highlight >}}.
 
 Verify the provider installed with `kubectl get providers`. 
 
@@ -575,7 +575,7 @@ creds:  114 bytes
 A `ProviderConfig` customizes the settings of the AWS Provider.  
 
 Apply the `ProviderConfig` with the command:
-```yaml
+```yaml {label="providerconfig"}
 cat <<EOF | kubectl apply -f -
 apiVersion: aws.upbound.io/v1beta1
 kind: ProviderConfig
@@ -593,7 +593,7 @@ EOF
 
 This attaches the AWS credentials, saved as a Kubernetes secret, as a `secretRef`.
 
-The `spec.credentials.secretRef.name` value is the name of the Kubernetes secret containing the AWS credentials in the `spec.credentials.secretRef.namespace`.
+The {{< hover-highlight label="providerconfig" line="11">}}spec.credentials.secretRef.name{{< /hover-highlight >}} value is the name of the Kubernetes secret containing the AWS credentials in the {{< hover-highlight label="providerconfig" line="10">}}spec.credentials.secretRef.namespace{{< /hover-highlight >}}.
 
 
 ### Create a managed resource
@@ -604,7 +604,7 @@ AWS S3 bucket names must be globally unique. To generate a unique name the examp
 Any unique name is acceptable.
 {{< /hint >}}
 
-```yaml
+```yaml {label="bucket"}
 bucket=$(echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10))
 cat <<EOF | kubectl apply -f -
 apiVersion: s3.aws.upbound.io/v1beta1
@@ -619,13 +619,13 @@ spec:
 EOF
 ```
 
-Notice the `apiVersion` and `kind` are `Provider` from the `Provider's` CRDs.
+Notice the {{< hover-highlight label="bucket" line="3">}}apiVersion{{< /hover-highlight >}} and {{< hover-highlight label="bucket" line="4">}}kind{{</hover-highlight >}} are from the `Provider's` CRDs.
 
 
-The `metadata.name` value is the name of the created S3 bucket in AWS.  
+The {{< hover-highlight label="bucket" line="6">}}metadata.name{{< /hover-highlight >}} value is the name of the created S3 bucket in AWS.  
 This example uses the generated name `upbound-bucket-<hash>` in the `$bucket` variable.
 
-The `spec.forProvider.region` tells AWS which AWS region to use when deploying resources. The region can be any [AWS Regional endpoint](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints) code.
+The {{< hover-highlight label="bucket" line="9">}}spec.forProvider.region{{< /hover-highlight >}} tells AWS which AWS region to use when deploying resources. The region can be any [AWS Regional endpoint](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints) code.
 
 Use `kubectl get buckets` to verify Crossplane created the bucket.
 
