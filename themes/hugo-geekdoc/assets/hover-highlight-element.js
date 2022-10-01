@@ -7,9 +7,6 @@ function build_eventlistner(){
     // the <mouseover> elment of the individual command calling the shortcode
     var command = document.getElementById(command_id);
 
-    console.log(command);
-    console.log(code_box_label);
-    console.log(code_line_number);
     // the outer div for the fenced code block
     code_box = document.querySelector("div[label=" + code_box_label + "]");
 
