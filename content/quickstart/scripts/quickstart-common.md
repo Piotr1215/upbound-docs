@@ -1,3 +1,6 @@
+---
+geekdocHidden: true
+---
 ### Install the Up command-line
 The Up command-line helps manage Upbound Universal Crossplane, Upbound's enterprise Crossplane distribution and manage Upbound user accounts. 
 
