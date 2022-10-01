@@ -27,6 +27,11 @@ The Upbound documentation welcomes contributions from the anyone in the Upbound 
   - [Tabs](#tabs)
   - [Hide long outputs](#hide-long-outputs)
   - [Images](#images)
+  - [Includes](#includes)
+  - [Code blocks](#code-blocks)
+    - [Shell code blocks](#shell-code-blocks)
+    - [Code highlighting](#code-highlighting)
+    - [Hover to highlight](#hover-to-highlight)
 - [Style guide](#style-guide)
   - [Vale](#vale)
     - [Clone the Vale repository](#clone-the-vale-repository)
@@ -154,6 +159,12 @@ weight: 610
 {{< hint type="note" >}}
 The `weight` of a directory's `_index.md` page moves the entire section of content in the table of contents.
 {{< /hint >}}
+
+{{< hint type="caution" >}}
+The `/content/cli/command-reference/` directory sorts alphabetically by title. Weight it ignored.
+{{< /hint >}}
+
+To hide a page from the left-hand table of contents set `geekdocHidden: true`.
 
 ### Links
 #### Linking between docs pages
@@ -364,7 +375,202 @@ For example, to link to the image located at `/static/images/robots/create-first
 ```markdown
 ![The alt text for an example image](/images/robots/create-first-robot-token.png)
 ```
-&nbsp;
+
+### Includes
+
+Include a page inside other pages with the `include` [shortcode from Geekdocs](https://geekdocs.de/shortcodes/includes/).
+
+For example, to include the contents of `child_page.md` inside `parent_page.md`, use this shortcode in `parent_page.md`.
+
+{{< include file="child_page.md" type="page" >}}
+
+Inside `child_page.md` include front matter to hide it from the table of contents
+
+```yaml
+---
+geekdocHidden: true
+---
+```
+
+An example of this is in the (parent) [AWS quickstart](https://github.com/upbound/docs/blob/staging/content/quickstart/provider-aws.md?plain=1#L96) with the (child) [Quickstart Commons](https://github.com/upbound/docs/blob/staging/content/quickstart/scripts/quickstart-common.md?plain=1) as the include.
+
+{{< hint type="important" >}}
+If the page has front matter that needs to ignoring use `type="page"`.  
+
+If it's raw content to include don't set the type. For example, [including a bash script](https://github.com/upbound/docs/blob/staging/content/quickstart/provider-aws.md?plain=1#L68).   
+
+For code blocks provide `language=<language>` to enable styling.
+{{< /hint >}}
+
+### Code blocks
+Hugo supports standard markdown code fences with ` ``` `
+
+Specify the language of the code block after the code fence with no space, for example ` ```yaml `.
+
+{{< hint type="important" >}}
+Not providing a language renders no line numbers or styling.
+{{< /hint >}}
+
+Hugo has a [full list](https://gohugo.io/content-management/syntax-highlighting/#list-of-chroma-highlighting-languages) of supported languages.
+
+#### Shell code blocks
+Using ` ```shell` will automatically generate a shell prompt and highlight the first line as the command. 
+
+For example
+{{< tabs "shell-block" >}}
+
+{{< tab "markdown" >}}
+
+````markdown
+```shell 
+echo hello
+hello
+```
+{{< /tab >}}
+
+{{< tab "rendered" >}}
+```shell
+echo hello
+hello
+```
+{{< /tab >}}
+
+{{< /tabs >}}
+
+#### Code highlighting
+Lines of a code block can be highlighted by adding `{hl_lines=<lines>}` to the code fence. 
+
+{{< tabs "highlight" >}}
+
+{{< tab "markdown" >}}
+
+````markdown
+```shell {hl_lines=2}
+echo hello
+hello
+```
+{{< /tab >}}
+
+{{< tab "rendered" >}}
+```shell {hl_lines=2}
+echo hello
+hello
+```
+{{< /tab >}}
+
+{{< /tabs >}}
+
+Line blocks and multiple lines are supported as a list of (string) line numbers.
+
+
+{{< tabs "highlight-large" >}}
+
+{{< tab "markdown" >}}
+
+````markdown
+```shell {hl_lines=["2","3","6-8"]}
+kubectl describe resourcegroup
+Name:         example-rg
+Namespace:
+Labels:       <none>
+Annotations:  crossplane.io/external-name: example-rg
+API Version:  azure.upbound.io/v1beta1
+Kind:         ResourceGroup
+# Output truncated
+Spec:
+  Deletion Policy:  Delete
+  For Provider:
+    Location:  East US
+  Provider Config Ref:
+    Name:  default
+Status:
+  At Provider:
+  Conditions:
+    Last Transition Time:  2022-07-26T16:54:26Z
+    Message:               connect failed: cannot get terraform setup: cannot get referenced ProviderConfig: ProviderConfig.azure.upbound.io "default" not found
+    Reason:                ReconcileError
+    Status:                False
+    Type:                  Synced
+Events:
+  Type     Reason                   Age              From                                                  Message
+  ----     ------                   ----             ----                                                  -------
+  Warning  CannotConnectToProvider  2s (x4 over 7s)  managed/azure.upbound.io/v1beta1, kind=resourcegroup  cannot get terraform setup: cannot get referenced ProviderConfig: ProviderConfig.azure.upbound.io "default" not found
+```
+{{< /tab >}}
+
+{{< tab "rendered" >}}
+```shell {hl_lines=["2","3","6-8"]}
+kubectl describe resourcegroup
+Name:         example-rg
+Namespace:
+Labels:       <none>
+Annotations:  crossplane.io/external-name: example-rg
+API Version:  azure.upbound.io/v1beta1
+Kind:         ResourceGroup
+# Output truncated
+Spec:
+  Deletion Policy:  Delete
+  For Provider:
+    Location:  East US
+  Provider Config Ref:
+    Name:  default
+Status:
+  At Provider:
+  Conditions:
+    Last Transition Time:  2022-07-26T16:54:26Z
+    Message:               connect failed: cannot get terraform setup: cannot get referenced ProviderConfig: ProviderConfig.azure.upbound.io "default" not found
+    Reason:                ReconcileError
+    Status:                False
+    Type:                  Synced
+Events:
+  Type     Reason                   Age              From                                                  Message
+  ----     ------                   ----             ----                                                  -------
+  Warning  CannotConnectToProvider  2s (x4 over 7s)  managed/azure.upbound.io/v1beta1, kind=resourcegroup  cannot get terraform setup: cannot get referenced ProviderConfig: ProviderConfig.azure.upbound.io "default" not found
+```
+{{< /tab >}}
+
+{{< /tabs >}}
+
+Code highlighting is provided by [goldmark-highlighting](https://github.com/yuin/goldmark-highlighting). Any setting supported by the Goldmark plugin should be supported by Hugo.
+
+#### Hover to highlight
+A single line in a code block can be highlighted on mouseover of another command with the `{{</* hover-highlight */>}}` shortcode.
+
+A command inside the shortcode highlights lines in an associated code block.
+
+To enable hover to highlight, first apply a `{label="<label>"}` tag on a code block.
+
+````markdown
+```shell {label="an_example"}
+echo hello
+hello
+```
+````
+
+Outside of the code block, reference the `label` and line number to provide highlighting.
+
+For example:
+````markdown
+```shell {label="an_example"}
+echo hello
+hello
+```
+````
+Hover over <code>&#123;&#123;< hover-highlight label="an_example" line="2">&#125;&#125;</code> hello <code>&#123;&#123;< hover-highlight >&#125;&#125;</code> to see it in action.
+
+Would render:
+```shell {label="an_example"}
+echo hello
+hello
+```
+Hover over {{< hover-highlight label="an_example" line="2">}} hello{{< /hover-highlight >}} to see it in action. 
+
+{{< hint type="important" >}}
+The `line="<number>"` variable uses displayed line numbers, which doesn't include the code fence.
+{{< /hint >}}
+
+The command must include a closing shortcode of <code>&#123;&#123;< hover-highlight >&#125;&#125;</code>.  
+
 ## Style guide
 The Upbound documentation style guide is still under construction, but the [Kubernetes style guide](https://kubernetes.io/docs/contribute/style/) is a safe reference. 
 
