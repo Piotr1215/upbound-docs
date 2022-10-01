@@ -36,9 +36,9 @@ xgql-7c4b74c458-5bf2q                       1/1     Running   3 (67m ago)   68m
 For more details about UXP pods, read the [UXP]({{<ref "uxp#universal-crossplane-pods" >}}) section.
 
 
-Installing UXP and Crossplane creates new Kubernetes API end-points. Take a look at the new API end-points with `kubectl api-resources  | grep crossplane`. In a later step you use the `Provider` resource install the Official Provider.
+Installing UXP and Crossplane creates new Kubernetes API end-points. Take a look at the new API end-points with `kubectl api-resources  | grep crossplane`. In a later step you use the {{< hover-highlight label="grep" line="10">}}Provider{{< /hover-highlight >}} resource install the Official Provider.
 
-```shell
+```shell  {label="grep"}
 kubectl api-resources  | grep crossplane
 compositeresourcedefinitions      xrd,xrds     apiextensions.crossplane.io/v1         false        CompositeResourceDefinition
 compositionrevisions                           apiextensions.crossplane.io/v1alpha1   false        CompositionRevision
@@ -166,9 +166,9 @@ up controlplane pull-secret create package-pull-secret -f token.json
 my-org/package-pull-secret created
 ```
 
-`up` creates a secret named `package-pull-secret` in the `upbound-system` namespace. 
+`up` creates a secret named {{< hover-highlight label="pps" line="3">}}package-pull-secret{{< /hover-highlight >}} in the `upbound-system` namespace. 
 
-```shell
+```shell {label="pps"}
 kubectl get secret -n upbound-system
 NAME                                         TYPE                             DATA   AGE
 package-pull-secret                          kubernetes.io/dockerconfigjson   1      8m46s
