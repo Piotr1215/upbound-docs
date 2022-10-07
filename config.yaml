@@ -1,7 +1,7 @@
 baseURL: "/"
 enableRobotsTXT: True
 languageCode: "en-us"
-title: "Documentation"
+title: "Upbound Documentation"
 theme: "hugo-geekdoc"
 enableGitInfo: true
 disablePathToLower: true

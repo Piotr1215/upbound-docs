@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.Language.Lang }}" class="color-toggle-light">
+<html lang="{{ .Site.Language.Lang }}" class="color-toggle-hidden" {{ if default false .Site.Params.GeekdocDarkModeCode }}code-theme="dark"{{ end }} >
   <head>
     {{ partial "head/meta" . }}
-    {{ partial "head/google-analytics" . }}
 
     <title>
       {{- if eq .Kind "home" -}}
@@ -13,18 +12,13 @@
     </title>
 
     {{ partial "head/favicons" . }}
-    {{ partial "head/rel-me" . }}
+    {{ partial "head/clarity" . }}
     {{ partial "head/microformats" . }}
-    {{ partial "head/others" . }}
+    {{ partial "head/styles" . }}
   </head>
 
   <body itemscope itemtype="https://schema.org/WebPage">
-    {{ partial "svg-icon-symbols" . }}
-
-
-    <div
-      class="wrapper {{ if default false .Site.Params.GeekdocDarkModeDim }}dark-mode-dim{{ end }}"
-    >
+    <div class="wrapper {{ if default false .Site.Params.GeekdocDarkModeDim }}dark-mode-dim{{ end }}" >
       <input type="checkbox" class="hidden" id="menu-control" />
       <input type="checkbox" class="hidden" id="menu-header-control" />
       {{ partial "site-header" }}
@@ -54,7 +48,7 @@
       {{ partial "site-footer" . }}
     </div>
 
-    {{ partial "foot" . }}
-    {{/* partial "head/custom" . */}}
+    {{ partial "end-of-page-js" . }}
+    {{ partial "svg-icon-symbols" . }}
   </body>
 </html>
