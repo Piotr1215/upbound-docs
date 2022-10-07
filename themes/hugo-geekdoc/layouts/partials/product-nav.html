@@ -1,7 +1,7 @@
 <div id="product-nav">
   <div class="container">
     {{ if .MenuEnabled }}
-    <label for="menu-control" class="gdoc-nav__control" tabindex="0">
+    <label for="menu-control" class="gdoc-nav__control sidebar" tabindex="0">
       <svg class="gdoc-icon gdoc_menu">
         <title>{{ i18n "button_nav_open" }}</title>
         <use xlink:href="#gdoc_menu"></use>
@@ -12,6 +12,7 @@
       </svg>
     </label>
     {{ end }}
+    
     <div class="sub-nav">
       <ul>
         {{- $product := .Page.Params.product | default "Upbound" -}}
@@ -22,15 +23,12 @@
     </div>
 
     <div class="header-right-items d-flex">
-
       <div class="gdoc-search flex align-center">
         <svg class="gdoc-icon gdoc_search"><use xlink:href="#gdoc_search"></use></svg>
         <input type="text" style="visibility: visible" id="gdoc-search-input" class="gdoc-search__input" placeholder="" aria-label="" maxlength="64" data-site-base-url="{{ .Site.BaseURL }}/" data-site-lang="en">
         <div class="gdoc-search__spinner spinner hidden"></div>
         <ul id="gdoc-search-results" class="gdoc-search__list"></ul>
       </div>
-
-
       <div class="switcher-header">
         <div class="gdoc-menu-header">
           <span class="gdoc-menu-header__items">
@@ -83,7 +81,19 @@
           </label> -->
         </div>
       </div>
-
     </div>
+
+    {{ if .ToCEnabled }}
+    <label for="menu-toc-control" class="gdoc-nav__control toc" tabindex="0">
+      <svg class="gdoc-icon gdoc_menu">
+        <title>{{ i18n "button_nav_open" }}</title>
+        <use xlink:href="#gdoc_menu"></use>
+      </svg>
+      <svg class="gdoc-icon gdoc_arrow_back">
+        <title>{{ i18n "button_nav_close" }}</title>
+        <use xlink:href="#gdoc_arrow_back"></use>
+      </svg>
+    </label>
+    {{ end }}
   </div>
 </div>
