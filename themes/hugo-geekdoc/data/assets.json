@@ -1,12 +1,12 @@
 {
   "main.js": {
-    "src": "js/main-52f74f7d.bundle.min.js"
+    "src": "js/main-4a2a6f6c.bundle.min.js"
   },
   "search.js": {
     "src": "js/search-01ed495f.bundle.min.js"
   },
-  "main-52f74f7d.bundle.min.js.map": {
-    "src": "js/main-52f74f7d.bundle.min.js.map"
+  "main-4a2a6f6c.bundle.min.js.map": {
+    "src": "js/main-4a2a6f6c.bundle.min.js.map"
   },
   "search-01ed495f.bundle.min.js.map": {
     "src": "js/search-01ed495f.bundle.min.js.map"
