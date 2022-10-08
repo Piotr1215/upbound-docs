@@ -363,7 +363,7 @@ svg.gdoc-icon {
 }
 
 .gdoc-page {
-  min-width: calc($body-min-width - $padding-32);
+  min-width: calc(20rem - 2rem);
   flex-grow: 1;
   padding: $padding-16 0;
 

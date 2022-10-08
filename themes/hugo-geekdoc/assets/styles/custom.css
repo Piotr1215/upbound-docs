@@ -964,7 +964,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   position: absolute;
   height: 2px;
   width: 100%;
-  background-color: #6d64f5;
+  background-color: #5643B7;
   padding: 0 10px;
   bottom: -28px;
   left: -10px;
@@ -1026,8 +1026,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --button-background: #62cb97;
   --button-border-color: #4ec58a;
 
-  --link-color: #6d64f5 !important;
-  --link-color-visited: #6d64f5 !important;
+  --link-color: #5643B7 !important;
+  --link-color-visited: #5643B7 !important;
 
   /* --code-background: #282a36;
   --code-accent-color: #e3e7eb;
@@ -1046,8 +1046,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 
   --footer-background: #0b1c28;
   --footer-font-color: #ffffff;
-  --footer-link-color: #6d64f5;
-  --footer-link-color-visited: #6d64f5;
+  --footer-link-color: #5643B7;
+  --footer-link-color-visited: #5643B7;
 
   /* Syntax highlighting */
   /* Current Theme: Dracula. https://xyproto.github.io/splash/docs/dracula.html */
@@ -1073,12 +1073,12 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_lnt_user-select:  none;
   --chroma_lnt_margin-right:  0.4em;
   --chroma_lnt_padding: 0 0.4em 0 0.4em;
-  --chroma_lnt_color: #7f7f7f;
+  --chroma_lnt_color: #4A4A4A;
   --chroma_ln_white-space: pre;
   --chroma_ln_user-select: none;
   --chroma_ln_margin-right: 0.4em;
   --chroma_ln_padding: 0 0.4em 0 0.4em;
-  --chroma_ln_color: #7f7f7f;
+  --chroma_ln_color: #4A4A4A;
   /* --chroma_line_display: flex; */
   --chroma_k_color: #ff79c6;
   --chroma_kc_color: #ff79c6;
@@ -1178,8 +1178,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
     --button-background: #62cb97;
     --button-border-color: #4ec58a;
 
-    --link-color: #6d64f5;
-    --link-color-visited: #6d64f5;
+    --link-color: #5643B7;
+    --link-color-visited: #5643B7;
 
     --code-copy-background: #f5f6f8;
     --code-copy-font-color: #6b7784;
@@ -1193,8 +1193,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 
     --footer-background: #0b1c28;
     --footer-font-color: #ffffff;
-    --footer-link-color: #6d64f5;
-    --footer-link-color-visited: #6d64f5;
+    --footer-link-color: #5643B7;
+    --footer-link-color-visited: #5643B7;
 
     /* Syntax highlighting */
     /* Current Theme: Dracula. https://xyproto.github.io/splash/docs/dracula.html */
@@ -1218,12 +1218,12 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
     --chroma_lnt_user-select:  none;
     --chroma_lnt_margin-right:  0.4em;
     --chroma_lnt_padding: 0 0.4em 0 0.4em;
-    --chroma_lnt_color: #7f7f7f;
+    --chroma_lnt_color: #4A4A4A;
     --chroma_ln_white-space: pre;
     --chroma_ln_user-select: none;
     --chroma_ln_margin-right: 0.4em;
     --chroma_ln_padding: 0 0.4em 0 0.4em;
-    --chroma_ln_color: #7f7f7f;
+    --chroma_ln_color: #4A4A4A;
     /* --chroma_line_display: flex; */
     --chroma_k_color: #ff79c6;
     --chroma_kc_color: #ff79c6;
@@ -1323,8 +1323,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --button-background: #62cb97;
   --button-border-color: #4ec58a;
 
-  --link-color: #6d64f5;
-  --link-color-visited: #6d64f5;
+  --link-color: #5643B7;
+  --link-color-visited: #5643B7;
 
   --code-background: #0D2436;
   --code-accent-color: #262b2f;
@@ -1343,8 +1343,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 
   --footer-background: #0b1c28;
   --footer-font-color: #ffffff;
-  --footer-link-color: #6d64f5;
-  --footer-link-color-visited: #6d64f5;
+  --footer-link-color: #5643B7;
+  --footer-link-color-visited: #5643B7;
 
   --chroma_k_color: #2c5dcd;
   --single_command_color: #000000;
@@ -1366,11 +1366,11 @@ p>code {
 }
 
 :root .chroma code {
-  background-color: var(---chroma_background_color);
-  /* display: block;
+  background-color: var(--chroma_background_color);
+  display: block;
+  font-size: .95em;
   line-height: 1.45;
-  font-size: .85em;
-  border-radius: .15rem; */
+  border-radius: .15rem;
 }
 :root .chroma .lntable {
   border-spacing: var(--chroma_lntable);
