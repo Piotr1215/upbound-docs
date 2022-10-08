@@ -2590,7 +2590,7 @@ svg.gdoc-icon {
   border-radius: 0.15rem;
   /* color: var(--code-font-color); */
   font-size: .95em;
-  line-height: 1.45em;
+  /* line-height: 1.45em; */
   padding: 0.2em 0.4em;
 }
 .gdoc-markdown pre code {
