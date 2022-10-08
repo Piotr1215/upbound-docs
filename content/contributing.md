@@ -32,6 +32,7 @@ The Upbound documentation welcomes contributions from the anyone in the Upbound 
     - [Shell code blocks](#shell-code-blocks)
     - [Code highlighting](#code-highlighting)
     - [Hover to highlight](#hover-to-highlight)
+    - [Copying code](#copying-code)
 - [Style guide](#style-guide)
   - [Vale](#vale)
     - [Clone the Vale repository](#clone-the-vale-repository)
@@ -571,6 +572,30 @@ The `line="<number>"` variable uses displayed line numbers, which doesn't includ
 
 The command must include a closing shortcode of <code>&#123;&#123;< hover-highlight >&#125;&#125;</code>.  
 
+#### Copying code
+By default the copy button copies the first line of the code block. Attach a `copy-lines=<start>-<end>` tag to the code block.
+
+For example, to copy lines 2-4 of a code block, use `{copy-lines="2-4"}`.
+
+{{< hint type="tip" >}}
+Comma seperate code blocks with more than one tag. For example, to apply a label and copy lines 3-5
+
+````
+```shell {hl_lines=["2","3","6-8"], copy-lines="2-4"}
+kubectl describe resourcegroup
+Name:         example-rg
+Namespace:
+Labels:       <none>
+Annotations:  crossplane.io/external-name: example-rg
+API Version:  azure.upbound.io/v1beta1
+Kind:         ResourceGroup
+# Output truncated
+Spec:
+```
+````
+{{< /hint >}}
+
+{copy-lines="2-4"}
 ## Style guide
 The Upbound documentation style guide is still under construction, but the [Kubernetes style guide](https://kubernetes.io/docs/contribute/style/) is a safe reference. 
 
