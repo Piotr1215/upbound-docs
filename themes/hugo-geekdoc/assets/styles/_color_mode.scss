@@ -1,7 +1,7 @@
 @mixin color_theme_light {
   --header-background: #{$main-color};
   --header-font-color: #{$white};
-
+  --nav_color: #{$white};
   --body-background: #{$body-background};
   --body-font-color: #{$body-font-color};
 
@@ -48,8 +48,9 @@
   --header-font-color: #{$white};
 
   --body-background: #{$body-background-dark};
-  --body-font-color: #{lighten($body-background-dark, 60)};
+  --body-font-color: #E1E4EB;
 
+  --nav_color: #132334;
   --mark-color: #{$mark-color};
 
   --button-background: #{lighten($main-color, 2)};
