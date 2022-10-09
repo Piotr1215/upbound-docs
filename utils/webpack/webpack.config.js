@@ -11,7 +11,7 @@ const config = {
   output: {
     filename: "[name]-[contenthash:8].bundle.min.js",
     chunkFilename: "[name]-[contenthash:8].chunk.min.js",
-    path: path.join(__dirname, "../../themes/hugo-geekdoc/static/js"),
+    path: path.join(__dirname, "../../themes/hugo-geekdoc/assets/js"),
     clean: true
   },
 
