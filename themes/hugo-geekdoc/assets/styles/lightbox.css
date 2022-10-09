@@ -91,7 +91,7 @@ body.lb-disable-scrolling {
 
   .lb-nav a {
     outline: none;
-    background-image: url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+    background-image: url('/img/lightbox.gif');
   }
 
   .lb-prev, .lb-next {
