@@ -805,7 +805,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   font-family: 'Avenir-Roman', 'Arial', sans-serif;
   font-weight: 400;
   margin: 0px 0px 16.5px;
-  color: rgb(90, 113, 132);
+  color: rgb(152, 167, 179);
   font-size: 14px;
   line-height: 25px;
 }
@@ -824,7 +824,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 .footer-column-first > .site-by {
   font-family: 'Avenir-Roman', 'Arial', sans-serif;
   font-weight: 600;
-  color: rgb(90, 113, 132);
+  color: rgb(152, 167, 179);
   font-size: 13px;
   line-height: 28px;
   margin-top: 21.5px;
