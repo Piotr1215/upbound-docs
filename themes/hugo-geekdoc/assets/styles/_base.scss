@@ -600,6 +600,7 @@ svg.gdoc-icon {
 
     background: var(--accent-color-lite);
     color: var(--body-font-color);
+    visibility: visible;
 
     &:required + &__spinner {
       display: block;

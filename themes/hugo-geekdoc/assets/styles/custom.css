@@ -762,7 +762,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 .footer-column > p {
   margin: 0px 0px 18px;
   line-height: normal;
-  color: rgb(90, 113, 132);
+  color: rgb(146, 170, 180);
   font-family: 'Avenir-Black', Arial, sans-serif;
   font-size: 16px;
 }
@@ -782,7 +782,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   font-size: 14px;
   text-decoration: none;
   margin-bottom: 15px;
-  color: inherit;
+  color: #A2A7AE;
 }
 
 @media screen and (min-width: 576px) {
@@ -1782,4 +1782,8 @@ code.language-shell::before {
 
 pre.chroma > code {
   min-height: 3rem;
+}
+
+.unomena-logo {
+  display: flex; margin-left: 4px;
 }
