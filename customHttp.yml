@@ -1,0 +1,16 @@
+customHeaders:
+  - pattern: '**'
+    headers:
+      - key: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains; preload
+      - key: Content-Security-Policy
+        value: >-
+          default-src 'none'; script-src
+          'sha256-WG2zxo32N5HltK/d+tA+kvwHhVUclaSfdaiT14HrqOk=' ;
+          frame-ancestors 'none' ; form-action 'none' ; strict-dynamic
+      - key: X-XSS-Protection
+        value: 1; mode=block
+      - key: X-Content-Type-Options
+        value: nosniff
+      - key: X-Frame-Options
+        value: SAMEORIGIN
