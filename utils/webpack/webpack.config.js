@@ -3,10 +3,11 @@ const { WebpackManifestPlugin } = require("webpack-manifest-plugin")
 
 const config = {
   devtool: "source-map",
-  entry: {
-    main: path.resolve("src", "js", "app.js"),
-    search: path.resolve("src", "js", "search.js"),
-  },
+  entry:
+    [path.resolve("src", "js", "app.js"),
+    path.resolve("src", "js", "search.js"),
+    path.resolve("src", "js", "lightbox.js")]
+  ,
   output: {
     filename: "[name]-[contenthash:8].bundle.min.js",
     chunkFilename: "[name]-[contenthash:8].chunk.min.js",
