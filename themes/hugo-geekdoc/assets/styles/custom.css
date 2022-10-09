@@ -1053,8 +1053,8 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   /* Current Theme: Dracula. https://xyproto.github.io/splash/docs/dracula.html */
   --chroma_color: #f8f8f2;
   --chroma_background_color: #282a36;
-  --single_command_color: ##0a0b0f;
-  --single_command_background-color: #e7e8ef;
+  --single_command_color: #0a0b0f;
+  --single_command_background-color: ##e7e8ef;
 
   /* --chroma_x:
   --chroma_err:
