@@ -26,6 +26,6 @@
 {{ printf "<!-- %s -->" "Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc" | safeHTML }}
 
 {{- if .Page.HasShortcode "img" -}}
-{{ $imgstyle := resources.Get "styles/lightbox.min.css" | fingerprint }}
+{{ $imgstyle := resources.Get "styles/lightbox.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{$imgstyle.Permalink}}" integrity="{{ $imgstyle.Data.Integrity }}" media="all" />
 {{- end -}}
