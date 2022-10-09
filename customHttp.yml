@@ -5,8 +5,7 @@ customHeaders:
         value: max-age=31536000; includeSubDomains; preload
       - key: Content-Security-Policy
         value: >-
-          default-src 'self'; script-src
-          'sha256-WG2zxo32N5HltK/d+tA+kvwHhVUclaSfdaiT14HrqOk=' ;
+          default-src 'self' https://*.clarity.ms https://c.bing.com 'unsafe-inline';
           frame-ancestors 'none' ; form-action 'none'
       - key: X-XSS-Protection
         value: 1; mode=block
