@@ -853,7 +853,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 .footer-sub > div > p {
   margin: 0px;
   line-height: normal;
-  color: rgb(90, 113, 132);
+  color: #A2A7AE;
   font-size: 16px;
 }
 
