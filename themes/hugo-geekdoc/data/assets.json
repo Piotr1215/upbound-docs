@@ -1,8 +1,14 @@
 {
   "main.js": {
-    "src": "js/main-041372a5.bundle.min.js"
+    "src": "js/main-cbd3b28c.bundle.min.js"
   },
-  "main-041372a5.bundle.min.js.map": {
-    "src": "js/main-041372a5.bundle.min.js.map"
+  "lightbox.js": {
+    "src": "js/lightbox-1160b3c9.bundle.min.js"
+  },
+  "main-cbd3b28c.bundle.min.js.map": {
+    "src": "js/main-cbd3b28c.bundle.min.js.map"
+  },
+  "lightbox-1160b3c9.bundle.min.js.map": {
+    "src": "js/lightbox-1160b3c9.bundle.min.js.map"
   }
 }
