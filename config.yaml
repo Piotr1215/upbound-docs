@@ -26,6 +26,20 @@ markup:
     LineNumbersInTable: true
     anchorLineNos: true
 
+module:
+  mounts:
+  - source: content
+    target: content
+  - source: assets
+    target: assets
+  - source: content
+    target: assets/content
+    includeFiles:
+      - "**/**.png"
+      - "**/**.jpg"
+      - "**/**.jpeg"
+      - "**/**.gif"
+
 
 params:
   # (Optional, default 6) Set how many table of contents levels to be showed on page.
