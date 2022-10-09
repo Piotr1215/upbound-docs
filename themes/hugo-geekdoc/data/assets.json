@@ -3,12 +3,12 @@
     "src": "js/main-cbd3b28c.bundle.min.js"
   },
   "lightbox.js": {
-    "src": "js/lightbox-fea398e4.bundle.min.js"
+    "src": "js/lightbox-a24cf8c2.bundle.min.js"
   },
   "main-cbd3b28c.bundle.min.js.map": {
     "src": "js/main-cbd3b28c.bundle.min.js.map"
   },
-  "lightbox-fea398e4.bundle.min.js.map": {
-    "src": "js/lightbox-fea398e4.bundle.min.js.map"
+  "lightbox-a24cf8c2.bundle.min.js.map": {
+    "src": "js/lightbox-a24cf8c2.bundle.min.js.map"
   }
 }
