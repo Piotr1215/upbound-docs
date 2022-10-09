@@ -29,5 +29,5 @@
 {{- if .Page.HasShortcode "img" -}}
 {{ $imgstyle := resources.Get "styles/lightbox.css" | minify  }}
 {{ $imghash := $imgstyle | resources.Fingerprint "sha512" }}
-<link rel="stylesheet" href="{{$imgstyle.Permalink}}" media="all" />
+<link rel="stylesheet" href="{{$imgstyle.Permalink}}" media="all"  fetchpriority="low" />
 {{- end -}}
