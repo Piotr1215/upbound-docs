@@ -165,7 +165,8 @@ The `weight` of a directory's `_index.md` page moves the entire section of conte
 The `/content/cli/command-reference/` directory sorts alphabetically by title. Weight it ignored.
 {{< /hint >}}
 
-To hide a page from the left-hand table of contents set `geekdocHidden: true`.
+To hide a page from the left-hand site table of contents set `geekdocHidden: true`.  
+To hide the right-hand page table of contents set `GeekdocToC: true`.
 
 ### Links
 #### Linking between docs pages
@@ -575,13 +576,13 @@ The command must include a closing shortcode of <code>&#123;&#123;< hover-highli
 #### Copying code
 By default the copy button copies the first line of the code block. Attach a `copy-lines=<start>-<end>` tag to the code block.
 
-For example, to copy lines 2-4 of a code block, use `{copy-lines="2-4"}`.
+For example, to copy from lines 2 to 4, use `{copy-lines="2-4"}`.
 
 {{< hint type="tip" >}}
-Comma seperate code blocks with more than one tag. For example, to apply a label and copy lines 3-5
+Comma seperate code blocks with more than one tag. For example, to apply a label and copy from lines 3 to 5
 
 ````
-```shell {hl_lines=["2","3","6-8"], copy-lines="2-4"}
+```shell {hl_lines="2-4", copy-lines="2-4"}
 kubectl describe resourcegroup
 Name:         example-rg
 Namespace:
@@ -595,7 +596,19 @@ Spec:
 ````
 {{< /hint >}}
 
-{copy-lines="2-4"}
+This example copies from lines 2 to 4.
+```shell {hl_lines="2-4", copy-lines="2-4"}
+kubectl describe resourcegroup
+Name:         example-rg
+Namespace:
+Labels:       <none>
+Annotations:  crossplane.io/external-name: example-rg
+API Version:  azure.upbound.io/v1beta1
+Kind:         ResourceGroup
+# Output truncated
+Spec:
+```
+
 ## Style guide
 The Upbound documentation style guide is still under construction, but the [Kubernetes style guide](https://kubernetes.io/docs/contribute/style/) is a safe reference. 
 
