@@ -1,7 +1,6 @@
 ---
-title: "Digital Millennium Copyright Act"
-weight: 10
-type: "contributing"
+title: "DMCA Policy"
+weight: 10000
 ---
 <!-- vale off -->
 ## Upbound DMCA (Digital Millennium Copyright Act) takedown request requirements
