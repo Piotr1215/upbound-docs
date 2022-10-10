@@ -1174,10 +1174,10 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --link-color: #6d64f5 !important;
   --link-color-visited: #6d64f5 !important;
 
-  --code-background: #282a36;
+  /* --code-background: #282a36;
   --code-accent-color: #e3e7eb;
   --code-accent-color-lite: #eff1f3;
-  --code-font-color: #f8f8f2;
+  --code-font-color: #f8f8f2; */
 
   --code-copy-background: #f5f6f8;
   --code-copy-font-color: #6b7784;
@@ -1201,9 +1201,9 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --single_command_color: ##0a0b0f;
   --single_command_background-color: #e7e8ef;
 
-  --chroma_x:
+  /* --chroma_x:
   --chroma_err:
-  --chroma_cl:  
+  --chroma_cl:   */
   --chroma_lntd_vertical-align: top;
   --chroma_lntd_padding: 0;
   --chroma_lntd_margin: 0;
@@ -1224,7 +1224,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_ln_margin-right: 0.4em;
   --chroma_ln_padding: 0 0.4em 0 0.4em;
   --chroma_ln_color: #7f7f7f;
-  --chroma_line_display: flex;
+  /* --chroma_line_display: flex; */
   --chroma_k_color: #ff79c6;
   --chroma_kc_color: #ff79c6;
   --chroma_kd_color: #8be9fd;
@@ -1233,23 +1233,23 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_kp_color:  #ff79c6;
   --chroma_kr_color:  #ff79c6;
   --chroma_kt_color:  #8be9fd;
-  --chroma_n:  
+  /* --chroma_n:   */
   --chroma_na_color:  #50fa7b;
   --chroma_nb_color:  #8be9fd;
   --chroma_nb_font-style: italic;
-  --chroma_bp:
+  /* --chroma_bp: */
   --chroma_nc_color: #50fa7b;
-  --chroma_no:
+  /* --chroma_no:
   --chroma_nd:
   --chroma_ni:
-  --chroma_ne:
+  --chroma_ne: */
   --chroma_nf_color: #50fa7b;
-  --chroma_fm:
+  /* --chroma_fm: */
   --chroma_nl_color: #8be9fd;
   --chroma_nl_font-style: italic;
-  --chroma_nn:
+  /* --chroma_nn:
   --chroma_nx:
-  --chroma_py:
+  --chroma_py: */
   --chroma_nt: #ff79c6;
   --chroma_nv: #8be9fd;
   --chroma_nv_font-style: italic;
@@ -1259,9 +1259,9 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_vg_font-style: italic;
   --chroma_vi_color:  #8be9fd;
   --chroma_vi_font-style: italic;
-  --chroma_vm:
+  /* --chroma_vm:
   --chroma_l:
-  --chroma_ld:
+  --chroma_ld: */
   --chroma_s_color:   #f1fa8c;
   --chroma_sa_color:  #f1fa8c;
   --chroma_sb_color:  #f1fa8c;
@@ -1285,7 +1285,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_mo_color:  #bd93f9;
   --chroma_o_color:   #ff79c6;
   --chroma_ow_color:  #ff79c6;
-  --chroma_p:
+  /* --chroma_p: */
   --chroma_c_color:   #6272a4;
   --chroma_ch_color:  #6272a4;
   --chroma_cm_color:  #6272a4;
@@ -1293,23 +1293,24 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   --chroma_cs_color:  #6272a4;
   --chroma_cp_color:  #ff79c6;
   --chroma_cpf_color: #ff79c6;
-  --chroma_g_color:
+  /* --chroma_g_color: */
   --chroma_gd_color:  #ff5555;
   --chroma_ge_text-decoration: underline;
-  --chroma_gr_color:
+  /* --chroma_gr_color: */
   --chroma_gh_font-weight: bold;
   --chroma_gi_color: #50fa7b;
   --chroma_gi_font-weight: bold;
   --chroma_go_color: #44475a;
-  --chroma_gp:
-  --chroma_gs:
+  /* --chroma_gp: */
+  /* --chroma_gs: */
   --chroma_gu_font-weight: bold;
-  --chroma_gt:
+  /* --chroma_gt: */
   --chroma_gl_text-decoration: underline;
-  --chroma_w:
+  /* --chroma_w: */
+
 }
 
-/* @media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: light) {
   :root {
     --header-background: #0b1c28;
     --header-font-color: #ffffff;
@@ -1342,14 +1343,14 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 
     /* Syntax highlighting */
     /* Current Theme: Dracula. https://xyproto.github.io/splash/docs/dracula.html */
-    /* --chroma_color:  #f8f8f2;
+    --chroma_color:  #f8f8f2;
     --chroma_background_color: #282a36;
     --single_command_color: ##0a0b0f;
-    --single_command_background-color: #e7e8ef; */
+    --single_command_background-color: #e7e8ef;
     /* --chroma_x:
     --chroma_err:
     --chroma_cl:   */
-    /* --chroma_lntd_vertical-align: top;
+    --chroma_lntd_vertical-align: top;
     --chroma_lntd_padding: 0;
     --chroma_lntd_margin: 0;
     --chroma_lntd_border: 0;
@@ -1367,34 +1368,34 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
     --chroma_ln_user-select: none;
     --chroma_ln_margin-right: 0.4em;
     --chroma_ln_padding: 0 0.4em 0 0.4em;
-    --chroma_ln_color: #7f7f7f; */
+    --chroma_ln_color: #7f7f7f;
     /* --chroma_line_display: flex; */
-    /* --chroma_k_color: #ff79c6;
+    --chroma_k_color: #ff79c6;
     --chroma_kc_color: #ff79c6;
     --chroma_kd_color: #8be9fd;
     --chroma_kd_font-style:  italic;
     --chroma_kn_color:  #ff79c6;
     --chroma_kp_color:  #ff79c6;
     --chroma_kr_color:  #ff79c6;
-    --chroma_kt_color:  #8be9fd; */
+    --chroma_kt_color:  #8be9fd;
     /* --chroma_n:   */
-    /* --chroma_na_color:  #50fa7b;
+    --chroma_na_color:  #50fa7b;
     --chroma_nb_color:  #8be9fd;
-    --chroma_nb_font-style: italic; */
+    --chroma_nb_font-style: italic;
     /* --chroma_bp: */
-    /* --chroma_nc_color: #50fa7b; */
+    --chroma_nc_color: #50fa7b;
     /* --chroma_no:
     --chroma_nd:
     --chroma_ni:
     --chroma_ne: */
-    /* --chroma_nf_color: #50fa7b; */
+    --chroma_nf_color: #50fa7b;
     /* --chroma_fm: */
-    /* --chroma_nl_color: #8be9fd;
-    --chroma_nl_font-style: italic; */
+    --chroma_nl_color: #8be9fd;
+    --chroma_nl_font-style: italic;
     /* --chroma_nn:
     --chroma_nx:
     --chroma_py: */
-    /* --chroma_nt_color: #ff79c6;
+    --chroma_nt_color: #ff79c6;
     --chroma_nv_color: #8be9fd;
     --chroma_nv_font-style: italic;
     --chroma_vc_color:  #8be9fd;
@@ -1402,11 +1403,11 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
     --chroma_vg_color: #8be9fd;
     --chroma_vg_font-style: italic;
     --chroma_vi_color:  #8be9fd;
-    --chroma_vi_font-style: italic; */
+    --chroma_vi_font-style: italic;
     /* --chroma_vm:
     --chroma_l:
     --chroma_ld: */
-    /* --chroma_s_color:   #f1fa8c;
+    --chroma_s_color:   #f1fa8c;
     --chroma_sa_color:  #f1fa8c;
     --chroma_sb_color:  #f1fa8c;
     --chroma_sc_color:  #f1fa8c;
@@ -1428,31 +1429,31 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
     --chroma_il_color:  #bd93f9;
     --chroma_mo_color:  #bd93f9;
     --chroma_o_color:   #ff79c6;
-    --chroma_ow_color:  #ff79c6; */
+    --chroma_ow_color:  #ff79c6;
     /* --chroma_p: */
-    /* --chroma_c_color:   #6272a4;
+    --chroma_c_color:   #6272a4;
     --chroma_ch_color:  #6272a4;
     --chroma_cm_color:  #6272a4;
     --chroma_c1_color:  #6272a4;
     --chroma_cs_color:  #6272a4;
     --chroma_cp_color:  #ff79c6;
-    --chroma_cpf_color: #ff79c6; */
+    --chroma_cpf_color: #ff79c6;
     /* --chroma_g_color: */
-    /* --chroma_gd_color:  #ff5555;
-    --chroma_ge_text-decoration: underline; */
+    --chroma_gd_color:  #ff5555;
+    --chroma_ge_text-decoration: underline;
     /* --chroma_gr_color: */
-    /* --chroma_gh_font-weight: bold;
+    --chroma_gh_font-weight: bold;
     --chroma_gi_color: #50fa7b;
     --chroma_gi_font-weight: bold;
-    --chroma_go_color: #44475a; */
+    --chroma_go_color: #44475a;
     /* --chroma_gp: */
     /* --chroma_gs: */
-    /* --chroma_gu_font-weight: bold; */
+    --chroma_gu_font-weight: bold;
     /* --chroma_gt: */
-    /* --chroma_gl_text-decoration: underline; */
+    --chroma_gl_text-decoration: underline;
     /* --chroma_w: */
-  /* }
-} */
+  }
+}
 
 /* Dark mode theming */
 :root[color-mode='dark'] {
@@ -1666,18 +1667,45 @@ p>code {
   color: var(--chroma_kn_color);
   font-style: var(--chroma_nb_font-style);
 }
+/* NameBuiltinPseudo */
+:root .chroma .bp {
+}
 /* NameClass */
 :root .chroma .nc {
   color: var(--chroma_nc_color);
+}
+/* NameConstant */
+:root .chroma .no {
+}
+/* NameDecorator */
+:root .chroma .nd {
+}
+/* NameEntity */
+:root .chroma .ni {
+}
+/* NameException */
+:root .chroma .ne {
 }
 /* NameFunction */
 :root .chroma .nf {
   color: var(--chroma_nf_color);
 }
+/* NameFunctionMagic */
+:root .chroma .fm {
+}
 /* NameLabel */
 :root .chroma .nl {
   color: var(--chroma_nl_color);
   font-style: var(--chroma_nl_font-style);
+}
+/* NameNamespace */
+:root .chroma .nn {
+}
+/* NameOther */
+:root .chroma .nx {
+}
+/* NameProperty */
+:root .chroma .py {
 }
 /* NameTag */
 :root .chroma .nt {
@@ -1702,6 +1730,15 @@ p>code {
 :root .chroma .vi {
   color: var(--chroma_vi_color);
   font-style: var(--chroma_vi_font-style);
+}
+/* NameVariableMagic */
+:root .chroma .vm {
+}
+/* Literal */
+:root .chroma .l {
+}
+/* LiteralDate */
+:root .chroma .ld {
 }
 /* LiteralString */
 :root .chroma .s {
@@ -1795,6 +1832,9 @@ p>code {
 :root .chroma .ow {
   color: var(--chroma_ow_color);
 }
+/* Punctuation */
+:root .chroma .p {
+}
 /* Comment */
 :root .chroma .c {
   color: var(--chroma_c_color);
@@ -1823,6 +1863,9 @@ p>code {
 :root .chroma .cpf {
   color: var(--chroma_cpf_color);
 }
+/* Generic */
+:root .chroma .g {
+}
 /* GenericDeleted */
 :root .chroma .gd {
   color: var(--chroma_gd_color);
@@ -1830,6 +1873,9 @@ p>code {
 /* GenericEmph */
 :root .chroma .ge {
   text-decoration: var(--chroma_ge_text-decoration);
+}
+/* GenericError */
+:root .chroma .gr {
 }
 /* GenericHeading */
 :root .chroma .gh {
@@ -1844,13 +1890,25 @@ p>code {
 :root .chroma .go {
   color: var(--chroma_go_color);
 }
+/* GenericPrompt */
+:root .chroma .gp {
+}
+/* GenericStrong */
+:root .chroma .gs {
+}
 /* GenericSubheading */
 :root .chroma .gu {
   font-weight: var(--chroma_gu_font-weight);
 }
+/* GenericTraceback */
+:root .chroma .gt {
+}
 /* GenericUnderline */
 :root .chroma .gl {
   text-decoration: var(--chroma_gl_text-decoration);
+}
+/* TextWhitespace */
+:root .chroma .w {
 }
 
 :root .dark-mode-dim .gdoc-markdown img {
