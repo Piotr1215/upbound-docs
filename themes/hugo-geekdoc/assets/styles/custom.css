@@ -83,11 +83,11 @@ input:focus-visible {
   display: flex;
 }
 .d-none {
-  display: none;
+  display: none !important;
 }
 @media screen and (min-width: 992px) {
   .d-lg-none {
-    display: none;
+    display: none !important;
   }
 }
 @media screen and (min-width: 1200px) {
@@ -362,6 +362,11 @@ button:focus {
 /* Navigation */
 /* Mobile First Approach */
 
+#navbar {
+  background-color: #0b1c28;
+  height: 88px;
+}
+
 #navbar .nav-container {
   width: 100%;
   max-width: 1440px;
@@ -598,7 +603,9 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 
 @media screen and (max-width: 39rem) {
   .header-right-items {
-    margin-left: 15px;
+    margin-left: auto;
+    padding-left: 15px;
+    margin-right: 15px;
   }
 }
 
@@ -910,7 +917,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 
 @media screen and (max-width: 991px) {
   .anchor-top {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -918,7 +925,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 #product-nav {
   background-color: #fff;
   box-shadow: 0 2px 10px rgb(175 184 197 / 20%);
-  margin-top: 88px;
+  /* margin-top: 88px; */
 }
 
 #product-nav > .container {
@@ -979,7 +986,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   color: #183B56;
 }
 
-#product-nav .gdoc-nav__control {
+#product-nav .gdoc-nav__control.sidebar {
   position: absolute;
   left: 14px;
   top: 50%;
@@ -991,6 +998,146 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   height: 2rem;
 }
 
+/* TableOfContents side menu */
+#TableOfContents ul {
+  list-style: none;
+}
+#TableOfContents > ul {
+  padding: 0;
+}
+#TableOfContents ul li {
+  padding-top: .5rem;
+}
+#TableOfContents ul li a {
+  text-decoration: none;
+}
+
+.gdoc-toc {
+  flex: 0 0 16rem;
+  font-size: 0.875rem;
+}
+.gdoc-toc nav {
+  width: 16rem;
+  padding: 1rem 2rem 1rem 0;
+}
+.gdoc-toc nav > ul > li > * {
+  font-weight: normal;
+}
+.gdoc-toc nav > :first-child,
+.gdoc-toc nav > :first-child > :first-child {
+  margin-top: 0;
+}
+.gdoc-toc nav section {
+  margin-top: 2rem;
+}
+.gdoc-toc__control {
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+.gdoc-toc__control svg.gdoc-icon {
+  cursor: pointer;
+}
+.gdoc-toc__control svg.gdoc-icon.gdoc_menu {
+  display: inline-block;
+}
+.gdoc-toc__control svg.gdoc-icon.gdoc_arrow_back {
+  display: none;
+}
+.gdoc-toc__list {
+  padding-right: 1em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.gdoc-toc__list ul {
+  padding-right: 1rem;
+}
+.gdoc-toc__list li {
+  margin: 0.5rem 0;
+}
+.gdoc-toc__list svg.gdoc-icon {
+  margin-right: 0.25rem;
+}
+.gdoc-toc__toggle {
+  display: none;
+}
+.gdoc-toc__toggle ~ label {
+  cursor: pointer;
+}
+.gdoc-toc__toggle ~ label svg.gdoc-icon.toggle {
+  width: 1rem;
+  height: 1rem;
+}
+.gdoc-toc__toggle:not(:checked) ~ ul,
+.gdoc-toc__toggle:not(:checked) ~ label svg.gdoc-icon.gdoc_keyboard_arrow_down {
+  display: none;
+}
+.gdoc-toc__toggle:not(:checked) ~ label svg.gdoc-icon.gdoc_keyboard_arrow_left {
+  display: block;
+}
+.gdoc-toc__toggle:checked ~ ul,
+.gdoc-toc__toggle:checked ~ label svg.gdoc-icon.gdoc_keyboard_arrow_down {
+  display: block;
+}
+.gdoc-toc__toggle:checked ~ label svg.gdoc-icon.gdoc_keyboard_arrow_left {
+  display: none;
+}
+.gdoc-toc--main > ul > li > span,
+.gdoc-toc--main > ul > li > span > a,
+.gdoc-toc--main > ul > li > label,
+.gdoc-toc--main > ul > li > label > a {
+  font-weight: bold;
+}
+.gdoc-toc__entry {
+  flex: 1;
+  color: var(--body-font-color);
+}
+.gdoc-toc__entry:hover,
+.gdoc-toc__entry.is-active{
+  text-decoration: underline;
+  -webkit-text-decoration-style: dashed !important;
+  text-decoration-style: dashed !important;
+}
+.gdoc-toc__entry:visited {
+  color: var(--body-font-color);
+}
+
+@media screen and (max-width: 39rem) {
+  .gdoc-toc {
+      margin-right: -16rem;
+      font-size: 16px;
+  }
+  .gdoc-nav__control.toc {
+      display: flex;
+      align-items: center;
+  }
+  #menu-toc-control:checked~main .gdoc-toc nav, #menu-toc-control:checked~main .gdoc-page {
+      transform: translateX(-16rem);
+  }
+  #menu-toc-control:checked~main .gdoc-page {
+      opacity: .25;
+  }
+  #menu-toc-control:checked~.gdoc-header .gdoc-toc__control svg.gdoc-icon.gdoc_menu {
+      display: none;
+  }
+  #menu-toc-control:checked~.gdoc-header .gdoc-toc__control svg.gdoc-icon.gdoc_arrow_back {
+      display: inline-block;
+  }
+}
+
+/* Error pages */
+@media screen and (max-width: 45rem) {
+  .gdoc-error {
+    padding: 11.438rem 1rem 6rem 1rem;
+  }
+}
+
+/* :root */
 :root {
   --code-max-height: 60rem;
 }

@@ -1,7 +1,7 @@
 <div id="product-nav">
   <div class="container">
     {{ if .MenuEnabled }}
-    <label for="menu-control" class="gdoc-nav__control" tabindex="0">
+    <label for="menu-control" class="gdoc-nav__control sidebar"  tabindex="0">
       <svg class="gdoc-icon gdoc_menu">
         <title>{{ i18n "button_nav_open" }}</title>
         <use xlink:href="#gdoc_menu"></use>
@@ -52,5 +52,21 @@
       </div>
 
     </div>
+    {{ if .ToCEnabled }}
+      {{ $hide_toc_class := "" }}
+      {{ if lt (len .Root.TableOfContents) 100 }}
+      {{ $hide_toc_class = "d-none" }}
+    {{ end }}
+    <label for="menu-toc-control" class="gdoc-nav__control toc {{$hide_toc_class}}" tabindex="0">
+      <svg class="gdoc-icon gdoc_menu">
+        <title>{{ i18n "button_nav_open" }}</title>
+        <use xlink:href="#gdoc_menu"></use>
+      </svg>
+      <svg class="gdoc-icon gdoc_arrow_back">
+        <title>{{ i18n "button_nav_close" }}</title>
+        <use xlink:href="#gdoc_arrow_back"></use>
+      </svg>
+    </label>
+    {{ end }}
   </div>
 </div>
