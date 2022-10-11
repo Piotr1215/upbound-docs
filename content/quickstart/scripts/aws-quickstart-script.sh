@@ -29,7 +29,7 @@ kubectl wait "providers.pkg.crossplane.io/provider-aws" --for=condition=Installe
 kubectl wait "providers.pkg.crossplane.io/provider-aws" --for=condition=Healthy --timeout=180s
 
 creds=$(
-cat <<EOF | base64
+cat <<EOF | base64 -w 0
 [default]
 aws_access_key_id = $AWS_KEY
 aws_secret_access_key = $AWS_SECRET
@@ -70,7 +70,7 @@ spec:
     region: us-east-1
 EOF
 
-printf "\n\nChecking AWS bucket creation (this only takes a minute)...\n"
+printf "\n\nChecking AWS bucket creation (this takes a minute)...\n"
 kubectl wait "$(kubectl get buckets -o name)" --for=condition=Ready --timeout=180s
 
 kubectl get buckets
