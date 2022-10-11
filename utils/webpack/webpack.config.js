@@ -7,12 +7,6 @@ const config = {
     main: path.resolve("src", "js", "app.js"),
     search: path.resolve("src", "js", "search.js"),
   },
-
-  entry:{
-    main: [path.resolve("src", "js", "app.js"),
-    path.resolve("src", "js", "search.js")],
-    lightbox: [path.resolve("src", "js", "lightbox.js")]
-  },
   output: {
     filename: "[name]-[contenthash:8].bundle.min.js",
     chunkFilename: "[name]-[contenthash:8].chunk.min.js",
