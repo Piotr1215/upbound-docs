@@ -7,9 +7,9 @@
         <dt class="flex flex-wrap align-center gdoc-props__meta">
           <span class="gdoc-props__title">{{ $key }}</span>
           {{- if $value.required }}
-            <span class="gdoc-props__tag warning">{{ i18n "propertylist_required" | lower }}</span>
+            <span class="gdoc-props__tag warning">required</span>
           {{ else }}
-            <span class="gdoc-props__tag tip">{{ i18n "propertylist_optional" | lower }}</span>
+            <span class="gdoc-props__tag tip">optional</span>
           {{- end }}
           {{- with $value.type }}
             <span class="gdoc-props__tag note">{{ . }}</span>
@@ -38,7 +38,7 @@
           </div>
           <div class="gdoc-props__default">
             {{- with default "none" ($value.defaultValue | string) }}
-              <span>{{ i18n "propertylist_default" | title }}:</span>
+              <span>default:</span>
               <span>{{ . }}</span>
             {{- end }}
           </div>
