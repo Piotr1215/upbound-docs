@@ -1507,7 +1507,12 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
   background-color: var(--chroma_background_color);
 }
 
-p>code {
+p code {
+  background-color: var(--single_command_background-color);
+  color: var(--single_command_color);
+}
+
+li code {
   background-color: var(--single_command_background-color);
   color: var(--single_command_color);
 }
