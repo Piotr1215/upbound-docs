@@ -642,7 +642,7 @@ upbound-bucket-45eed4ae0   True    True     upbound-bucket-45eed4ae0   61s
 
 Optionally, log into the [AWS Console](https://s3.console.aws.amazon.com/s3/buckets) and see the bucket inside AWS.
 
-![AWS console showing an S3 bucket with the name upbound-bucket-45eed4ae0 that matches the bucket created by Crossplane.](/quickstart/images/s3-bucket-create.png)
+{{< img src="images/s3-bucket-create.png" alt="AWS console shows an S3 bucket with the name upbound-bucket-45eed4ae0 that matches the bucket created by Crossplane." >}}
 
 <br />
 
@@ -722,7 +722,9 @@ bucket.s3.aws.upbound.io "upbound-bucket-45eed4ae0" deleted
 
 Look in the [AWS Console](https://s3.console.aws.amazon.com/s3/buckets) to confirm Crossplane deleted the bucket from AWS.
 
-![AWS console showing No buckets, indicating Crossplane deleted the S3 bucket managed resource](/quickstart/images/s3-bucket-delete.png)
+{{< img alt="AWS console showing no buckets exist, indicating Crossplane deleted the S3 bucket managed resource." src="images/s3-bucket-delete.png" >}}
+
+
 
 ### Next steps 
 * Explore AWS resources that can Crossplane can configure in the [Provider CRD reference](https://marketplace.upbound.io/providers/upbound/provider-aws/v0.15.0/crds).

@@ -1,7 +1,7 @@
 baseURL: "/"
 enableRobotsTXT: True
 languageCode: "en-us"
-title: "Documentation"
+title: "Upbound Documentation"
 theme: "hugo-geekdoc"
 enableGitInfo: true
 disablePathToLower: true
@@ -26,8 +26,28 @@ markup:
     LineNumbersInTable: true
     anchorLineNos: true
 
+module:
+  mounts:
+  - source: content
+    target: content
+  - source: assets
+    target: assets
+  - source: content
+    target: assets/content
+    includeFiles:
+      - "**/**.png"
+      - "**/**.jpg"
+      - "**/**.jpeg"
+      - "**/**.gif"
+
 
 params:
+  products:
+    - "name": Upbound
+      "path": "/"
+  #   - "name": "Knowledge Base"
+  #     "path": "/knowledge-base"
+
   # (Optional, default 6) Set how many table of contents levels to be showed on page.
   # Use false to hide ToC, note that 0 will default to 6 (https://gohugo.io/functions/default/)
   # You can also specify this parameter per page in front matter.
@@ -35,7 +55,7 @@ params:
 
   # (Optional, default static/brand.svg) Set the path to a logo for the Geekdoc
   # relative to your 'static/' folder.
-  geekdocLogo: img/upbound-logo-white.svg
+  geekdocLogo: upbound-logo-white.svg
 
   # (Optional, default false) Render menu from data file in 'data/menu/main.yaml'.
   # See also https://geekdocs.de/usage/menus/#bundle-menu.
