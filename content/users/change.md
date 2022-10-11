@@ -3,7 +3,7 @@ title: "Change an existing account"
 weight: 42
 ---
 
-Manage an existing Upbound account at [cloud.upbound.io](https://cloud.upbound.io)
+Manage an existing Upbound account at [accounts.upbound.io](https://accounts.upbound.io)
 
 Once logged in, select the icon in the lower-left corner of the Cloud Console and select `My Account`.
 
