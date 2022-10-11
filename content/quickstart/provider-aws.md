@@ -3,6 +3,8 @@ title: Official Provider AWS
 weight: 10
 ---
 
+Connect Crossplane to AWS to create and manage cloud resources from Kubernetes with the AWS Official Provider.
+
 This guide walks you through the steps required to get started with the AWS Official Provider. This includes installing Upbound Universal Crossplane, configuring the provider to authenticate to AWS and creating a _Managed Resource_ in AWS directly from your Kubernetes cluster.
 
 - [Prerequisites](#prerequisites)
@@ -20,7 +22,6 @@ This guide walks you through the steps required to get started with the AWS Offi
 
 ## Prerequisites
 This quickstart requires:
-* an [Upbound user account]({{<ref "users/register" >}})
 * a Kubernetes cluster with at least 3 GB of RAM
 * permissions to create pods and secrets in the Kubernetes cluster
 * an AWS account with permissions to create an S3 storage bucket
@@ -45,14 +46,8 @@ All commands use the current `kubeconfig` context and configuration.
 {{< /hint >}}
 
 You need your:
-* Upbound username
-* Upbound password
 * AWS Access Key ID
 * AWS Secret Access Key
-
-{{< hint type="note" >}}
-The [create a new account]({{<ref "users/register" >}}) section has directions for creating an Upbound account.
-{{< /hint >}}
 
 ### Bash script
 Download the script with `wget`.
@@ -84,14 +79,8 @@ All commands use the current `kubeconfig` context and configuration.
 {{< /hint >}}
 
 You need your:
-* Upbound username
-* Upbound password
 * AWS Access Key ID
 * AWS Secret Access Key
-
-{{< hint type="note" >}}
-The [create a new account]({{<ref "users/register" >}}) section has directions for creating an Upbound account.
-{{< /hint >}}
 
 {{< include file="quickstart/scripts/quickstart-common.md" type="page" >}}
 
@@ -99,7 +88,7 @@ The [create a new account]({{<ref "users/register" >}}) section has directions f
 
 Install the official provider into the Kubernetes cluster with a Kubernetes configuration file. 
 
-```shell {label="provider"}
+```shell {label="provider",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
@@ -113,8 +102,6 @@ EOF
 ```
 
 The {{< hover-highlight label="provider" line="3">}}kind: Provider{{< /hover-highlight >}} uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.  
-
-The {{< hover-highlight label="provider" line="8">}}packagePullSecrets{{</ hover-highlight >}} uses the Kubernetes image pull secret to authenticate to the Upbound Marketplace repository at {{< hover-highlight label="provider" line="7">}}xpkg.upbound.io{{< /hover-highlight >}}.
 
 Verify the provider installed with `kubectl get providers`. 
 
@@ -528,7 +515,7 @@ The [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-con
 
 Create a text file containing the AWS account `aws_access_key_id` and `aws_secret_access_key`.  
 
-```ini
+```ini {copy-lines="all"}
 [default]
 aws_access_key_id = <aws_access_key>
 aws_secret_access_key = <aws_secret_key>
@@ -541,10 +528,10 @@ The [Configuration](https://marketplace.upbound.io/providers/upbound/provider-aw
 {{< /hint >}}
 
 #### Create a Kubernetes secret with the AWS credentials
-A Kubernetes generic secret has a name and contents. Use `kubectl create secret -n upbound-system` to generate the secret object named _aws-secret_ in the _upbound-system_ namespace.  
-Use the `--from-file=` argument to set the value to the contents of the _aws-credentials.txt_ file.
+A Kubernetes generic secret has a name and contents. Use {{< hover-highlight label="kube-create-secret" line="1">}}kubectl create secret{{< /hover-highlight >}} to generate the secret object named {{< hover-highlight label="kube-create-secret" line="2">}}aws-secret{{< /hover-highlight >}} in the {{< hover-highlight label="kube-create-secret" line="3">}}upbound-system{{</ hover-highlight >}} namespace.  
+Use the {{< hover-highlight label="kube-create-secret" line="4">}}--from-file={{</hover-highlight>}} argument to set the value to the contents of the  {{< hover-highlight label="kube-create-secret" line="4">}}aws-credentials.txt{{< /hover-highlight >}} file.
 
-```shell
+```shell {label="kube-create-secret",copy-lines="all"}
 kubectl create secret \
 generic aws-secret \
 -n upbound-system \
@@ -554,7 +541,7 @@ generic aws-secret \
 View the secret with `kubectl describe secret`
 
 {{< hint type="note" >}}
-The size may be larger if there are extra blank space in your text file.
+The size may be larger if there are extra blank spaces in your text file.
 {{< /hint >}}
 
 ```shell
@@ -574,8 +561,8 @@ creds:  114 bytes
 ### Create a ProviderConfig
 A `ProviderConfig` customizes the settings of the AWS Provider.  
 
-Apply the `ProviderConfig` with the command:
-```yaml {label="providerconfig"}
+Apply the {{< hover-highlight label="providerconfig" line="2">}}ProviderConfig{{</ hover-highlight >}} with the command:
+```yaml {label="providerconfig",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
 apiVersion: aws.upbound.io/v1beta1
 kind: ProviderConfig
@@ -591,7 +578,7 @@ spec:
 EOF
 ```
 
-This attaches the AWS credentials, saved as a Kubernetes secret, as a `secretRef`.
+This attaches the AWS credentials, saved as a Kubernetes secret, as a {{< hover-highlight label="providerconfig" line="9">}}secretRef{{</ hover-highlight>}}.
 
 The {{< hover-highlight label="providerconfig" line="11">}}spec.credentials.secretRef.name{{< /hover-highlight >}} value is the name of the Kubernetes secret containing the AWS credentials in the {{< hover-highlight label="providerconfig" line="10">}}spec.credentials.secretRef.namespace{{< /hover-highlight >}}.
 
@@ -656,7 +643,7 @@ A common issue is incorrect AWS credentials or not having permissions to create 
 
 The following output is an example of the `kubectl describe bucket` output when using the wrong AWS credentials.
 
-```shell
+```shell {label="bad-aws-auth"}
 kubectl describe bucket
 Name:         upbound-bucket-ff2ce7e86
 Annotations:  crossplane.io/external-name: upbound-bucket-ff2ce7e86
@@ -688,7 +675,7 @@ Events:
   ```
 
 The error message in the _Events_ log indicates the problem.  
-`api error InvalidClientTokenId: The security token included in the request is invalid.`
+{{< hover-highlight label="bad-aws-auth" line="28">}}api error InvalidClientTokenId: The security token included in the request is invalid.{{< /hover-highlight >}}
 
 To fix the problem:
 
