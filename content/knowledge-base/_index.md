@@ -2,7 +2,7 @@
 title: "Upbound Knowledge Base"
 rank: 0
 cascade:
-    type: "kb"
+    product: "Knowledge Base"
 ---
 
 The root of the KB.

@@ -14,10 +14,14 @@
     {{ end }}
     <div class="sub-nav">
       <ul>
-        {{- $product := .Page.Params.product | default "Upbound" -}}
-        <li {{- if eq $product "Upbound" }} class="active" {{- end -}}>
-          <a href="/">Upbound</a>
-        </li>
+        {{- $currentproduct := .Root.Page.Params.product | default "Upbound" -}}
+        {{range .Root.Site.Params.products }}
+          <li
+          {{- if eq $currentproduct .name }} class="active" {{- end -}}
+          >
+            <a href="{{ .path }}">{{ .name }}</a>
+          </li>
+       {{ end }}
       </ul>
     </div>
 
