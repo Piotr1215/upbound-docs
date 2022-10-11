@@ -42,9 +42,9 @@ module:
 
 
 params:
-  # products:
-  #   - "name": Upbound
-  #     "path": "/"
+  products:
+    - "name": Upbound
+      "path": "/"
   #   - "name": "Knowledge Base"
   #     "path": "/knowledge-base"
 
