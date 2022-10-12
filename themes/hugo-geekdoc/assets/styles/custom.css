@@ -1517,7 +1517,7 @@ li code {
   color: var(--single_command_color);
 }
 
-.gdoc-markdown--nested.gdoc-tabs__content code {
+.gdoc-markdown--nested.gdoc-tabs__content p code {
   background-color: var(--single_command_background-color);
   color: var(--single_command_color);
 }
