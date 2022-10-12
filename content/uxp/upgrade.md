@@ -3,7 +3,7 @@ title: "Upgrade UXP"
 weight: 210
 ---
 
-Use the `up` command-line Upbound Universal Crossplane (UXP) to upgrade an existing UXP install to a newer version of UXP or to upgrade from open source Crossplane to UXP.
+Use the `up` command-line Upbound Universal Crossplane (UXP) to upgrade an existing install to a newer version or to upgrade from open source Crossplane.
 
 ### Upgrade from Upbound Universal Crossplane
 UXP supports upgrading from any older UXP release to any newer UXP release version.
