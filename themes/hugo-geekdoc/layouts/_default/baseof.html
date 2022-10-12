@@ -10,11 +10,12 @@
         {{ printf "%s | %s" (partial "utils/title" .) .Site.Title }}
       {{- end -}}
     </title>
-
-    {{ partial "head/favicons" . }}
-    {{ partial "head/clarity" . }}
-    {{ partial "head/microformats" . }}
     {{ partial "head/styles" . }}
+    {{ partial "head/favicons" . }}
+  {{ if hugo.IsProduction }}
+    {{ partial "head/trackers" . }}
+  {{ end }}
+    {{ partial "head/microformats" . }}
   </head>
 
   <body itemscope itemtype="https://schema.org/WebPage">

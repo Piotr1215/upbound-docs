@@ -16,16 +16,22 @@ export function createCopyButton(highlightDiv) {
 
     // did they set the "copy-lines" value in the code box to identify what to copy?
     if("copy-lines" in highlightDiv.attributes){
-      // look for a value like 1-10. Split on the dash.
-      var startendLines = highlightDiv.attributes["copy-lines"].value.split("-")
-      startLines = parseInt(startendLines[0])
 
-      // they want to copy a single line, but it's not the first one
-      if(startendLines.length == 1){
-        endLines = parseInt(startendLines[0])
+      var copyVal = highlightDiv.attributes["copy-lines"].value
+
+      // if it's a single digit then start == end
+      if(copyVal.length === 1){
+        startLines = parseInt(copyVal, 10)
+        endLines = parseInt(copyVal, 10)
       }
-      else{
-        endLines = parseInt(startendLines[1])
+      else if(copyVal.localeCompare("all") === 0){
+          endLines = codeContent.length
+      }
+      else {
+        // look for a value like 1-10. Split on the dash.
+        var startendLines = copyVal.split("-")
+        startLines = parseInt(startendLines[0], 10)
+        endLines = parseInt(startendLines[1], 10)
       }
 
     }
