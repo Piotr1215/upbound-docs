@@ -44,9 +44,10 @@ Install the official provider into the Kubernetes cluster with the `up` command-
 {{< tabs "provider-install" >}}
 
 {{< tab "with the Up command-line" >}}
-<!-- TODO: style doesn't work for multi-line command. Need to fix style and break up the command -->
 ```shell {copy-lines="all"}
-up controlplane provider install xpkg.upbound.io/upbound/provider-azure:v0.16.0
+up controlplane \
+provider install \
+xpkg.upbound.io/upbound/provider-azure:v0.16.0
 ```
 {{< /tab >}}
 
@@ -528,6 +529,7 @@ A common issue is incorrect Azure credentials or not having permissions to creat
 The following output is an example of the `kubectl describe resourcegroup` output when using the wrong Azure credentials.
 
 ```shell {label="bad-auth"}
+kubectl describe ResourceGroup
 Name:         example-rg
 Namespace:
 Labels:       <none>
@@ -558,7 +560,7 @@ Events:
 The error message in the _Condition_ indicates the problem.  
 <!-- vale alex.Ablist = NO --> 
 <!-- allow "invalid" since it quotes the error -->
-{{< hover label="bad-auth" line="18">}} Invalid client secret provided.{{< /hover >}}
+{{< hover label="bad-auth" line="19">}} Invalid client secret provided.{{< /hover >}}
 <!-- vale alex.Ablist = YES --> 
 
 To fix the problem:
