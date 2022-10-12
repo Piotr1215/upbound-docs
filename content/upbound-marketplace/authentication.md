@@ -3,9 +3,7 @@ title: "Authentication"
 weight: 10
 ---
 
-Some Marketplace resources, including pulling private packages or pushing packages to a repository require authentication to Upbound.
-
-Pushing packages to a repository or managing organizations, robot accounts or users uses the [Up command-line]({{<ref "cli">}}). 
+Pulling private packages or pushing packages to an Upbound Marketplace private repository requires authentication to Upbound.
 
 Installing private Kubernetes resources requires an [image pull secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials). 
 
@@ -31,7 +29,7 @@ password:
 my-user logged in
 ```
 
-### Authenticate to an Organization
+<!-- ### Authenticate to an Organization
 [Organization-only resources]({{<ref "users/organizations">}}) requires specifying the organization. You can provide an organization globally or per-command.
 
 {{< tabs "org-auth" >}}
@@ -73,15 +71,75 @@ my-org/my-robot created
 ```
 {{< /tab >}}
 
-{{< /tabs >}}
+{{< /tabs >}} -->
 
 ## Kubernetes image pull secrets
 
 Packages in private repositories require a Kubernetes image pull secret.  
 The image pull secret authenticates Kubernetes to the Upbound Marketplace, allowing Kubernetes to download and install packages.
 
-Generating an image pull secret requires either a user or robot account _token_. 
+Generating an image pull secret requires either a user account _token_. 
 
+{{< hint type="important" >}}
+A user account token uses your current `up login` profile.  
+Logging out with `up logout` deactivates the token.
+{{< /hint >}}
+
+Use the command `up controlplane pull-secret create` to generate a token and Kubernetes _Secret_ in the _upbound-system_ namespace.
+
+```shell
+up ctp pull-secret create
+WARNING: Using temporary user credentials that will expire within 30 days.
+upbound-system/package-pull-secret created
+```
+Verify the secret with `kubectl describe secret -n upbound-system package-pull-secret`
+
+```shell
+kubectl describe secret -n upbound-system package-pull-secret
+Name:         package-pull-secret
+Namespace:    upbound-system
+Labels:       <none>
+Annotations:  <none>
+
+Type:  kubernetes.io/dockerconfigjson
+
+Data
+====
+.dockerconfigjson:  1201 bytes
+```
+
+## Use an image pull secret
+
+Use an image pull secret by providing a {{< hover label="pps" line="8" >}}spec.packagePullSecrets{{< /hover >}} in a {{< hover label="pps" line="2" >}}Configuration{{</hover>}} or `Provider` manifest.  
+
+This example installs a private {{< hover label="pps" line="2" >}}Configuration{{< /hover >}} named {{< hover label="pps" line="6" >}}secret-configuration{{< /hover >}} from the Upbound image repository using image pull secret named {{< hover label="pps" line="8" >}}package-pull-secret{{< /hover >}}.
+```yaml {label="pps",copy-line="all"}
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: platform-ref-aws
+spec:
+  package: xpkg.upbound.io/secret-org/secret-configuration:v1.2.3
+  packagePullSecrets:
+    - name: package-pull-secret
+```
+
+
+<!-- The following is the old robot token and org auth info -->
+
+<!-- 
+{{< hint type="caution" >}}
+User accounts also have _API Tokens_ to use with `up login`.   
+Image pull secrets can't use API tokens.  
+<!-- vale Microsoft.FirstPerson = NO -->
+<!-- ignore "My" in "My Account" -->
+<!-- The <a href="https://accounts.upbound.io">My Account</a> management panel creates API tokens.  -->
+<!-- vale Microsoft.FirstPerson = YES -->
+<!-- Kubernetes can only use the _pull-secret_ token for authentication.  -->
+{{< /hint >}} -->
+
+
+<!-- 
 {{< tabs "tokens" >}}
 
 {{< tab "Create a robot account token" >}}
@@ -192,54 +250,10 @@ xgql-tls                                     Opaque                           3 
 
 {{< tab "Create a user account token" >}}
 
-{{< hint type="caution" >}}
-User account tokens can't install Upbound Official Providers.
-{{< /hint >}}
-
-A user account token uses your current `up login` profile. Logging out with `up logout` deactivates the token.
-
-{{< hint type="note" >}}
-Upbound recommends using Organizations and robot account tokens instead of user account tokens.
-{{< /hint >}}
-
-Use the command `up controlplane pull-secret create` to generate a token and Kubernetes _Secret_ in the _upbound-system_ namespace.
-
-```shell
-up ctp pull-secret create
-WARNING: Using temporary user credentials that will expire within 30 days.
-upbound-system/package-pull-secret created
-```
-Verify the secret with `kubectl describe secret -n upbound-system package-pull-secret`
-
-```shell
-kubectl describe secret -n upbound-system package-pull-secret
-Name:         package-pull-secret
-Namespace:    upbound-system
-Labels:       <none>
-Annotations:  <none>
-
-Type:  kubernetes.io/dockerconfigjson
-
-Data
-====
-.dockerconfigjson:  1201 bytes
-```
-
-
-{{< hint type="caution" >}}
-User accounts also have _API Tokens_ to use with `up login`.   
-Image pull secrets can't use API tokens.  
-<!-- vale Microsoft.FirstPerson = NO -->
-<!-- ignore "My" in "My Account" -->
-The <a href="https://accounts.upbound.io">My Account</a> management panel creates API tokens. 
-<!-- vale Microsoft.FirstPerson = YES -->
-Kubernetes can only use the _pull-secret_ token for authentication. 
-{{< /hint >}}
-
 {{< /tab >}}
 
 {{< /tabs >}}
 
 
 
-
+ -->
