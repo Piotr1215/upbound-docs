@@ -3,7 +3,7 @@ title: "Creating and Pushing Packages"
 weight: 30
 ---
 
-{{< hint type="note" >}}
+{{< hint type="caution" >}}
 This section covers creating and pushing packages to the Upbound Marketplace. For information about installing packages read the <a href="{{<ref "uxp/crossplane-concepts/packages">}}">Crossplane Packages</a> section.
 {{< /hint >}}
 
@@ -23,7 +23,7 @@ Build a package using `up xpkg build`.
 
 The `up xpkg build` command expects a `crossplane.yaml` file to provide the metadata for the package file. 
 
-The default name is based on the `metadata.name` value in the `crossplane.yaml` file. 
+The default name is the `metadata.name` value in the `crossplane.yaml` file. 
 
 ```shell
 up xpkg build
@@ -65,7 +65,8 @@ The `up xpkg push` command requires:
 * The repository to push a package to.
 * A package version tag. The package version tag is a <a href="https://semver.org/">semantic versioning</a> number determining package upgrades and dependency requirements.
 
-The push command syntax is `up xpkg push <repoository>:<version tag> -f <xpkg file>`.
+The push command syntax is  
+`up xpkg push <repoository>:<version tag> -f <xpkg file>`.
 
 For example, to push a package with the following parameters:
 * Repository `upbound-docs/my-repo`
