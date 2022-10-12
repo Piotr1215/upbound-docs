@@ -1,5 +1,5 @@
 ---
-title: Official Provider Azure 
+title: Azure Quickstart 
 weight: 10
 ---
 
@@ -8,13 +8,12 @@ Connect Crossplane to Microsoft Azure to create and manage cloud resources from 
 This guide walks you through the steps required to get started with the Azure Official Provider. This includes installing Upbound Universal Crossplane, configuring the provider to authenticate to Azure and creating a _Managed Resource_ in Azure directly from your Kubernetes cluster.
 
 - [Prerequisites](#prerequisites)
-- [Copy and paste quickstart](#copy-and-paste-quickstart)
-  - [Bash script](#bash-script)
 - [Guided tour](#guided-tour)
-  - [Install the official AWS provider](#install-the-official-aws-provider)
-  - [Create a Kubernetes secret for AWS](#create-a-kubernetes-secret-for-aws)
-    - [Generate an AWS key-pair file](#generate-an-aws-key-pair-file)
-    - [Create a Kubernetes secret with the AWS credentials](#create-a-kubernetes-secret-with-the-aws-credentials)
+  - [Install the official Azure provider](#install-the-official-azure-provider)
+  - [Create a Kubernetes secret for Azure](#create-a-kubernetes-secret-for-azure)
+    - [Install the Azure command-line](#install-the-azure-command-line)
+    - [Create an Azure service principal](#create-an-azure-service-principal)
+    - [Create a Kubernetes secret with the Azure credentials](#create-a-kubernetes-secret-with-the-azure-credentials)
   - [Create a ProviderConfig](#create-a-providerconfig)
   - [Create a managed resource](#create-a-managed-resource)
   - [Delete the managed resource](#delete-the-managed-resource)
@@ -24,82 +23,50 @@ This guide walks you through the steps required to get started with the Azure Of
 This quickstart requires:
 * a Kubernetes cluster with at least 3 GB of RAM
 * permissions to create pods and secrets in the Kubernetes cluster
-* an Azure account with permissions to create a Azure [service principal](https://learn.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals#service-principal-object) and an [Azure Resource Group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal)
+* an Azure account with permissions to create an Azure [service principal](https://learn.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals#service-principal-object) and an [Azure Resource Group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal)
 
 {{< hint type="tip" >}}
 If you don't have a Kubernetes cluster create one locally with [minikube](https://minikube.sigs.k8s.io/docs/start/) or [kind](https://kind.sigs.k8s.io/).
 {{< /hint >}}
 
-You can use this guide in one of two methods:
-* [_shell script_](#copy-and-paste-quickstart) - A single shell script prompts you for inputs and runs the commands. At the end you have a complete system to examine.  
-* [_guided tour_](#guided-tour) - A step-by-step walk through of the required commands and descriptions on what the commands do.
-
-Both methods create an identical environment. Choose the method that best fits your learning style.
-
-## Copy and paste quickstart
-
-You can either run a single Bash script or run each command individually.
-
-{{< hint type="note" >}}
-All commands use the current `kubeconfig` context and configuration. 
-{{< /hint >}}
-
-You need your:
-* Azure [authentication JSON file](https://learn.microsoft.com/en-us/azure/developer/go/azure-sdk-authorization#use-file-based-authentication)
-
-### Bash script
-Download the script with `wget`.
-```shell
-wget {{< url "quickstart/azure-quickstart-script.sh" >}}
-```
-{{< expand "Click to view the complete Bash script" >}}
-
-{{< hint type="warning" >}}
-Paste this script into a text file and run it as a script. Some terminals don't handle lots of commands at once.
-{{< /hint >}}
-
-{{<include file="quickstart/scripts/azure-quickstart-script.sh" language="bash" >}}
-
-Your Kubernetes cluster created this Azure Resource Group.
-
-Remove it with `kubectl delete resourcegroup <resource group name>`
-
-```shell
-kubectl delete bucket upbound-bucket-$VAR
-```
-{{< /expand >}}
+<!-- due to Azure CLI auth, this can't be automated -->
 
 ## Guided tour
-These steps are the same as the preceding quickstart, but provides more information for each action.
-
 {{< hint type="note" >}}
 All commands use the current `kubeconfig` context and configuration. 
 {{< /hint >}}
-
-You need your:
-* AWS Access Key ID
-* AWS Secret Access Key
 
 {{< include file="quickstart/scripts/quickstart-common.md" type="page" >}}
 
-### Install the official AWS provider
+### Install the official Azure provider
 
-Install the official provider into the Kubernetes cluster with a Kubernetes configuration file. 
+Install the official provider into the Kubernetes cluster with the `up` command-line or a Kubernetes configuration file. 
+{{< tabs "provider-install" >}}
 
-```shell {label="provider",copy-lines="3"}
+{{< tab "with the Up command-line" >}}
+<!-- TODO: style doesn't work for multi-line command. Need to fix style and break up the command -->
+```shell {copy-lines="all"}
+up controlplane provider install xpkg.upbound.io/upbound/provider-azure:v0.16.0
+```
+{{< /tab >}}
+
+{{< tab "with a Kubernetes manifest" >}}
+```shell {label="provider",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-aws
+  name: upbound-provider-azure
 spec:
-  package: xpkg.upbound.io/upbound/provider-aws:v0.15.0
-  packagePullSecrets:
-    - name: package-pull-secret
+  package: xpkg.upbound.io/upbound/provider-azure:v0.16.0
 EOF
 ```
 
 The {{< hover label="provider" line="3">}}kind: Provider{{< /hover >}} uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.  
+
+{{< /tab >}}
+
+{{< /tabs >}}
 
 Verify the provider installed with `kubectl get providers`. 
 
@@ -107,433 +74,361 @@ Verify the provider installed with `kubectl get providers`.
 It may take up to five minutes for the provider to list `HEALTHY` as `True`. 
 {{< /hint >}}
 
-```shell 
-kubectl get providers
-NAME           INSTALLED   HEALTHY   PACKAGE                                        AGE
-provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.15.0   73s
+```shell
+kubectl get providers 
+NAME                     INSTALLED   HEALTHY   PACKAGE                                          AGE
+upbound-provider-azure   True        True      xpkg.upbound.io/upbound/provider-azure:v0.16.0   3m3s
 ```
 
-A provider installs their own Kubernetes _Custom Resource Definitions_ (CRDs). These CRDs allow you to create AWS resources directly inside Kubernetes.
+A provider installs their own Kubernetes _Custom Resource Definitions_ (CRDs). These CRDs allow you to create Azure resources directly inside Kubernetes.
 
-You can view the new CRDs with `kubectl get crds`. Every CRD maps to a unique AWS service Crossplane can provision and manage.
+You can view the new CRDs with `kubectl get crds`. Every CRD maps to a unique Azure service Crossplane can provision and manage.
 <!-- vale gitlab.SubstitutionWarning = NO -->
 <!-- disable "click" error. The user needs to actually click the button -->
-{{< expand "Click to see the AWS CRDs" >}}
+{{< expand "Click to see the Azure CRDs" >}}
 <!-- vale gitlab.SubstitutionWarning = YES -->
 ```shell
 kubectl get crds
-NAME                                                                      CREATED AT
-accelerators.globalaccelerator.aws.upbound.io                             2022-09-30T03:16:56Z
-accesskeys.iam.aws.upbound.io                                             2022-09-30T03:16:56Z
-accesspoints.efs.aws.upbound.io                                           2022-09-30T03:16:55Z
-accountaliases.iam.aws.upbound.io                                         2022-09-30T03:16:56Z
-accountpasswordpolicies.iam.aws.upbound.io                                2022-09-30T03:16:56Z
-accounts.apigateway.aws.upbound.io                                        2022-09-30T03:16:52Z
-accountsettingdefaults.ecs.aws.upbound.io                                 2022-09-30T03:16:55Z
-activities.sfn.aws.upbound.io                                             2022-09-30T03:16:59Z
-addons.eks.aws.upbound.io                                                 2022-09-30T03:16:55Z
-alertmanagerdefinitions.amp.aws.upbound.io                                2022-09-30T03:16:52Z
-aliases.gamelift.aws.upbound.io                                           2022-09-30T03:16:56Z
-aliases.kms.aws.upbound.io                                                2022-09-30T03:16:57Z
-aliases.lambda.aws.upbound.io                                             2022-09-30T03:16:57Z
-apikeys.apigateway.aws.upbound.io                                         2022-09-30T03:16:52Z
-apimappings.apigatewayv2.aws.upbound.io                                   2022-09-30T03:16:52Z
-apis.apigatewayv2.aws.upbound.io                                          2022-09-30T03:16:52Z
-applications.kinesisanalytics.aws.upbound.io                              2022-09-30T03:16:56Z
-applications.kinesisanalyticsv2.aws.upbound.io                            2022-09-30T03:16:57Z
-applicationsnapshots.kinesisanalyticsv2.aws.upbound.io                    2022-09-30T03:16:57Z
-associations.licensemanager.aws.upbound.io                                2022-09-30T03:16:57Z
-attachments.autoscaling.aws.upbound.io                                    2022-09-30T03:16:53Z
-attachments.elb.aws.upbound.io                                            2022-09-30T03:16:55Z
-authorizers.apigateway.aws.upbound.io                                     2022-09-30T03:16:52Z
-authorizers.apigatewayv2.aws.upbound.io                                   2022-09-30T03:16:52Z
-autoscalinggroups.autoscaling.aws.upbound.io                              2022-09-30T03:16:53Z
-backuppolicies.efs.aws.upbound.io                                         2022-09-30T03:16:55Z
-basepathmappings.apigateway.aws.upbound.io                                2022-09-30T03:16:52Z
-botaliases.lexmodels.aws.upbound.io                                       2022-09-30T03:16:57Z
-bots.lexmodels.aws.upbound.io                                             2022-09-30T03:16:57Z
-brokers.mq.aws.upbound.io                                                 2022-09-30T03:16:57Z
-bucketaccelerateconfigurations.s3.aws.upbound.io                          2022-09-30T03:16:58Z
-bucketacls.s3.aws.upbound.io                                              2022-09-30T03:16:58Z
-bucketanalyticsconfigurations.s3.aws.upbound.io                           2022-09-30T03:16:58Z
-bucketcorsconfigurations.s3.aws.upbound.io                                2022-09-30T03:16:58Z
-bucketintelligenttieringconfigurations.s3.aws.upbound.io                  2022-09-30T03:16:58Z
-bucketinventories.s3.aws.upbound.io                                       2022-09-30T03:16:58Z
-bucketlifecycleconfigurations.s3.aws.upbound.io                           2022-09-30T03:16:58Z
-bucketloggings.s3.aws.upbound.io                                          2022-09-30T03:16:58Z
-bucketmetrics.s3.aws.upbound.io                                           2022-09-30T03:16:58Z
-bucketnotifications.s3.aws.upbound.io                                     2022-09-30T03:16:58Z
-bucketobjectlockconfigurations.s3.aws.upbound.io                          2022-09-30T03:16:58Z
-bucketobjects.s3.aws.upbound.io                                           2022-09-30T03:16:58Z
-bucketownershipcontrols.s3.aws.upbound.io                                 2022-09-30T03:16:58Z
-bucketpolicies.s3.aws.upbound.io                                          2022-09-30T03:16:58Z
-bucketpublicaccessblocks.s3.aws.upbound.io                                2022-09-30T03:16:58Z
-bucketreplicationconfigurations.s3.aws.upbound.io                         2022-09-30T03:16:58Z
-bucketrequestpaymentconfigurations.s3.aws.upbound.io                      2022-09-30T03:16:58Z
-buckets.s3.aws.upbound.io                                                 2022-09-30T03:16:58Z
-bucketserversideencryptionconfigurations.s3.aws.upbound.io                2022-09-30T03:16:58Z
-bucketversionings.s3.aws.upbound.io                                       2022-09-30T03:16:58Z
-bucketwebsiteconfigurations.s3.aws.upbound.io                             2022-09-30T03:16:58Z
-builds.gamelift.aws.upbound.io                                            2022-09-30T03:16:56Z
-cachepolicies.cloudfront.aws.upbound.io                                   2022-09-30T03:16:53Z
-capacityproviders.ecs.aws.upbound.io                                      2022-09-30T03:16:55Z
-catalogdatabases.glue.aws.upbound.io                                      2022-09-30T03:16:56Z
-catalogtables.glue.aws.upbound.io                                         2022-09-30T03:16:56Z
-certificateauthorities.acmpca.aws.upbound.io                              2022-09-30T03:16:52Z
-certificateauthoritycertificates.acmpca.aws.upbound.io                    2022-09-30T03:16:52Z
-certificates.acm.aws.upbound.io                                           2022-09-30T03:16:52Z
-certificates.acmpca.aws.upbound.io                                        2022-09-30T03:16:52Z
-certificatevalidations.acm.aws.upbound.io                                 2022-09-30T03:16:52Z
-ciphertexts.kms.aws.upbound.io                                            2022-09-30T03:16:57Z
-classifiers.glue.aws.upbound.io                                           2022-09-30T03:16:56Z
-clientcertificates.apigateway.aws.upbound.io                              2022-09-30T03:16:52Z
-clusteractivitystreams.rds.aws.upbound.io                                 2022-09-30T03:16:57Z
-clusterauths.eks.aws.upbound.io                                           2022-09-30T03:16:55Z
-clustercapacityproviders.ecs.aws.upbound.io                               2022-09-30T03:16:55Z
-clusterendpoints.neptune.aws.upbound.io                                   2022-09-30T03:16:57Z
-clusterendpoints.rds.aws.upbound.io                                       2022-09-30T03:16:57Z
-clusterinstances.docdb.aws.upbound.io                                     2022-09-30T03:16:53Z
-clusterinstances.neptune.aws.upbound.io                                   2022-09-30T03:16:57Z
-clusterinstances.rds.aws.upbound.io                                       2022-09-30T03:16:57Z
-clusterparametergroups.neptune.aws.upbound.io                             2022-09-30T03:16:57Z
-clusterparametergroups.rds.aws.upbound.io                                 2022-09-30T03:16:57Z
-clusterroleassociations.rds.aws.upbound.io                                2022-09-30T03:16:57Z
-clusters.dax.aws.upbound.io                                               2022-09-30T03:16:53Z
-clusters.docdb.aws.upbound.io                                             2022-09-30T03:16:53Z
-clusters.ecs.aws.upbound.io                                               2022-09-30T03:16:55Z
-clusters.eks.aws.upbound.io                                               2022-09-30T03:16:55Z
-clusters.elasticache.aws.upbound.io                                       2022-09-30T03:16:55Z
-clusters.kafka.aws.upbound.io                                             2022-09-30T03:16:56Z
-clusters.neptune.aws.upbound.io                                           2022-09-30T03:16:57Z
-clusters.rds.aws.upbound.io                                               2022-09-30T03:16:57Z
-clusters.redshift.aws.upbound.io                                          2022-09-30T03:16:58Z
-clustersnapshots.neptune.aws.upbound.io                                   2022-09-30T03:16:57Z
-codesigningconfigs.lambda.aws.upbound.io                                  2022-09-30T03:16:57Z
-cognitoidentitypoolproviderprincipaltags.cognitoidentity.aws.upbound.io   2022-09-30T03:16:53Z
-compositealarms.cloudwatch.aws.upbound.io                                 2022-09-30T03:16:53Z
-compositeresourcedefinitions.apiextensions.crossplane.io                  2022-09-30T02:09:11Z
-compositionrevisions.apiextensions.crossplane.io                          2022-09-30T02:09:11Z
-compositions.apiextensions.crossplane.io                                  2022-09-30T02:09:11Z
-configurationrevisions.pkg.crossplane.io                                  2022-09-30T02:09:11Z
-configurations.kafka.aws.upbound.io                                       2022-09-30T03:16:56Z
-configurations.mq.aws.upbound.io                                          2022-09-30T03:16:57Z
-configurations.pkg.crossplane.io                                          2022-09-30T02:09:11Z
-contributorinsights.dynamodb.aws.upbound.io                               2022-09-30T03:16:54Z
-controllerconfigs.pkg.crossplane.io                                       2022-09-30T02:09:11Z
-dashboards.cloudwatch.aws.upbound.io                                      2022-09-30T03:16:53Z
-databases.athena.aws.upbound.io                                           2022-09-30T03:16:52Z
-datacatalogencryptionsettings.glue.aws.upbound.io                         2022-09-30T03:16:56Z
-datacatalogs.athena.aws.upbound.io                                        2022-09-30T03:16:52Z
-datalakesettings.lakeformation.aws.upbound.io                             2022-09-30T03:16:57Z
-defaultroutetables.ec2.aws.upbound.io                                     2022-09-30T03:16:54Z
-delegationsets.route53.aws.upbound.io                                     2022-09-30T03:16:58Z
-deliverystreams.firehose.aws.upbound.io                                   2022-09-30T03:16:55Z
-deployments.apigateway.aws.upbound.io                                     2022-09-30T03:16:52Z
-deployments.apigatewayv2.aws.upbound.io                                   2022-09-30T03:16:52Z
-distributions.cloudfront.aws.upbound.io                                   2022-09-30T03:16:53Z
-documentationparts.apigateway.aws.upbound.io                              2022-09-30T03:16:52Z
-documentationversions.apigateway.aws.upbound.io                           2022-09-30T03:16:52Z
-domainnames.apigateway.aws.upbound.io                                     2022-09-30T03:16:52Z
-domainnames.apigatewayv2.aws.upbound.io                                   2022-09-30T03:16:52Z
-domainpolicies.opensearch.aws.upbound.io                                  2022-09-30T03:16:57Z
-domains.cloudsearch.aws.upbound.io                                        2022-09-30T03:16:53Z
-domains.opensearch.aws.upbound.io                                         2022-09-30T03:16:57Z
-domainsamloptions.opensearch.aws.upbound.io                               2022-09-30T03:16:57Z
-domainserviceaccesspolicies.cloudsearch.aws.upbound.io                    2022-09-30T03:16:53Z
-ebssnapshots.ec2.aws.upbound.io                                           2022-09-30T03:16:54Z
-ebsvolumes.ec2.aws.upbound.io                                             2022-09-30T03:16:54Z
-egressonlyinternetgateways.ec2.aws.upbound.io                             2022-09-30T03:16:54Z
-eipassociations.ec2.aws.upbound.io                                        2022-09-30T03:16:54Z
-eips.ec2.aws.upbound.io                                                   2022-09-30T03:16:54Z
-elbs.elb.aws.upbound.io                                                   2022-09-30T03:16:55Z
-endpointgroups.globalaccelerator.aws.upbound.io                           2022-09-30T03:16:56Z
-endpoints.route53resolver.aws.upbound.io                                  2022-09-30T03:16:58Z
-eventsourcemappings.lambda.aws.upbound.io                                 2022-09-30T03:16:57Z
-eventsubscriptions.neptune.aws.upbound.io                                 2022-09-30T03:16:57Z
-externalkeys.kms.aws.upbound.io                                           2022-09-30T03:16:57Z
-fargateprofiles.eks.aws.upbound.io                                        2022-09-30T03:16:55Z
-fieldlevelencryptionconfigs.cloudfront.aws.upbound.io                     2022-09-30T03:16:53Z
-fieldlevelencryptionprofiles.cloudfront.aws.upbound.io                    2022-09-30T03:16:53Z
-filesystempolicies.efs.aws.upbound.io                                     2022-09-30T03:16:55Z
-filesystems.efs.aws.upbound.io                                            2022-09-30T03:16:55Z
-fleet.gamelift.aws.upbound.io                                             2022-09-30T03:16:56Z
-flowlogs.ec2.aws.upbound.io                                               2022-09-30T03:16:54Z
-frameworks.backup.aws.upbound.io                                          2022-09-30T03:16:53Z
-functioneventinvokeconfigs.lambda.aws.upbound.io                          2022-09-30T03:16:57Z
-functions.cloudfront.aws.upbound.io                                       2022-09-30T03:16:53Z
-functions.lambda.aws.upbound.io                                           2022-09-30T03:16:57Z
-functionurls.lambda.aws.upbound.io                                        2022-09-30T03:16:57Z
-gamesessionqueues.gamelift.aws.upbound.io                                 2022-09-30T03:16:56Z
-gatewayresponses.apigateway.aws.upbound.io                                2022-09-30T03:16:52Z
-globalclusters.docdb.aws.upbound.io                                       2022-09-30T03:16:53Z
-globalclusters.rds.aws.upbound.io                                         2022-09-30T03:16:58Z
-globalsettings.backup.aws.upbound.io                                      2022-09-30T03:16:53Z
-globaltables.dynamodb.aws.upbound.io                                      2022-09-30T03:16:54Z
-grants.kms.aws.upbound.io                                                 2022-09-30T03:16:57Z
-groupmemberships.iam.aws.upbound.io                                       2022-09-30T03:16:56Z
-grouppolicyattachments.iam.aws.upbound.io                                 2022-09-30T03:16:56Z
-groups.cloudwatchlogs.aws.upbound.io                                      2022-09-30T03:16:53Z
-groups.iam.aws.upbound.io                                                 2022-09-30T03:16:56Z
-groups.resourcegroups.aws.upbound.io                                      2022-09-30T03:16:58Z
-healthchecks.route53.aws.upbound.io                                       2022-09-30T03:16:58Z
-hostedzonednssecs.route53.aws.upbound.io                                  2022-09-30T03:16:58Z
-httpnamespaces.servicediscovery.aws.upbound.io                            2022-09-30T03:16:59Z
-identityproviderconfigs.eks.aws.upbound.io                                2022-09-30T03:16:55Z
-identityproviders.cognitoidp.aws.upbound.io                               2022-09-30T03:16:53Z
-instanceprofiles.iam.aws.upbound.io                                       2022-09-30T03:16:56Z
-instanceroleassociations.rds.aws.upbound.io                               2022-09-30T03:16:58Z
-instances.ec2.aws.upbound.io                                              2022-09-30T03:16:54Z
-instances.rds.aws.upbound.io                                              2022-09-30T03:16:58Z
-integrationresponses.apigateway.aws.upbound.io                            2022-09-30T03:16:52Z
-integrationresponses.apigatewayv2.aws.upbound.io                          2022-09-30T03:16:52Z
-integrations.apigateway.aws.upbound.io                                    2022-09-30T03:16:52Z
-integrations.apigatewayv2.aws.upbound.io                                  2022-09-30T03:16:52Z
-intents.lexmodels.aws.upbound.io                                          2022-09-30T03:16:57Z
-internetgateways.ec2.aws.upbound.io                                       2022-09-30T03:16:54Z
-invocations.lambda.aws.upbound.io                                         2022-09-30T03:16:57Z
-jobs.glue.aws.upbound.io                                                  2022-09-30T03:16:56Z
-keygroups.cloudfront.aws.upbound.io                                       2022-09-30T03:16:53Z
-keypairs.ec2.aws.upbound.io                                               2022-09-30T03:16:54Z
-keys.kms.aws.upbound.io                                                   2022-09-30T03:16:57Z
-kinesisstreamingdestinations.dynamodb.aws.upbound.io                      2022-09-30T03:16:53Z
-launchtemplates.ec2.aws.upbound.io                                        2022-09-30T03:16:54Z
-layerversionpermissions.lambda.aws.upbound.io                             2022-09-30T03:16:57Z
-layerversions.lambda.aws.upbound.io                                       2022-09-30T03:16:57Z
-lblisteners.elbv2.aws.upbound.io                                          2022-09-30T03:16:55Z
-lbs.elbv2.aws.upbound.io                                                  2022-09-30T03:16:55Z
-lbtargetgroupattachments.elbv2.aws.upbound.io                             2022-09-30T03:16:55Z
-lbtargetgroups.elbv2.aws.upbound.io                                       2022-09-30T03:16:55Z
-licenseconfigurations.licensemanager.aws.upbound.io                       2022-09-30T03:16:57Z
-lifecyclepolicies.ecr.aws.upbound.io                                      2022-09-30T03:16:55Z
-listeners.globalaccelerator.aws.upbound.io                                2022-09-30T03:16:56Z
-locks.pkg.crossplane.io                                                   2022-09-30T02:09:11Z
-mainroutetableassociations.ec2.aws.upbound.io                             2022-09-30T03:16:54Z
-managedprefixlistentries.ec2.aws.upbound.io                               2022-09-30T03:16:54Z
-managedprefixlists.ec2.aws.upbound.io                                     2022-09-30T03:16:54Z
-methodresponses.apigateway.aws.upbound.io                                 2022-09-30T03:16:52Z
-methods.apigateway.aws.upbound.io                                         2022-09-30T03:16:52Z
-methodsettings.apigateway.aws.upbound.io                                  2022-09-30T03:16:52Z
-metricalarms.cloudwatch.aws.upbound.io                                    2022-09-30T03:16:53Z
-metricstreams.cloudwatch.aws.upbound.io                                   2022-09-30T03:16:53Z
-models.apigateway.aws.upbound.io                                          2022-09-30T03:16:52Z
-models.apigatewayv2.aws.upbound.io                                        2022-09-30T03:16:52Z
-monitoringsubscriptions.cloudfront.aws.upbound.io                         2022-09-30T03:16:53Z
-mounttargets.efs.aws.upbound.io                                           2022-09-30T03:16:55Z
-namedqueries.athena.aws.upbound.io                                        2022-09-30T03:16:52Z
-natgateways.ec2.aws.upbound.io                                            2022-09-30T03:16:54Z
-networkaclrules.ec2.aws.upbound.io                                        2022-09-30T03:16:54Z
-networkacls.ec2.aws.upbound.io                                            2022-09-30T03:16:54Z
-networkinterfaceattachments.ec2.aws.upbound.io                            2022-09-30T03:16:54Z
-networkinterfaces.ec2.aws.upbound.io                                      2022-09-30T03:16:54Z
-networkinterfacesgattachments.ec2.aws.upbound.io                          2022-09-30T03:16:54Z
-nodegroups.eks.aws.upbound.io                                             2022-09-30T03:16:55Z
-objects.s3.aws.upbound.io                                                 2022-09-30T03:16:58Z
-openidconnectproviders.iam.aws.upbound.io                                 2022-09-30T03:16:56Z
-optiongroups.rds.aws.upbound.io                                           2022-09-30T03:16:58Z
-originaccessidentities.cloudfront.aws.upbound.io                          2022-09-30T03:16:53Z
-originrequestpolicies.cloudfront.aws.upbound.io                           2022-09-30T03:16:53Z
-parametergroups.dax.aws.upbound.io                                        2022-09-30T03:16:54Z
-parametergroups.elasticache.aws.upbound.io                                2022-09-30T03:16:55Z
-parametergroups.neptune.aws.upbound.io                                    2022-09-30T03:16:57Z
-parametergroups.rds.aws.upbound.io                                        2022-09-30T03:16:58Z
-permissions.lakeformation.aws.upbound.io                                  2022-09-30T03:16:57Z
-permissions.lambda.aws.upbound.io                                         2022-09-30T03:16:57Z
-placementgroups.ec2.aws.upbound.io                                        2022-09-30T03:16:54Z
-plans.backup.aws.upbound.io                                               2022-09-30T03:16:53Z
-policies.appautoscaling.aws.upbound.io                                    2022-09-30T03:16:52Z
-policies.iam.aws.upbound.io                                               2022-09-30T03:16:56Z
-policies.iot.aws.upbound.io                                               2022-09-30T03:16:56Z
-poolrolesattachments.cognitoidentity.aws.upbound.io                       2022-09-30T03:16:53Z
-pools.cognitoidentity.aws.upbound.io                                      2022-09-30T03:16:53Z
-privatednsnamespaces.servicediscovery.aws.upbound.io                      2022-09-30T03:16:59Z
-providerconfigs.aws.upbound.io                                            2022-09-30T03:16:53Z
-providerconfigusages.aws.upbound.io                                       2022-09-30T03:16:53Z
-providerrevisions.pkg.crossplane.io                                       2022-09-30T02:09:11Z
-providers.pkg.crossplane.io                                               2022-09-30T02:09:11Z
-provisionedconcurrencyconfigs.lambda.aws.upbound.io                       2022-09-30T03:16:57Z
-proxies.rds.aws.upbound.io                                                2022-09-30T03:16:58Z
-proxydefaulttargetgroups.rds.aws.upbound.io                               2022-09-30T03:16:58Z
-proxyendpoints.rds.aws.upbound.io                                         2022-09-30T03:16:58Z
-proxytargets.rds.aws.upbound.io                                           2022-09-30T03:16:58Z
-publicdnsnamespaces.servicediscovery.aws.upbound.io                       2022-09-30T03:16:59Z
-publickeys.cloudfront.aws.upbound.io                                      2022-09-30T03:16:53Z
-pullthroughcacherules.ecr.aws.upbound.io                                  2022-09-30T03:16:55Z
-queuepolicies.sqs.aws.upbound.io                                          2022-09-30T03:16:59Z
-queues.sqs.aws.upbound.io                                                 2022-09-30T03:16:59Z
-realtimelogconfigs.cloudfront.aws.upbound.io                              2022-09-30T03:16:53Z
-records.route53.aws.upbound.io                                            2022-09-30T03:16:58Z
-regionsettings.backup.aws.upbound.io                                      2022-09-30T03:16:53Z
-registries.glue.aws.upbound.io                                            2022-09-30T03:16:56Z
-registrypolicies.ecr.aws.upbound.io                                       2022-09-30T03:16:55Z
-registryscanningconfigurations.ecr.aws.upbound.io                         2022-09-30T03:16:55Z
-replicaexternalkeys.kms.aws.upbound.io                                    2022-09-30T03:16:57Z
-replicakeys.kms.aws.upbound.io                                            2022-09-30T03:16:57Z
-replicationconfigurations.ecr.aws.upbound.io                              2022-09-30T03:16:55Z
-replicationgroups.elasticache.aws.upbound.io                              2022-09-30T03:16:55Z
-reportplans.backup.aws.upbound.io                                         2022-09-30T03:16:53Z
-repositories.ecr.aws.upbound.io                                           2022-09-30T03:16:55Z
-repositories.ecrpublic.aws.upbound.io                                     2022-09-30T03:16:55Z
-repositorypolicies.ecr.aws.upbound.io                                     2022-09-30T03:16:55Z
-repositorypolicies.ecrpublic.aws.upbound.io                               2022-09-30T03:16:55Z
-requestvalidators.apigateway.aws.upbound.io                               2022-09-30T03:16:52Z
-resourcepolicies.glue.aws.upbound.io                                      2022-09-30T03:16:56Z
-resources.apigateway.aws.upbound.io                                       2022-09-30T03:16:52Z
-resources.lakeformation.aws.upbound.io                                    2022-09-30T03:16:57Z
-resourceservers.cognitoidp.aws.upbound.io                                 2022-09-30T03:16:53Z
-resourceshares.ram.aws.upbound.io                                         2022-09-30T03:16:57Z
-responseheaderspolicies.cloudfront.aws.upbound.io                         2022-09-30T03:16:53Z
-restapipolicies.apigateway.aws.upbound.io                                 2022-09-30T03:16:52Z
-restapis.apigateway.aws.upbound.io                                        2022-09-30T03:16:52Z
-roleassociations.grafana.aws.upbound.io                                   2022-09-30T03:16:56Z
-rolepolicyattachments.iam.aws.upbound.io                                  2022-09-30T03:16:56Z
-roles.iam.aws.upbound.io                                                  2022-09-30T03:16:56Z
-routeresponses.apigatewayv2.aws.upbound.io                                2022-09-30T03:16:52Z
-routes.apigatewayv2.aws.upbound.io                                        2022-09-30T03:16:52Z
-routes.ec2.aws.upbound.io                                                 2022-09-30T03:16:54Z
-routetableassociations.ec2.aws.upbound.io                                 2022-09-30T03:16:54Z
-routetables.ec2.aws.upbound.io                                            2022-09-30T03:16:54Z
-ruleassociations.route53resolver.aws.upbound.io                           2022-09-30T03:16:58Z
-rulegroupnamespaces.amp.aws.upbound.io                                    2022-09-30T03:16:52Z
-rules.route53resolver.aws.upbound.io                                      2022-09-30T03:16:58Z
-samlproviders.iam.aws.upbound.io                                          2022-09-30T03:16:56Z
-scheduledactions.appautoscaling.aws.upbound.io                            2022-09-30T03:16:52Z
-scripts.gamelift.aws.upbound.io                                           2022-09-30T03:16:56Z
-secretpolicies.secretsmanager.aws.upbound.io                              2022-09-30T03:16:58Z
-secretrotations.secretsmanager.aws.upbound.io                             2022-09-30T03:16:58Z
-secrets.secretsmanager.aws.upbound.io                                     2022-09-30T03:16:58Z
-secretversions.secretsmanager.aws.upbound.io                              2022-09-30T03:16:59Z
-securitygrouprules.ec2.aws.upbound.io                                     2022-09-30T03:16:54Z
-securitygroups.ec2.aws.upbound.io                                         2022-09-30T03:16:54Z
-securitygroups.rds.aws.upbound.io                                         2022-09-30T03:16:58Z
-selections.backup.aws.upbound.io                                          2022-09-30T03:16:53Z
-servercertificates.iam.aws.upbound.io                                     2022-09-30T03:16:56Z
-servers.transfer.aws.upbound.io                                           2022-09-30T03:16:59Z
-servicelinkedroles.iam.aws.upbound.io                                     2022-09-30T03:16:56Z
-services.ecs.aws.upbound.io                                               2022-09-30T03:16:55Z
-servicespecificcredentials.iam.aws.upbound.io                             2022-09-30T03:16:56Z
-signingcertificates.iam.aws.upbound.io                                    2022-09-30T03:16:56Z
-signingprofiles.signer.aws.upbound.io                                     2022-09-30T03:16:59Z
-slottypes.lexmodels.aws.upbound.io                                        2022-09-30T03:16:57Z
-snapshots.rds.aws.upbound.io                                              2022-09-30T03:16:58Z
-spotdatafeedsubscriptions.ec2.aws.upbound.io                              2022-09-30T03:16:54Z
-spotinstancerequests.ec2.aws.upbound.io                                   2022-09-30T03:16:54Z
-stages.apigateway.aws.upbound.io                                          2022-09-30T03:16:52Z
-stages.apigatewayv2.aws.upbound.io                                        2022-09-30T03:16:52Z
-statemachines.sfn.aws.upbound.io                                          2022-09-30T03:16:59Z
-storeconfigs.aws.upbound.io                                               2022-09-30T03:16:53Z
-storeconfigs.secrets.crossplane.io                                        2022-09-30T02:09:11Z
-streamconsumers.kinesis.aws.upbound.io                                    2022-09-30T03:16:56Z
-streams.kinesis.aws.upbound.io                                            2022-09-30T03:16:56Z
-streams.kinesisvideo.aws.upbound.io                                       2022-09-30T03:16:57Z
-subnetgroups.dax.aws.upbound.io                                           2022-09-30T03:16:54Z
-subnetgroups.docdb.aws.upbound.io                                         2022-09-30T03:16:54Z
-subnetgroups.elasticache.aws.upbound.io                                   2022-09-30T03:16:55Z
-subnetgroups.neptune.aws.upbound.io                                       2022-09-30T03:16:57Z
-subnetgroups.rds.aws.upbound.io                                           2022-09-30T03:16:58Z
-subnets.ec2.aws.upbound.io                                                2022-09-30T03:16:54Z
-tableitems.dynamodb.aws.upbound.io                                        2022-09-30T03:16:54Z
-tables.dynamodb.aws.upbound.io                                            2022-09-30T03:16:54Z
-targets.appautoscaling.aws.upbound.io                                     2022-09-30T03:16:52Z
-taskdefinitions.ecs.aws.upbound.io                                        2022-09-30T03:16:55Z
-things.iot.aws.upbound.io                                                 2022-09-30T03:16:56Z
-topics.sns.aws.upbound.io                                                 2022-09-30T03:16:59Z
-topicsubscriptions.sns.aws.upbound.io                                     2022-09-30T03:16:59Z
-trafficpolicies.route53.aws.upbound.io                                    2022-09-30T03:16:58Z
-trafficpolicyinstances.route53.aws.upbound.io                             2022-09-30T03:16:58Z
-transitgatewaymulticastdomainassociations.ec2.aws.upbound.io              2022-09-30T03:16:54Z
-transitgatewaymulticastdomains.ec2.aws.upbound.io                         2022-09-30T03:16:54Z
-transitgatewaymulticastgroupmembers.ec2.aws.upbound.io                    2022-09-30T03:16:54Z
-transitgatewaymulticastgroupsources.ec2.aws.upbound.io                    2022-09-30T03:16:54Z
-transitgatewaypeeringattachments.ec2.aws.upbound.io                       2022-09-30T03:16:54Z
-transitgatewayprefixlistreferences.ec2.aws.upbound.io                     2022-09-30T03:16:54Z
-transitgatewayroutes.ec2.aws.upbound.io                                   2022-09-30T03:16:54Z
-transitgatewayroutetableassociations.ec2.aws.upbound.io                   2022-09-30T03:16:54Z
-transitgatewayroutetablepropagations.ec2.aws.upbound.io                   2022-09-30T03:16:54Z
-transitgatewayroutetables.ec2.aws.upbound.io                              2022-09-30T03:16:54Z
-transitgateways.ec2.aws.upbound.io                                        2022-09-30T03:16:54Z
-transitgatewayvpcattachmentaccepters.ec2.aws.upbound.io                   2022-09-30T03:16:54Z
-transitgatewayvpcattachments.ec2.aws.upbound.io                           2022-09-30T03:16:54Z
-triggers.glue.aws.upbound.io                                              2022-09-30T03:16:56Z
-usageplankeys.apigateway.aws.upbound.io                                   2022-09-30T03:16:52Z
-usageplans.apigateway.aws.upbound.io                                      2022-09-30T03:16:52Z
-userdefinedfunctions.glue.aws.upbound.io                                  2022-09-30T03:16:56Z
-usergroupmemberships.iam.aws.upbound.io                                   2022-09-30T03:16:56Z
-usergroups.elasticache.aws.upbound.io                                     2022-09-30T03:16:55Z
-userloginprofiles.iam.aws.upbound.io                                      2022-09-30T03:16:56Z
-userpolicyattachments.iam.aws.upbound.io                                  2022-09-30T03:16:56Z
-userpoolclients.cognitoidp.aws.upbound.io                                 2022-09-30T03:16:53Z
-userpooldomains.cognitoidp.aws.upbound.io                                 2022-09-30T03:16:53Z
-userpools.cognitoidp.aws.upbound.io                                       2022-09-30T03:16:53Z
-userpooluicustomizations.cognitoidp.aws.upbound.io                        2022-09-30T03:16:53Z
-users.cognitoidp.aws.upbound.io                                           2022-09-30T03:16:53Z
-users.elasticache.aws.upbound.io                                          2022-09-30T03:16:55Z
-users.iam.aws.upbound.io                                                  2022-09-30T03:16:56Z
-users.transfer.aws.upbound.io                                             2022-09-30T03:16:59Z
-usersshkeys.iam.aws.upbound.io                                            2022-09-30T03:16:56Z
-vaultlockconfigurations.backup.aws.upbound.io                             2022-09-30T03:16:53Z
-vaultnotifications.backup.aws.upbound.io                                  2022-09-30T03:16:53Z
-vaultpolicies.backup.aws.upbound.io                                       2022-09-30T03:16:53Z
-vaults.backup.aws.upbound.io                                              2022-09-30T03:16:53Z
-virtualmfadevices.iam.aws.upbound.io                                      2022-09-30T03:16:56Z
-volumeattachments.ec2.aws.upbound.io                                      2022-09-30T03:16:54Z
-vpcassociationauthorizations.route53.aws.upbound.io                       2022-09-30T03:16:58Z
-vpcdhcpoptions.ec2.aws.upbound.io                                         2022-09-30T03:16:55Z
-vpcdhcpoptionsassociations.ec2.aws.upbound.io                             2022-09-30T03:16:55Z
-vpcendpointconnectionnotifications.ec2.aws.upbound.io                     2022-09-30T03:16:55Z
-vpcendpointroutetableassociations.ec2.aws.upbound.io                      2022-09-30T03:16:55Z
-vpcendpoints.ec2.aws.upbound.io                                           2022-09-30T03:16:55Z
-vpcendpointserviceallowedprincipals.ec2.aws.upbound.io                    2022-09-30T03:16:55Z
-vpcendpointservices.ec2.aws.upbound.io                                    2022-09-30T03:16:55Z
-vpcendpointsubnetassociations.ec2.aws.upbound.io                          2022-09-30T03:16:55Z
-vpcipv4cidrblockassociations.ec2.aws.upbound.io                           2022-09-30T03:16:55Z
-vpclinks.apigateway.aws.upbound.io                                        2022-09-30T03:16:52Z
-vpclinks.apigatewayv2.aws.upbound.io                                      2022-09-30T03:16:52Z
-vpcpeeringconnections.ec2.aws.upbound.io                                  2022-09-30T03:16:55Z
-vpcs.ec2.aws.upbound.io                                                   2022-09-30T03:16:55Z
-workflows.glue.aws.upbound.io                                             2022-09-30T03:16:56Z
-workgroups.athena.aws.upbound.io                                          2022-09-30T03:16:53Z
-workspaces.amp.aws.upbound.io                                             2022-09-30T03:16:52Z
-workspaces.grafana.aws.upbound.io                                         2022-09-30T03:16:56Z
-workspacesamlconfigurations.grafana.aws.upbound.io                        2022-09-30T03:16:56Z
-zones.route53.aws.upbound.io                                              2022-09-30T03:16:58Z
+NAME                                                                            CREATED AT
+accesspolicies.keyvault.azure.upbound.io                                        2022-10-12T01:06:59Z
+accountnetworkrules.storage.azure.upbound.io                                    2022-10-12T01:07:02Z
+accounts.cosmosdb.azure.upbound.io                                              2022-10-12T01:06:58Z
+accounts.datashare.azure.upbound.io                                             2022-10-12T01:06:58Z
+accounts.netapp.azure.upbound.io                                                2022-10-12T01:07:00Z
+accounts.storage.azure.upbound.io                                               2022-10-12T01:07:02Z
+activedirectoryadministrators.dbforpostgresql.azure.upbound.io                  2022-10-12T01:06:59Z
+advancedthreatprotections.security.azure.upbound.io                             2022-10-12T01:07:02Z
+agentpools.containerregistry.azure.upbound.io                                   2022-10-12T01:06:58Z
+applicationgateways.network.azure.upbound.io                                    2022-10-12T01:07:00Z
+applicationinsights.insights.azure.upbound.io                                   2022-10-12T01:07:00Z
+applicationsecuritygroups.network.azure.upbound.io                              2022-10-12T01:07:00Z
+assets.media.azure.upbound.io                                                   2022-10-12T01:07:00Z
+authorizationrules.eventhub.azure.upbound.io                                    2022-10-12T01:06:59Z
+availabilitysets.compute.azure.upbound.io                                       2022-10-12T01:06:58Z
+backuppolicyblobstorages.dataprotection.azure.upbound.io                        2022-10-12T01:06:58Z
+backupvaults.dataprotection.azure.upbound.io                                    2022-10-12T01:06:59Z
+blobinventorypolicies.storage.azure.upbound.io                                  2022-10-12T01:07:02Z
+blobs.storage.azure.upbound.io                                                  2022-10-12T01:07:02Z
+cassandraclusters.cosmosdb.azure.upbound.io                                     2022-10-12T01:06:58Z
+cassandradatacenters.cosmosdb.azure.upbound.io                                  2022-10-12T01:06:58Z
+cassandrakeyspaces.cosmosdb.azure.upbound.io                                    2022-10-12T01:06:58Z
+cassandratables.cosmosdb.azure.upbound.io                                       2022-10-12T01:06:58Z
+certificateissuers.keyvault.azure.upbound.io                                    2022-10-12T01:06:59Z
+certificates.keyvault.azure.upbound.io                                          2022-10-12T01:07:00Z
+clusters.kusto.azure.upbound.io                                                 2022-10-12T01:07:00Z
+clusters.streamanalytics.azure.upbound.io                                       2022-10-12T01:07:02Z
+compositeresourcedefinitions.apiextensions.crossplane.io                        2022-10-12T01:05:33Z
+compositionrevisions.apiextensions.crossplane.io                                2022-10-12T01:05:33Z
+compositions.apiextensions.crossplane.io                                        2022-10-12T01:05:33Z
+configurationrevisions.pkg.crossplane.io                                        2022-10-12T01:05:33Z
+configurations.dbformariadb.azure.upbound.io                                    2022-10-12T01:06:59Z
+configurations.dbformysql.azure.upbound.io                                      2022-10-12T01:06:59Z
+configurations.dbforpostgresql.azure.upbound.io                                 2022-10-12T01:06:59Z
+configurations.pkg.crossplane.io                                                2022-10-12T01:05:33Z
+connectionmonitors.network.azure.upbound.io                                     2022-10-12T01:07:00Z
+consumergroups.eventhub.azure.upbound.io                                        2022-10-12T01:06:59Z
+containerconnectedregistries.containerregistry.azure.upbound.io                 2022-10-12T01:06:58Z
+containers.storage.azure.upbound.io                                             2022-10-12T01:07:02Z
+controllerconfigs.pkg.crossplane.io                                             2022-10-12T01:05:33Z
+databases.dbformariadb.azure.upbound.io                                         2022-10-12T01:06:59Z
+databases.dbforpostgresql.azure.upbound.io                                      2022-10-12T01:06:59Z
+databases.kusto.azure.upbound.io                                                2022-10-12T01:07:00Z
+datalakegen2filesystems.storage.azure.upbound.io                                2022-10-12T01:07:02Z
+datasetblobstorages.datashare.azure.upbound.io                                  2022-10-12T01:06:58Z
+datasetdatalakegen2s.datashare.azure.upbound.io                                 2022-10-12T01:06:58Z
+datasetkustoclusters.datashare.azure.upbound.io                                 2022-10-12T01:06:58Z
+datasetkustodatabases.datashare.azure.upbound.io                                2022-10-12T01:06:59Z
+datashares.datashare.azure.upbound.io                                           2022-10-12T01:06:59Z
+ddosprotectionplans.network.azure.upbound.io                                    2022-10-12T01:07:00Z
+dedicatedhosts.compute.azure.upbound.io                                         2022-10-12T01:06:58Z
+diskaccesses.compute.azure.upbound.io                                           2022-10-12T01:06:58Z
+diskencryptionsets.compute.azure.upbound.io                                     2022-10-12T01:06:58Z
+dnsaaaarecords.network.azure.upbound.io                                         2022-10-12T01:07:00Z
+dnsarecords.network.azure.upbound.io                                            2022-10-12T01:07:00Z
+dnscaarecords.network.azure.upbound.io                                          2022-10-12T01:07:00Z
+dnscnamerecords.network.azure.upbound.io                                        2022-10-12T01:07:00Z
+dnsmxrecords.network.azure.upbound.io                                           2022-10-12T01:07:00Z
+dnsnsrecords.network.azure.upbound.io                                           2022-10-12T01:07:00Z
+dnsptrrecords.network.azure.upbound.io                                          2022-10-12T01:07:00Z
+dnssrvrecords.network.azure.upbound.io                                          2022-10-12T01:07:00Z
+dnstxtrecords.network.azure.upbound.io                                          2022-10-12T01:07:00Z
+dnszones.network.azure.upbound.io                                               2022-10-12T01:07:00Z
+encryptionscopes.storage.azure.upbound.io                                       2022-10-12T01:07:02Z
+eventhubnamespaces.eventhub.azure.upbound.io                                    2022-10-12T01:06:59Z
+eventhubs.eventhub.azure.upbound.io                                             2022-10-12T01:06:59Z
+expressroutecircuitauthorizations.network.azure.upbound.io                      2022-10-12T01:07:00Z
+expressroutecircuitconnections.network.azure.upbound.io                         2022-10-12T01:07:00Z
+expressroutecircuitpeerings.network.azure.upbound.io                            2022-10-12T01:07:00Z
+expressroutecircuits.network.azure.upbound.io                                   2022-10-12T01:07:00Z
+expressrouteconnections.network.azure.upbound.io                                2022-10-12T01:07:00Z
+expressroutegateways.network.azure.upbound.io                                   2022-10-12T01:07:00Z
+expressrouteports.network.azure.upbound.io                                      2022-10-12T01:07:00Z
+firewallapplicationrulecollections.network.azure.upbound.io                     2022-10-12T01:07:00Z
+firewallnatrulecollections.network.azure.upbound.io                             2022-10-12T01:07:00Z
+firewallnetworkrulecollections.network.azure.upbound.io                         2022-10-12T01:07:00Z
+firewallpolicies.network.azure.upbound.io                                       2022-10-12T01:07:01Z
+firewallpolicyrulecollectiongroups.network.azure.upbound.io                     2022-10-12T01:07:01Z
+firewallrules.dbformariadb.azure.upbound.io                                     2022-10-12T01:06:58Z
+firewallrules.dbformysql.azure.upbound.io                                       2022-10-12T01:06:59Z
+firewallrules.dbforpostgresql.azure.upbound.io                                  2022-10-12T01:06:59Z
+firewalls.network.azure.upbound.io                                              2022-10-12T01:07:01Z
+flexibledatabases.dbformysql.azure.upbound.io                                   2022-10-12T01:06:59Z
+flexibleserverconfigurations.dbformysql.azure.upbound.io                        2022-10-12T01:06:59Z
+flexibleserverconfigurations.dbforpostgresql.azure.upbound.io                   2022-10-12T01:06:59Z
+flexibleserverdatabases.dbforpostgresql.azure.upbound.io                        2022-10-12T01:06:59Z
+flexibleserverfirewallrules.dbformysql.azure.upbound.io                         2022-10-12T01:06:59Z
+flexibleserverfirewallrules.dbforpostgresql.azure.upbound.io                    2022-10-12T01:06:59Z
+flexibleservers.dbformysql.azure.upbound.io                                     2022-10-12T01:06:59Z
+flexibleservers.dbforpostgresql.azure.upbound.io                                2022-10-12T01:06:59Z
+frontdoorcustomhttpsconfigurations.network.azure.upbound.io                     2022-10-12T01:07:01Z
+frontdoorfirewallpolicies.network.azure.upbound.io                              2022-10-12T01:07:01Z
+frontdoorrulesengines.network.azure.upbound.io                                  2022-10-12T01:07:01Z
+frontdoors.network.azure.upbound.io                                             2022-10-12T01:07:01Z
+functionjavascriptudas.streamanalytics.azure.upbound.io                         2022-10-12T01:07:02Z
+gremlindatabases.cosmosdb.azure.upbound.io                                      2022-10-12T01:06:58Z
+gremlingraphs.cosmosdb.azure.upbound.io                                         2022-10-12T01:06:58Z
+hpccacheaccesspolicies.storagecache.azure.upbound.io                            2022-10-12T01:07:02Z
+hpccacheblobnfstargets.storagecache.azure.upbound.io                            2022-10-12T01:07:02Z
+hpccacheblobtargets.storagecache.azure.upbound.io                               2022-10-12T01:07:02Z
+hpccachenfstargets.storagecache.azure.upbound.io                                2022-10-12T01:07:02Z
+hpccaches.storagecache.azure.upbound.io                                         2022-10-12T01:07:02Z
+images.compute.azure.upbound.io                                                 2022-10-12T01:06:58Z
+integrationserviceenvironments.logic.azure.upbound.io                           2022-10-12T01:07:00Z
+iothubconsumergroups.devices.azure.upbound.io                                   2022-10-12T01:06:59Z
+iothubdps.devices.azure.upbound.io                                              2022-10-12T01:06:59Z
+iothubdpscertificates.devices.azure.upbound.io                                  2022-10-12T01:06:59Z
+iothubdpssharedaccesspolicies.devices.azure.upbound.io                          2022-10-12T01:06:59Z
+iothubendpointeventhubs.devices.azure.upbound.io                                2022-10-12T01:06:59Z
+iothubendpointservicebusqueues.devices.azure.upbound.io                         2022-10-12T01:06:59Z
+iothubendpointservicebustopics.devices.azure.upbound.io                         2022-10-12T01:06:59Z
+iothubendpointstoragecontainers.devices.azure.upbound.io                        2022-10-12T01:06:59Z
+iothubenrichments.devices.azure.upbound.io                                      2022-10-12T01:06:59Z
+iothubfallbackroutes.devices.azure.upbound.io                                   2022-10-12T01:06:59Z
+iothubroutes.devices.azure.upbound.io                                           2022-10-12T01:06:59Z
+iothubs.devices.azure.upbound.io                                                2022-10-12T01:06:59Z
+iothubsharedaccesspolicies.devices.azure.upbound.io                             2022-10-12T01:06:59Z
+iotsecuritydevicegroups.security.azure.upbound.io                               2022-10-12T01:07:02Z
+iotsecuritysolutions.security.azure.upbound.io                                  2022-10-12T01:07:02Z
+ipgroups.network.azure.upbound.io                                               2022-10-12T01:07:01Z
+jobs.streamanalytics.azure.upbound.io                                           2022-10-12T01:07:02Z
+keys.keyvault.azure.upbound.io                                                  2022-10-12T01:06:59Z
+kubernetesclusternodepools.containerservice.azure.upbound.io                    2022-10-12T01:06:58Z
+kubernetesclusters.containerservice.azure.upbound.io                            2022-10-12T01:06:58Z
+linuxvirtualmachines.compute.azure.upbound.io                                   2022-10-12T01:06:58Z
+linuxvirtualmachinescalesets.compute.azure.upbound.io                           2022-10-12T01:06:58Z
+liveeventoutputs.media.azure.upbound.io                                         2022-10-12T01:07:00Z
+liveevents.media.azure.upbound.io                                               2022-10-12T01:07:00Z
+loadbalancerbackendaddresspooladdresses.network.azure.upbound.io                2022-10-12T01:07:01Z
+loadbalancerbackendaddresspools.network.azure.upbound.io                        2022-10-12T01:07:01Z
+loadbalancernatpools.network.azure.upbound.io                                   2022-10-12T01:07:01Z
+loadbalancernatrules.network.azure.upbound.io                                   2022-10-12T01:07:01Z
+loadbalanceroutboundrules.network.azure.upbound.io                              2022-10-12T01:07:01Z
+loadbalancerprobes.network.azure.upbound.io                                     2022-10-12T01:07:01Z
+loadbalancerrules.network.azure.upbound.io                                      2022-10-12T01:07:01Z
+loadbalancers.network.azure.upbound.io                                          2022-10-12T01:07:01Z
+localnetworkgateways.network.azure.upbound.io                                   2022-10-12T01:07:01Z
+locks.pkg.crossplane.io                                                         2022-10-12T01:05:33Z
+manageddisks.compute.azure.upbound.io                                           2022-10-12T01:06:58Z
+managedhardwaresecuritymodules.keyvault.azure.upbound.io                        2022-10-12T01:07:00Z
+managedprivateendpoints.streamanalytics.azure.upbound.io                        2022-10-12T01:07:02Z
+managedstorageaccounts.keyvault.azure.upbound.io                                2022-10-12T01:07:00Z
+managedstorageaccountsastokendefinitions.keyvault.azure.upbound.io              2022-10-12T01:07:00Z
+managementgroups.management.azure.upbound.io                                    2022-10-12T01:07:00Z
+managementpolicies.storage.azure.upbound.io                                     2022-10-12T01:07:02Z
+managements.apimanagement.azure.upbound.io                                      2022-10-12T01:06:58Z
+marketplaceagreements.marketplaceordering.azure.upbound.io                      2022-10-12T01:07:00Z
+mongocollections.cosmosdb.azure.upbound.io                                      2022-10-12T01:06:58Z
+mongodatabases.cosmosdb.azure.upbound.io                                        2022-10-12T01:06:58Z
+monitoractiongroups.insights.azure.upbound.io                                   2022-10-12T01:06:59Z
+monitormetricalerts.insights.azure.upbound.io                                   2022-10-12T01:06:59Z
+monitorprivatelinkscopedservices.insights.azure.upbound.io                      2022-10-12T01:06:59Z
+monitorprivatelinkscopes.insights.azure.upbound.io                              2022-10-12T01:06:59Z
+mssqldatabases.sql.azure.upbound.io                                             2022-10-12T01:07:02Z
+mssqlfailovergroups.sql.azure.upbound.io                                        2022-10-12T01:07:02Z
+mssqlmanageddatabases.sql.azure.upbound.io                                      2022-10-12T01:07:02Z
+mssqlmanagedinstanceactivedirectoryadministrators.sql.azure.upbound.io          2022-10-12T01:07:02Z
+mssqlmanagedinstancefailovergroups.sql.azure.upbound.io                         2022-10-12T01:07:02Z
+mssqlmanagedinstances.sql.azure.upbound.io                                      2022-10-12T01:07:02Z
+mssqlmanagedinstancevulnerabilityassessments.sql.azure.upbound.io               2022-10-12T01:07:02Z
+mssqloutboundfirewallrules.sql.azure.upbound.io                                 2022-10-12T01:07:02Z
+mssqlserverdnsaliases.sql.azure.upbound.io                                      2022-10-12T01:07:02Z
+mssqlservers.sql.azure.upbound.io                                               2022-10-12T01:07:02Z
+mssqlservertransparentdataencryptions.sql.azure.upbound.io                      2022-10-12T01:07:02Z
+mssqlvirtualnetworkrules.sql.azure.upbound.io                                   2022-10-12T01:07:02Z
+natgatewaypublicipassociations.network.azure.upbound.io                         2022-10-12T01:07:01Z
+natgatewaypublicipprefixassociations.network.azure.upbound.io                   2022-10-12T01:07:01Z
+natgateways.network.azure.upbound.io                                            2022-10-12T01:07:01Z
+networkinterfaceapplicationsecuritygroupassociations.network.azure.upbound.io   2022-10-12T01:07:01Z
+networkinterfacebackendaddresspoolassociations.network.azure.upbound.io         2022-10-12T01:07:01Z
+networkinterfacenatruleassociations.network.azure.upbound.io                    2022-10-12T01:07:01Z
+networkinterfaces.network.azure.upbound.io                                      2022-10-12T01:07:01Z
+networkinterfacesecuritygroupassociations.network.azure.upbound.io              2022-10-12T01:07:01Z
+notificationhubs.notificationhubs.azure.upbound.io                              2022-10-12T01:07:02Z
+objectreplications.storage.azure.upbound.io                                     2022-10-12T01:07:02Z
+orchestratedvirtualmachinescalesets.compute.azure.upbound.io                    2022-10-12T01:06:58Z
+outputblobs.streamanalytics.azure.upbound.io                                    2022-10-12T01:07:02Z
+outputfunctions.streamanalytics.azure.upbound.io                                2022-10-12T01:07:02Z
+outputsynapses.streamanalytics.azure.upbound.io                                 2022-10-12T01:07:03Z
+packetcaptures.network.azure.upbound.io                                         2022-10-12T01:07:01Z
+pointtositevpngateways.network.azure.upbound.io                                 2022-10-12T01:07:01Z
+policydefinitions.authorization.azure.upbound.io                                2022-10-12T01:06:57Z
+pools.netapp.azure.upbound.io                                                   2022-10-12T01:07:00Z
+privatednsaaaarecords.network.azure.upbound.io                                  2022-10-12T01:07:01Z
+privatednsarecords.network.azure.upbound.io                                     2022-10-12T01:07:01Z
+privatednscnamerecords.network.azure.upbound.io                                 2022-10-12T01:07:01Z
+privatednsmxrecords.network.azure.upbound.io                                    2022-10-12T01:07:01Z
+privatednsptrrecords.network.azure.upbound.io                                   2022-10-12T01:07:01Z
+privatednssrvrecords.network.azure.upbound.io                                   2022-10-12T01:07:01Z
+privatednstxtrecords.network.azure.upbound.io                                   2022-10-12T01:07:01Z
+privatednszones.network.azure.upbound.io                                        2022-10-12T01:07:01Z
+privatednszonevirtualnetworklinks.network.azure.upbound.io                      2022-10-12T01:07:01Z
+privateendpoints.network.azure.upbound.io                                       2022-10-12T01:07:01Z
+privatelinkservices.network.azure.upbound.io                                    2022-10-12T01:07:01Z
+profiles.network.azure.upbound.io                                               2022-10-12T01:07:01Z
+providerconfigs.azure.upbound.io                                                2022-10-12T01:06:57Z
+providerconfigusages.azure.upbound.io                                           2022-10-12T01:06:57Z
+providerrevisions.pkg.crossplane.io                                             2022-10-12T01:05:33Z
+providers.pkg.crossplane.io                                                     2022-10-12T01:05:33Z
+proximityplacementgroups.compute.azure.upbound.io                               2022-10-12T01:06:58Z
+publicipprefixes.network.azure.upbound.io                                       2022-10-12T01:07:01Z
+publicips.network.azure.upbound.io                                              2022-10-12T01:07:01Z
+queues.storage.azure.upbound.io                                                 2022-10-12T01:07:02Z
+rediscaches.cache.azure.upbound.io                                              2022-10-12T01:06:58Z
+redisenterpriseclusters.cache.azure.upbound.io                                  2022-10-12T01:06:58Z
+redisenterprisedatabases.cache.azure.upbound.io                                 2022-10-12T01:06:57Z
+redisfirewallrules.cache.azure.upbound.io                                       2022-10-12T01:06:58Z
+redislinkedservers.cache.azure.upbound.io                                       2022-10-12T01:06:58Z
+registries.containerregistry.azure.upbound.io                                   2022-10-12T01:06:58Z
+resourcegrouppolicyassignments.authorization.azure.upbound.io                   2022-10-12T01:06:57Z
+resourcegroups.azure.upbound.io                                                 2022-10-12T01:06:57Z
+resourcegrouptemplatedeployments.resources.azure.upbound.io                     2022-10-12T01:07:02Z
+resourceproviderregistrations.azure.upbound.io                                  2022-10-12T01:06:57Z
+roleassignments.authorization.azure.upbound.io                                  2022-10-12T01:06:57Z
+routetables.network.azure.upbound.io                                            2022-10-12T01:07:01Z
+scopemaps.containerregistry.azure.upbound.io                                    2022-10-12T01:06:58Z
+secrets.keyvault.azure.upbound.io                                               2022-10-12T01:07:00Z
+securitygroups.network.azure.upbound.io                                         2022-10-12T01:07:01Z
+securityrules.network.azure.upbound.io                                          2022-10-12T01:07:01Z
+serverkeys.dbforpostgresql.azure.upbound.io                                     2022-10-12T01:06:59Z
+servers.dbformariadb.azure.upbound.io                                           2022-10-12T01:06:59Z
+servers.dbformysql.azure.upbound.io                                             2022-10-12T01:06:59Z
+servers.dbforpostgresql.azure.upbound.io                                        2022-10-12T01:06:59Z
+servicesaccounts.media.azure.upbound.io                                         2022-10-12T01:07:00Z
+sharedimagegalleries.compute.azure.upbound.io                                   2022-10-12T01:06:58Z
+shares.storage.azure.upbound.io                                                 2022-10-12T01:07:02Z
+snapshotpolicies.netapp.azure.upbound.io                                        2022-10-12T01:07:00Z
+snapshots.compute.azure.upbound.io                                              2022-10-12T01:06:58Z
+snapshots.netapp.azure.upbound.io                                               2022-10-12T01:07:00Z
+spatialanchorsaccounts.mixedreality.azure.upbound.io                            2022-10-12T01:07:00Z
+sqlcontainers.cosmosdb.azure.upbound.io                                         2022-10-12T01:06:58Z
+sqldatabases.cosmosdb.azure.upbound.io                                          2022-10-12T01:06:58Z
+sqlfunctions.cosmosdb.azure.upbound.io                                          2022-10-12T01:06:58Z
+sqlroleassignments.cosmosdb.azure.upbound.io                                    2022-10-12T01:06:58Z
+sqlroledefinitions.cosmosdb.azure.upbound.io                                    2022-10-12T01:06:58Z
+sqlstoredprocedures.cosmosdb.azure.upbound.io                                   2022-10-12T01:06:58Z
+sqltriggers.cosmosdb.azure.upbound.io                                           2022-10-12T01:06:58Z
+storagesyncs.storagesync.azure.upbound.io                                       2022-10-12T01:07:02Z
+storeconfigs.azure.upbound.io                                                   2022-10-12T01:06:57Z
+storeconfigs.secrets.crossplane.io                                              2022-10-12T01:05:33Z
+streamingendpoints.media.azure.upbound.io                                       2022-10-12T01:07:00Z
+streaminglocators.media.azure.upbound.io                                        2022-10-12T01:07:00Z
+streamingpolicies.media.azure.upbound.io                                        2022-10-12T01:07:00Z
+subnetnatgatewayassociations.network.azure.upbound.io                           2022-10-12T01:07:01Z
+subnetnetworksecuritygroupassociations.network.azure.upbound.io                 2022-10-12T01:07:01Z
+subnetroutetableassociations.network.azure.upbound.io                           2022-10-12T01:07:01Z
+subnets.network.azure.upbound.io                                                2022-10-12T01:07:01Z
+subnetserviceendpointstoragepolicies.network.azure.upbound.io                   2022-10-12T01:07:01Z
+subscriptions.azure.upbound.io                                                  2022-10-12T01:06:57Z
+tables.cosmosdb.azure.upbound.io                                                2022-10-12T01:06:58Z
+tables.storage.azure.upbound.io                                                 2022-10-12T01:07:02Z
+tokens.containerregistry.azure.upbound.io                                       2022-10-12T01:06:58Z
+transforms.media.azure.upbound.io                                               2022-10-12T01:07:00Z
+vaults.keyvault.azure.upbound.io                                                2022-10-12T01:07:00Z
+virtualhubs.network.azure.upbound.io                                            2022-10-12T01:07:01Z
+virtualnetworkgatewayconnections.network.azure.upbound.io                       2022-10-12T01:07:02Z
+virtualnetworkgateways.network.azure.upbound.io                                 2022-10-12T01:07:02Z
+virtualnetworkpeerings.network.azure.upbound.io                                 2022-10-12T01:07:02Z
+virtualnetworkrules.dbformariadb.azure.upbound.io                               2022-10-12T01:06:59Z
+virtualnetworkrules.dbformysql.azure.upbound.io                                 2022-10-12T01:06:59Z
+virtualnetworkrules.dbforpostgresql.azure.upbound.io                            2022-10-12T01:06:59Z
+virtualnetworks.network.azure.upbound.io                                        2022-10-12T01:07:02Z
+virtualwans.network.azure.upbound.io                                            2022-10-12T01:07:02Z
+volumes.netapp.azure.upbound.io                                                 2022-10-12T01:07:00Z
+vpnserverconfigurations.network.azure.upbound.io                                2022-10-12T01:07:02Z
+watcherflowlogs.network.azure.upbound.io                                        2022-10-12T01:07:02Z
+watchers.network.azure.upbound.io                                               2022-10-12T01:07:02Z
+webhooks.containerregistry.azure.upbound.io                                     2022-10-12T01:06:58Z
+windowsvirtualmachines.compute.azure.upbound.io                                 2022-10-12T01:06:58Z
+windowsvirtualmachinescalesets.compute.azure.upbound.io                         2022-10-12T01:06:58Z
+workspaces.operationalinsights.azure.upbound.io                                 2022-10-12T01:07:02Z
 ```
 {{< /expand >}}
 
-### Create a Kubernetes secret for AWS
-The provider requires credentials to create and manage AWS resources. Providers use a Kubernetes _Secret_ to connect the credentials to the provider.
+### Create a Kubernetes secret for Azure
+The provider requires credentials to create and manage Azure resources. Providers use a Kubernetes _Secret_ to connect the credentials to the provider.
 
-First generate a Kubernetes _Secret_ from your AWS key-pair and then configure the Provider to use it.
+First generate a Kubernetes _Secret_ from your Azure JSON file and then configure the Provider to use it.
 
-#### Generate an AWS key-pair file
-For basic user authentication, use an AWS Access keys key-pair file. 
+{{<expand "Need to generate an Azure JSON file?" >}}
+#### Install the Azure command-line
+Generating an [authentication file](https://docs.microsoft.com/en-us/azure/developer/go/azure-sdk-authorization#use-file-based-authentication) requires the Azure command-line.  
+Follow the documentation from Microsoft to [Download and install the Azure command-line](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 
-{{< hint type="tip" >}}
-The [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-creds) provides information on how to generate AWS Access keys.
+Log in to the Azure command-line.
+
+```command
+az login
+```
+#### Create an Azure service principal
+Follow the Azure documentation to [find your Subscription ID](https://docs.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id) from the Azure Portal.
+
+Using the Azure command-line and provide your Subscription ID create a service principal and authentication file.
+
+```shell {copy-lines="all"}
+az ad sp create-for-rbac \
+--sdk-auth \
+--role Owner \
+--scopes /subscriptions/<Subscription ID> 
+```
+{{< hint type="note" >}}
+The Azure command-line prints an expected deprecation warning for `--sdk-auth`.
 {{< /hint >}}
 
-Create a text file containing the AWS account `aws_access_key_id` and `aws_secret_access_key`.  
-
-```ini {copy-lines="all"}
-[default]
-aws_access_key_id = <aws_access_key>
-aws_secret_access_key = <aws_secret_key>
+The command generates a JSON file like this:
+```json
+{
+  "clientId": "5d73973c-1933-4621-9f6a-9642db949768",
+  "clientSecret": "24O8Q~db2DFJ123MBpB25hdESvV3Zy8bfeGYGcSd",
+  "subscriptionId": "c02e2b27-21ef-48e3-96b9-a91305e9e010",
+  "tenantId": "7060afec-1db7-4b6f-a44f-82c9c6d8762a",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"
+}
 ```
+{{< /expand >}}
 
-Save this text file as `aws-credentials.txt`.
+Save your Azure JSON output as `azure-credentials.json`.
 
 {{< hint type="note" >}}
-The [Configuration](https://marketplace.upbound.io/providers/upbound/provider-aws/latest/docs/configuration) section of the Provider documentation describes other authentication methods.
+The [Configuration](https://marketplace.upbound.io/providers/upbound/provider-azure/latest/docs/configuration) section of the Provider documentation describes other authentication methods.
 {{< /hint >}}
 
-#### Create a Kubernetes secret with the AWS credentials
-A Kubernetes generic secret has a name and contents. Use {{< hover label="kube-create-secret" line="1">}}kubectl create secret{{< /hover >}} to generate the secret object named {{< hover label="kube-create-secret" line="2">}}aws-secret{{< /hover >}} in the {{< hover label="kube-create-secret" line="3">}}upbound-system{{</ hover >}} namespace.  
-Use the {{< hover label="kube-create-secret" line="4">}}--from-file={{</hover>}} argument to set the value to the contents of the  {{< hover label="kube-create-secret" line="4">}}aws-credentials.txt{{< /hover >}} file.
+#### Create a Kubernetes secret with the Azure credentials
+A Kubernetes generic secret has a name and contents. Use {{< hover label="kube-create-secret" line="1">}}kubectl create secret{{< /hover >}} to generate the secret object named {{< hover label="kube-create-secret" line="2">}}azure-secret{{< /hover >}} in the {{< hover label="kube-create-secret" line="3">}}upbound-system{{</ hover >}} namespace.  
 
+<!-- vale gitlab.Substitutions = NO -->
+<!-- ignore .json file name -->
+Use the {{< hover label="kube-create-secret" line="4">}}--from-file={{</hover>}} argument to set the value to the contents of the  {{< hover label="kube-create-secret" line="4">}}azure-credentials.json{{< /hover >}} file.
+<!-- vale gitlab.Substitutions = YES -->
 ```shell {label="kube-create-secret",copy-lines="all"}
 kubectl create secret \
-generic aws-secret \
+generic azure-secret \
 -n upbound-system \
---from-file=creds=./aws-credentials.txt
+--from-file=creds=./azure-credentials.json
 ```
 
 View the secret with `kubectl describe secret`
@@ -543,8 +438,8 @@ The size may be larger if there are extra blank spaces in your text file.
 {{< /hint >}}
 
 ```shell
-kubectl describe secret aws-secret -n upbound-system
-Name:         aws-secret
+kubectl describe secret azure-secret -n upbound-system
+Name:         azure-secret
 Namespace:    upbound-system
 Labels:       <none>
 Annotations:  <none>
@@ -553,139 +448,130 @@ Type:  Opaque
 
 Data
 ====
-creds:  114 bytes
+creds:  629 bytes
 ```
 
 ### Create a ProviderConfig
-A `ProviderConfig` customizes the settings of the AWS Provider.  
+A `ProviderConfig` customizes the settings of the Azure Provider.  
 
 Apply the {{< hover label="providerconfig" line="2">}}ProviderConfig{{</ hover >}} with the command:
 ```yaml {label="providerconfig",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
-apiVersion: aws.upbound.io/v1beta1
-kind: ProviderConfig
+apiVersion: azure.upbound.io/v1beta1
 metadata:
   name: default
+kind: ProviderConfig
 spec:
   credentials:
     source: Secret
     secretRef:
       namespace: upbound-system
-      name: aws-secret
+      name: azure-secret
       key: creds
 EOF
 ```
 
-This attaches the AWS credentials, saved as a Kubernetes secret, as a {{< hover label="providerconfig" line="9">}}secretRef{{</ hover>}}.
+This attaches the Azure credentials, saved as a Kubernetes secret, as a {{< hover label="providerconfig" line="9">}}secretRef{{</ hover>}}.
 
-The {{< hover label="providerconfig" line="11">}}spec.credentials.secretRef.name{{< /hover >}} value is the name of the Kubernetes secret containing the AWS credentials in the {{< hover label="providerconfig" line="10">}}spec.credentials.secretRef.namespace{{< /hover >}}.
+The {{< hover label="providerconfig" line="11">}}spec.credentials.secretRef.name{{< /hover >}} value is the name of the Kubernetes secret containing the Azure credentials in the {{< hover label="providerconfig" line="10">}}spec.credentials.secretRef.namespace{{< /hover >}}.
 
 
 ### Create a managed resource
-A _managed resource_ is anything Crossplane creates and manages outside of the Kubernetes cluster. This creates an AWS S3 bucket with Crossplane. The S3 bucket is a _managed resource_.
+A _managed resource_ is anything Crossplane creates and manages outside of the Kubernetes cluster. This creates an Azure Resource group with Crossplane. The Resource group is a _managed resource_.
 
-{{< hint type="note" >}}
-AWS S3 bucket names must be globally unique. To generate a unique name the example uses a random hash. 
-Any unique name is acceptable.
+{{< hint type="tip" >}}
+A resource group is one of the fastest Azure resources to provision.
 {{< /hint >}}
 
-```yaml {label="bucket"}
-bucket=$(echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10))
+```yaml {label="xr",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
-apiVersion: s3.aws.upbound.io/v1beta1
-kind: Bucket
+apiVersion: azure.upbound.io/v1beta1
+kind: ResourceGroup
 metadata:
-  name: $bucket
+  name: example-rg
 spec:
   forProvider:
-    region: us-east-1
+    location: "East US"
   providerConfigRef:
     name: default
 EOF
 ```
 
-Notice the {{< hover label="bucket" line="3">}}apiVersion{{< /hover >}} and {{< hover label="bucket" line="4">}}kind{{</hover >}} are from the `Provider's` CRDs.
+Notice the {{< hover label="xr" line="2">}}apiVersion{{< /hover >}} and {{< hover label="xr" line="3">}}kind{{</hover >}} are from the `Provider's` CRDs.
 
+The {{< hover label="xr" line="5">}}metadata.name{{< /hover >}} value is the name of the created resource group in Azure.  
+This example uses the name `example-rg`.
 
-The {{< hover label="bucket" line="6">}}metadata.name{{< /hover >}} value is the name of the created S3 bucket in AWS.  
-This example uses the generated name `upbound-bucket-<hash>` in the `$bucket` variable.
+The {{< hover label="xr" line="8">}}spec.forProvider.location{{< /hover >}} tells Azure which Azure region to use when deploying resources. The region can be any [Azure geography](https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/) code.
 
-The {{< hover label="bucket" line="9">}}spec.forProvider.region{{< /hover >}} tells AWS which AWS region to use when deploying resources. The region can be any [AWS Regional endpoint](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints) code.
-
-Use `kubectl get buckets` to verify Crossplane created the bucket.
-
-{{< hint type="tip" >}}
-Upbound created the bucket when the values `READY` and `SYNCED` are `True`.  
-This may take up to 5 minutes.  
-{{< /hint >}}
+Use `kubectl get resourcegroup` to verify Crossplane created the resource group.
 
 ```shell
-kubectl get buckets
-NAME                       READY   SYNCED   EXTERNAL-NAME              AGE
-upbound-bucket-45eed4ae0   True    True     upbound-bucket-45eed4ae0   61s
+kubectl get ResourceGroup
+NAME         READY   SYNCED   EXTERNAL-NAME   AGE
+example-rg   True    True     example-rg      4m58s
 ```
 
-Optionally, log into the [AWS Console](https://s3.console.aws.amazon.com/s3/buckets) and see the bucket inside AWS.
+Optionally, log into the [Azure Portal](https://https://portal.azure.com/) and see the resource group inside Azure.
 
-{{< img src="images/s3-bucket-create.png" alt="AWS console shows an S3 bucket with the name upbound-bucket-45eed4ae0 that matches the bucket created by Crossplane." >}}
+{{< img src="images/azure-rg-create.png" alt="Azure portal shows a resource-group with the name example-rg that matches the resource group created by Crossplane." >}}
 
-<br />
 
 <!-- vale gitlab.SubstitutionWarning = NO -->
 <!-- disable "click" error. The user needs to actually click the button -->
-{{< expand "Is the bucket not SYNCED? Click here for troubleshooting tips" >}}
+{{< expand "Is the resource group not SYNCED? Click here for troubleshooting tips" >}}
 <!-- vale gitlab.SubstitutionWarning = YES -->
-If the `READY` or `SYNCED` are blank or `False` use `kubectl describe bucket` to understand why.
+If the `READY` or `SYNCED` are blank or `False` use `kubectl describe resourcegroup` to understand why.
 
-A common issue is incorrect AWS credentials or not having permissions to create the S3 bucket.
+A common issue is incorrect Azure credentials or not having permissions to create the resource group.
 
-The following output is an example of the `kubectl describe bucket` output when using the wrong AWS credentials.
+The following output is an example of the `kubectl describe resourcegroup` output when using the wrong Azure credentials.
 
-```shell {label="bad-aws-auth"}
-kubectl describe bucket
-Name:         upbound-bucket-ff2ce7e86
-Annotations:  crossplane.io/external-name: upbound-bucket-ff2ce7e86
-API Version:  s3.aws.upbound.io/v1beta1
-Kind:         Bucket
+```shell {label="bad-auth"}
+Name:         example-rg
+Namespace:
+Labels:       <none>
+Annotations:  crossplane.io/external-name: example-rg
+API Version:  azure.upbound.io/v1beta1
+Kind:         ResourceGroup
 # Output trimmed for brevity
 Spec:
   Deletion Policy:  Delete
   For Provider:
-    Region:  us-east-1
-    Tags:
-      Crossplane - Kind:            bucket.s3.aws.upbound.io
-      Crossplane - Name:            upbound-bucket-ff2ce7e86
-      Crossplane - Providerconfig:  default
+    Location:  East US
   Provider Config Ref:
     Name:  default
 Status:
   At Provider:
   Conditions:
-    Last Transition Time:  2022-09-30T15:47:18Z
-    Message:               connect failed: cannot get terraform setup: cannot get the caller identity: GetCallerIdentity query failed: GetCallerIdentity query failed: operation error STS: GetCallerIdentity, https response error StatusCode: 403, RequestID: bc190d08-20fc-40c2-82ba-875ecb98bef6, api error InvalidClientTokenId: The security token included in the request is invalid.
+    Last Transition Time:  2022-10-12T02:17:40Z
+    Message:               observe failed: cannot run refresh: refresh failed: building account: getting authenticated object ID: listing Service Principals: ServicePrincipalsClient.BaseClient.Get(): clientCredentialsToken: received HTTP status 401 with response: {"error":"invalid_client","error_description":"AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app '76af2645-91b4-4087-aff3-e05bf1f1b88c'.\r\nTrace ID: 26369fb5-ab9c-4ba2-bb74-179818cc2e00\r\nCorrelation ID: 0fefd33e-dc03-4450-b70f-4b9a9c23143a\r\nTimestamp: 2022-10-12 02:17:40Z","error_codes":[7000215],"timestamp":"2022-10-12 02:17:40Z","trace_id":"26369fb5-ab9c-4ba2-bb74-179818cc2e00","correlation_id":"0fefd33e-dc03-4450-b70f-4b9a9c23143a","error_uri":"https://login.microsoftonline.com/error?code=7000215"}:
     Reason:                ReconcileError
     Status:                False
     Type:                  Synced
 Events:
-  Type     Reason                           Age               From                                            Message
-  ----     ------                           ----              ----                                            -------
-  Warning  CannotConnectToProvider          0s (x12 over 2s)  managed/s3.aws.upbound.io/v1beta1, kind=bucket  (combined from similar events): cannot get terraform setup: cannot get the caller identity: GetCallerIdentity query failed: GetCallerIdentity query failed: operation error STS: GetCallerIdentity, https response error StatusCode: 403, RequestID: bc190d08-20fc-40c2-82ba-875ecb98bef6, api error InvalidClientTokenId: The security token included in the request is invalid.
+  Type     Reason                         Age              From                                                  Message
+  ----     ------                         ----             ----                                                  -------
+  Warning  CannotObserveExternalResource  24s              managed/azure.upbound.io/v1beta1, kind=resourcegroup  cannot run refresh: refresh failed: building account: getting authenticated object ID: listing Service Principals: ServicePrincipalsClient.BaseClient.Get(): clientCredentialsToken: received HTTP status 401 with response: {"error":"invalid_client","error_description":"AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app '76af2645-91b4-4087-aff3-e05bf1f1b88c'.\r\nTrace ID: 54dd6c59-972b-4194-8d5c-81ccc9df2700\r\nCorrelation ID: 9d5df199-426b-45d4-bbd4-4d46703dff85\r\nTimestamp: 2022-10-12 02:17:17Z","error_codes":[7000215],"timestamp":"2022-10-12 02:17:17Z","trace_id":"54dd6c59-972b-4194-8d5c-81ccc9df2700","correlation_id":"9d5df199-426b-45d4-bbd4-4d46703dff85","error_uri":"https://login.microsoftonline.com/error?code=7000215"}:
   ```
 
-The error message in the _Events_ log indicates the problem.  
-{{< hover label="bad-aws-auth" line="28">}}api error InvalidClientTokenId: The security token included in the request is invalid.{{< /hover >}}
+The error message in the _Condition_ indicates the problem.  
+<!-- vale alex.Ablist = NO --> 
+<!-- allow "invalid" since it quotes the error -->
+{{< hover label="bad-auth" line="18">}} Invalid client secret provided.{{< /hover >}}
+<!-- vale alex.Ablist = YES --> 
 
 To fix the problem:
 
-* Update your AWS credentials in the `aws-credentials.txt` text file.
+* Update your Azure credentials in the `azure-credentials.json` text file.
 * Delete the original Kubernetes _secret_ with  
-* `kubectl delete secret aws-secret -n upbound-system`
+* `kubectl delete secret azure-secret -n upbound-system`
 * Create a new _secret_ with   
-`kubectl create secret generic aws-secret -n upbound-system --from-file=creds=aws.txt`
+`kubectl create secret generic azure-secret -n upbound-system --from-file=creds=azure-credentials.json`
 * Delete the `ProviderConfig` with  
-`kubectl delete providerconfig.aws.upbound.io/default`
+`kubectl delete providerconfig.azure.upbound.io/default`
 * Recreate the `ProviderConfig` with the output in the [ProviderConfig section](#create-a-providerconfig).
-* Create the [bucket again](#create-a-managed-resource).
+* Create the [resource group again](#create-a-managed-resource).
 
 {{< hint type="note" >}}
 Deleting the `ProviderConfig` isn't required, but is faster than waiting for Kubernetes to synchronize and update.
@@ -696,22 +582,16 @@ Still need help? Join the [Crossplane Slack](https://slack.crossplane.io/) and a
 {{< /expand >}}
 
 ### Delete the managed resource
-Before shutting down your Kubernetes cluster, delete the S3 bucket just created.
+Before shutting down your Kubernetes cluster, delete the resource group just created.
 
-Use `kubectl delete bucket <bucketname>` to remove the bucket.
+Use `kubectl delete resource-group` to remove the bucket.
 
 ```shell
-kubectl delete bucket $bucket
-bucket.s3.aws.upbound.io "upbound-bucket-45eed4ae0" deleted
+kubectl delete resourcegroup example-rg
+resourcegroup.azure.upbound.io "example-rg" deleted
 ```
 
-Look in the [AWS Console](https://s3.console.aws.amazon.com/s3/buckets) to confirm Crossplane deleted the bucket from AWS.
-
-{{< img alt="AWS console showing no buckets exist, indicating Crossplane deleted the S3 bucket managed resource." src="images/s3-bucket-delete.png" >}}
-
-
-
 ### Next steps 
-* Explore AWS resources that can Crossplane can configure in the [Provider CRD reference](https://marketplace.upbound.io/providers/upbound/provider-aws/v0.15.0/crds).
+* Explore Azure resources that can Crossplane can configure in the [Provider CRD reference](https://marketplace.upbound.io/providers/upbound/provider-azure/v0.16.0/crds).
 * Learn about [Crossplane configuration packages]({{<ref "uxp/crossplane-concepts/packages">}}) to make your cloud platform fully portable.
 * Join the [Crossplane Slack](https://slack.crossplane.io/) and the `#Upbound` room to connect with Crossplane users and contributors.
