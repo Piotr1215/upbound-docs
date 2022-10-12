@@ -3,14 +3,14 @@ title: "Authentication"
 weight: 10
 ---
 
-Some Marketplace resources, including Official Providers, pulling private packages or pushing packages to a repository require authentication to Upbound.
+Some Marketplace resources, including pulling private packages or pushing packages to a repository require authentication to Upbound.
 
 Pushing packages to a repository or managing organizations, robot accounts or users uses the [Up command-line]({{<ref "cli">}}). 
 
-Installing Kubernetes resources requires an [image pull secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials). 
+Installing private Kubernetes resources requires an [image pull secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials). 
 
 {{< hint type="important" >}}
-Authenticating to the Upbound Marketplace requires an [Upbound account]({{<ref "users/register" >}}).
+Authenticating to the Upbound Marketplace for private packages requires an [Upbound account]({{<ref "users/register" >}}).
 {{< /hint >}}
 
 ## Prerequisites
@@ -65,7 +65,7 @@ Providing an organization per-command is useful when you belong to multiple orga
 
 For example, to create a robot account in `my-org` use the command
 
-```shell
+```shell {copy-lines="1-3"}
 up robot create \
 my-robot \
 -a my-org
@@ -77,15 +77,10 @@ my-org/my-robot created
 
 ## Kubernetes image pull secrets
 
-Packages in private repositories require a Kubernetes image pull secret. Upbound Official Providers also require a Kubernetes image pull secret.
-The image pull secret authenticates Kubernetes to the Upbound Marketplace, allowing Kubernetes to download and installed packages.
-
+Packages in private repositories require a Kubernetes image pull secret.  
+The image pull secret authenticates Kubernetes to the Upbound Marketplace, allowing Kubernetes to download and install packages.
 
 Generating an image pull secret requires either a user or robot account _token_. 
-
-{{< hint type="important" >}}
-Only robot account tokens can install Upbound Official Providers. Robot accounts are only available to [organizations]({{<ref "users/organizations" >}}). 
-{{< /hint >}}
 
 {{< tabs "tokens" >}}
 
@@ -107,7 +102,7 @@ Create a new robot account with the command `up robot create <robot name>`.
 Use `up robot create -a <organization>` if you aren't using global organization authentication.
 {{< /hint >}}
 
-```shell
+```shell {copy-lines="1-2"}
 up robot create \
 my-robot
 my-org/my-robot created
@@ -117,7 +112,7 @@ my-org/my-robot created
 ### Create a robot token
 Create a robot token for a robot account with `up robot token create <robot name> <token name> --output <file>`
 
-```shell
+```shell {copy-lines="1-4",label="robot-token"}
 up robot token create \
 my-robot \
 my-token \
@@ -129,21 +124,21 @@ my-org/my-robot/my-token created
 You can't recover a lost robot token. You must delete and create a new token.
 {{< /hint >}}
 
-The `output` file is a JSON file containing the robot token's `accessId` and `token`. The `accessId` is the username and `token` is the password for the token.
+The {{< hover label="robot-token" line="4">}}output{{< /hover >}} file is a JSON file containing the robot token's `accessId` and `token`. The `accessId` is the username and `token` is the password for the token.
 
 ### Create an image pull secret
 Using the robot account token generate a Kubernetes image pull secret with `up controlplane pull-secret create package-pull-secret -f <token file>`.
 
-```shell
+```shell {copy-lines="1=3"}
 up controlplane pull-secret \ 
 create package-pull-secret \
 -f token.json
 my-org/package-pull-secret created
 ```
 
-The `up` command-line generates the Kubernetes _Secret_ named _package-pull-secret_ inside the _upbound-system_ namespace.
+The `up` command-line generates the Kubernetes _Secret_ named {{<hover label="describe-secret" line="2" >}}package-pull-secret{{< /hover >}} inside the {{<hover label="describe-secret" line="3" >}}upbound-system{{< /hover >}} namespace.
 
-```shell
+```shell {label="describe-secret"}
 kubectl describe secret package-pull-secret -n upbound-system
 Name:         package-pull-secret
 Namespace:    upbound-system
@@ -162,18 +157,18 @@ You can manually generate a Kubernetes secret without the `up controlplane pull-
 {{< expand "Manually install an image pull secret" >}}
 
 {{< hint type="note" >}}
-This step is not required if you generate an image pull secret with `up`
+This step isn't required if you generate an image pull secret with `up`
 {{< /hint >}}
 
 
 Create a _Secret_ with `kubectl create secret docker-registry` command with the following options:
-* `--namespace` the same namespace as Upbound. By default this is `upbound-system`.
-* `--docker-server` as `xpkg.upbound.io`
-* `--docker-username` the _Access ID_ value of the robot token
-* `--docker-password` the _Token_ value of the robot token
+* {{<hover label="manual-secret" line="2" >}}--namespace{{</ hover >}} the same namespace as Upbound. By default this is `upbound-system`.
+* {{<hover label="manual-secret" line="3" >}}--docker-server{{</ hover >}}  as `xpkg.upbound.io`
+* {{<hover label="manual-secret" line="4" >}}--docker-username{{</ hover >}}  the _Access ID_ value of the robot token
+* {{<hover label="manual-secret" line="5" >}}--docker-password{{</ hover >}}  the _Token_ value of the robot token
 
 For example, create an imagePullSecret with the name `package-pull-secret`
-```shell
+```shell {copy-lines="all",label="manual-secret"}
 kubectl create secret docker-registry package-pull-secret \
 --namespace=upbound-system \
 --docker-server=xpkg.upbound.io \
@@ -232,7 +227,8 @@ Data
 
 
 {{< hint type="caution" >}}
-User accounts also have _API Tokens_ to use with `up login`. Image pull secrets can't use API tokens.  
+User accounts also have _API Tokens_ to use with `up login`.   
+Image pull secrets can't use API tokens.  
 <!-- vale Microsoft.FirstPerson = NO -->
 <!-- ignore "My" in "My Account" -->
 The <a href="https://accounts.upbound.io">My Account</a> management panel creates API tokens. 
