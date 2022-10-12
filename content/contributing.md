@@ -579,7 +579,7 @@ By default the copy button copies the first line of the code block. Attach a `co
 For example, to copy from lines 2 to 4, use `{copy-lines="2-4"}`.
 
 {{< hint type="tip" >}}
-Comma seperate code blocks with more than one tag. For example, to apply a label and copy from lines 3 to 5
+Comma separate code blocks with more than one tag. For example, to apply a label and copy from lines 3 to 5
 
 ````
 ```shell {hl_lines="2-4", copy-lines="2-4"}
