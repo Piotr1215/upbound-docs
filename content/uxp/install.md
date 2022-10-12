@@ -18,7 +18,7 @@ Use the `up uxp install` command to install UXP into the current Kubernetes clus
 up uxp install
 ```
 
-Up installs the latest stable [UXP release](https://github.com/upbound/universal-crossplane/releases/tag/v1.8.1-up.2) into the `upbound-system` namespace.
+Up installs the latest stable [UXP release](https://github.com/upbound/universal-crossplane/releases/) into the `upbound-system` namespace.
 
 ### Install a specific Upbound Universal Crossplane version
 Install a specific version of UXP with `up uxp install <version>`. 
