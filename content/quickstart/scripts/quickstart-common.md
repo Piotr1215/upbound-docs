@@ -33,13 +33,13 @@ xgql-7c4b74c458-5bf2q                       1/1     Running   3 (67m ago)   68m
 ```
 
 {{< hint type="note" >}}
-`RESTARTS` for the {{< hover-highlight label="grep" line="6">}}`xgql`{{< /hover-highlight >}} pod are normal during initial installation. 
+`RESTARTS` for the {{< hover label="grep" line="6">}}`xgql`{{< /hover >}} pod are normal during initial installation. 
 {{< /hint >}}
 
 For more details about UXP pods, read the [UXP]({{<ref "uxp#universal-crossplane-pods" >}}) section.
 
 
-Installing UXP and Crossplane creates new Kubernetes API end-points. Take a look at the new API end-points with `kubectl api-resources  | grep crossplane`. In a later step you use the {{< hover-highlight label="grep" line="10">}}Provider{{< /hover-highlight >}} resource install the Official Provider.
+Installing UXP and Crossplane creates new Kubernetes API end-points. Take a look at the new API end-points with `kubectl api-resources  | grep crossplane`. In a later step you use the {{< hover label="grep" line="10">}}Provider{{< /hover >}} resource install the Official Provider.
 
 ```shell  {label="grep"}
 kubectl api-resources  | grep crossplane

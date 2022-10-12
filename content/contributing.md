@@ -536,7 +536,7 @@ Events:
 Code highlighting is provided by [goldmark-highlighting](https://github.com/yuin/goldmark-highlighting). Any setting supported by the Goldmark plugin should be supported by Hugo.
 
 #### Hover to highlight
-A single line in a code block can be highlighted on mouseover of another command with the `{{</* hover-highlight */>}}` shortcode.
+A single line in a code block can be highlighted on mouseover of another command with the `{{</* hover */>}}` shortcode.
 
 A command inside the shortcode highlights lines in an associated code block.
 
@@ -558,20 +558,20 @@ echo hello
 hello
 ```
 ````
-Hover over <code>&#123;&#123;< hover-highlight label="an_example" line="2">&#125;&#125;</code> hello <code>&#123;&#123;< hover-highlight >&#125;&#125;</code> to see it in action.
+Hover over <code>&#123;&#123;< hover label="an_example" line="2">&#125;&#125;</code> hello <code>&#123;&#123;< hover >&#125;&#125;</code> to see it in action.
 
 Would render:
 ```shell {label="an_example"}
 echo hello
 hello
 ```
-Hover over {{< hover-highlight label="an_example" line="2">}} hello{{< /hover-highlight >}} to see it in action. 
+Hover over {{< hover label="an_example" line="2">}} hello{{< /hover >}} to see it in action. 
 
 {{< hint type="important" >}}
 The `line="<number>"` variable uses displayed line numbers, which doesn't include the code fence.
 {{< /hint >}}
 
-The command must include a closing shortcode of <code>&#123;&#123;< hover-highlight >&#125;&#125;</code>.  
+The command must include a closing shortcode of <code>&#123;&#123;< hover >&#125;&#125;</code>.  
 
 #### Copying code
 By default the copy button copies the first line of the code block. Attach a `copy-lines=<start>-<end>` tag to the code block.
