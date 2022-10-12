@@ -124,7 +124,7 @@ my-org/my-robot/my-token created
 You can't recover a lost robot token. You must delete and create a new token.
 {{< /hint >}}
 
-The {{< hover label="robot-token" line="4">}}output{{< /hover >}} file is a JSON file containing the robot token's `accessId` and `token`. The `accessId` is the username and `token` is the password for the token.
+The output file is a JSON file containing the robot token's `accessId` and `token`. The `accessId` is the username and `token` is the password for the token.
 
 ### Create an image pull secret
 Using the robot account token generate a Kubernetes image pull secret with `up controlplane pull-secret create package-pull-secret -f <token file>`.
