@@ -28,22 +28,15 @@ EOF
 kubectl wait "providers.pkg.crossplane.io/provider-aws" --for=condition=Installed --timeout=180s
 kubectl wait "providers.pkg.crossplane.io/provider-aws" --for=condition=Healthy --timeout=180s
 
-creds=$(
-cat <<EOF | base64 -w 0
-[default]
-aws_access_key_id = $AWS_KEY
-aws_secret_access_key = $AWS_SECRET
-EOF
-)
-
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
 metadata:
   name: aws-secret
   namespace: upbound-system
-data:
-  creds: ${creds}
+stringData:
+  creds: |
+    $(printf "[default]\n    aws_access_key_id = %s\n    aws_secret_access_key = %s" "${AWS_KEY}" "${ASW_SECRET}")
 EOF
 
 cat <<EOF | kubectl apply -f -
