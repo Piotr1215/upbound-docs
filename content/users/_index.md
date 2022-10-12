@@ -2,10 +2,10 @@
 title: "Upbound Accounts and Organizations"
 weight: 400
 ---
-Some features of Upbound, including official providers, are only available to registered Upbound users.
+Some features of Upbound, like [publishing packages]({{<ref "upbound-marketplace/packages" >}}), are only available to registered Upbound users.
 
-- Register for an account at [accounts.upbound.io/register](accounts.upbound.io/register)
-- Change an account at [cloud.upbound.io](cloud.upbound.io)
+Register and manage Upbound accounts at [accounts.upbound.io](https://accounts.upbound.io)
+
 
 
 
