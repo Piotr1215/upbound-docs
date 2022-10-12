@@ -1,5 +1,5 @@
 ---
-title: Official Provider AWS 
+title: AWS Quickstart
 weight: 10
 ---
 
@@ -72,7 +72,7 @@ kubectl delete bucket upbound-bucket-$VAR
 {{< /expand >}}
 
 ## Guided tour
-These steps are the same as the preceding quickstart, but provides more information for each action.
+These steps are the same as the preceding script, but provides more information for each action.
 
 {{< hint type="note" >}}
 All commands use the current `kubeconfig` context and configuration. 
@@ -86,22 +86,33 @@ You need your:
 
 ### Install the official AWS provider
 
-Install the official provider into the Kubernetes cluster with a Kubernetes configuration file. 
+Install the official provider into the Kubernetes cluster with the `up` command-line or a Kubernetes configuration file. 
+{{< tabs "provider-install" >}}
 
+{{< tab "with the Up command-line" >}}
+<!-- TODO: style doesn't work for multi-line command. Need to fix style and break up the command -->
+```shell {copy-lines="all"}
+up controlplane provider install xpkg.upbound.io/upbound/provider-aws:v0.17.0
+```
+{{< /tab >}}
+
+{{< tab "with a Kubernetes manifest" >}}
 ```shell {label="provider",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-aws
+  name: upbound-provider-aws
 spec:
-  package: xpkg.upbound.io/upbound/provider-aws:v0.15.0
-  packagePullSecrets:
-    - name: package-pull-secret
+  package: xpkg.upbound.io/upbound/provider-aws:v0.17.0
 EOF
 ```
 
 The {{< hover label="provider" line="3">}}kind: Provider{{< /hover >}} uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.  
+
+{{< /tab >}}
+
+{{< /tabs >}}
 
 Verify the provider installed with `kubectl get providers`. 
 
@@ -112,7 +123,7 @@ It may take up to five minutes for the provider to list `HEALTHY` as `True`.
 ```shell 
 kubectl get providers
 NAME           INSTALLED   HEALTHY   PACKAGE                                        AGE
-provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.15.0   73s
+upbound-provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.17.0   73s
 ```
 
 A provider installs their own Kubernetes _Custom Resource Definitions_ (CRDs). These CRDs allow you to create AWS resources directly inside Kubernetes.
@@ -591,7 +602,7 @@ AWS S3 bucket names must be globally unique. To generate a unique name the examp
 Any unique name is acceptable.
 {{< /hint >}}
 
-```yaml {label="bucket"}
+```yaml {label="xr"}
 bucket=$(echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10))
 cat <<EOF | kubectl apply -f -
 apiVersion: s3.aws.upbound.io/v1beta1
@@ -606,13 +617,13 @@ spec:
 EOF
 ```
 
-Notice the {{< hover label="bucket" line="3">}}apiVersion{{< /hover >}} and {{< hover label="bucket" line="4">}}kind{{</hover >}} are from the `Provider's` CRDs.
+Notice the {{< hover label="xr" line="3">}}apiVersion{{< /hover >}} and {{< hover label="xr" line="4">}}kind{{</hover >}} are from the `Provider's` CRDs.
 
 
-The {{< hover label="bucket" line="6">}}metadata.name{{< /hover >}} value is the name of the created S3 bucket in AWS.  
-This example uses the generated name `upbound-bucket-<hash>` in the {{< hover label="bucket" line="6">}}`$bucket`{{</hover >}} variable.
+The {{< hover label="xr" line="6">}}metadata.name{{< /hover >}} value is the name of the created S3 bucket in AWS.  
+This example uses the generated name `upbound-bucket-<hash>` in the {{< hover label="xr" line="6">}}`$bucket`{{</hover >}} variable.
 
-The {{< hover label="bucket" line="9">}}spec.forProvider.region{{< /hover >}} tells AWS which AWS region to use when deploying resources. The region can be any [AWS Regional endpoint](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints) code.
+The {{< hover label="xr" line="9">}}spec.forProvider.region{{< /hover >}} tells AWS which AWS region to use when deploying resources. The region can be any [AWS Regional endpoint](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints) code.
 
 Use `kubectl get buckets` to verify Crossplane created the bucket.
 
@@ -643,7 +654,7 @@ A common issue is incorrect AWS credentials or not having permissions to create 
 
 The following output is an example of the `kubectl describe bucket` output when using the wrong AWS credentials.
 
-```shell {label="bad-aws-auth"}
+```shell {label="bad-auth"}
 kubectl describe bucket
 Name:         upbound-bucket-ff2ce7e86
 Annotations:  crossplane.io/external-name: upbound-bucket-ff2ce7e86
@@ -673,9 +684,11 @@ Events:
   ----     ------                           ----              ----                                            -------
   Warning  CannotConnectToProvider          0s (x12 over 2s)  managed/s3.aws.upbound.io/v1beta1, kind=bucket  (combined from similar events): cannot get terraform setup: cannot get the caller identity: GetCallerIdentity query failed: GetCallerIdentity query failed: operation error STS: GetCallerIdentity, https response error StatusCode: 403, RequestID: bc190d08-20fc-40c2-82ba-875ecb98bef6, api error InvalidClientTokenId: The security token included in the request is invalid.
   ```
-
+<!-- vale alex.Ablist = NO --> 
+<!-- allow "invalid" since it quotes the error -->
 The error message in the _Events_ log indicates the problem.  
-{{< hover label="bad-aws-auth" line="28">}}api error InvalidClientTokenId: The security token included in the request is invalid.{{< /hover >}}
+{{< hover label="bad-auth" line="28">}}api error InvalidClientTokenId: The security token included in the request is invalid.{{< /hover >}}
+<!-- vale alex.Ablist = YES --> 
 
 To fix the problem:
 

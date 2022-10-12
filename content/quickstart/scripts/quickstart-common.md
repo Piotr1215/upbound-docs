@@ -18,7 +18,7 @@ Install UXP with the Up command-line `up uxp install` command.
 
 ```shell
 up uxp install
-UXP 1.9.0-up.3 installed
+UXP 1.9.1-up.2 installed
 ```
 
 Verify all UXP pods are `Running` with `kubectl get pods -n upbound-system`. This may take up to five minutes depending on your Kubernetes cluster.
@@ -33,7 +33,7 @@ xgql-7c4b74c458-5bf2q                       1/1     Running   3 (67m ago)   68m
 ```
 
 {{< hint type="note" >}}
-`RESTARTS` for the {{< hover label="grep" line="6">}}`xgql`{{< /hover >}} pod are normal during initial installation. 
+`RESTARTS` for the `xgql` pod are normal during initial installation. 
 {{< /hint >}}
 
 For more details about UXP pods, read the [UXP]({{<ref "uxp#universal-crossplane-pods" >}}) section.
