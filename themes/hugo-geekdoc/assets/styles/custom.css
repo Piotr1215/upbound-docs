@@ -929,7 +929,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 }
 
 #product-nav > .container {
-  background-color: var(--nav_color);
+  /* background-color: var(--nav_color); */
   width: 100%;
   max-width: 1440px;
   padding: 20px 50px;
@@ -941,7 +941,7 @@ input#chkToggle:checked + label.navbar-toggle > span.bars:after {
 @media screen and (max-width: 39rem) {
   #product-nav > .container {
     padding-right: 10px;
-    background-color: var(--nav_color);
+    /* background-color: var(--nav_color); */
   }
 }
 
