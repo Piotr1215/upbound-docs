@@ -1,9 +1,8 @@
 ---
 title: AWS Quickstart
-weight: 10
 ---
 
-Connect Crossplane to AWS to create and manage cloud resources from Kubernetes with the AWS Official Provider.
+Connect Crossplane to AWS to create and manage cloud resources from Kubernetes with the [AWS Official Provider](https://marketplace.upbound.io/providers/upbound/provider-aws).
 
 This guide walks you through the steps required to get started with the AWS Official Provider. This includes installing Upbound Universal Crossplane, configuring the provider to authenticate to AWS and creating a _Managed Resource_ in AWS directly from your Kubernetes cluster.
 
@@ -82,7 +81,7 @@ You need your:
 * AWS Access Key ID
 * AWS Secret Access Key
 
-{{< include file="quickstart/scripts/quickstart-common.md" type="page" >}}
+{{< include file="quickstart/quickstart-common.md" type="page" >}}
 
 ### Install the official AWS provider
 
@@ -90,7 +89,6 @@ Install the official provider into the Kubernetes cluster with the `up` command-
 {{< tabs "provider-install" >}}
 
 {{< tab "with the Up command-line" >}}
-<!-- TODO: style doesn't work for multi-line command. Need to fix style and break up the command -->
 ```shell {copy-lines="all"}
 up controlplane \
 provider install \
@@ -642,7 +640,7 @@ upbound-bucket-45eed4ae0   True    True     upbound-bucket-45eed4ae0   61s
 
 Optionally, log into the [AWS Console](https://s3.console.aws.amazon.com/s3/buckets) and see the bucket inside AWS.
 
-{{< img src="images/s3-bucket-create.png" alt="AWS console shows an S3 bucket with the name upbound-bucket-45eed4ae0 that matches the bucket created by Crossplane." >}}
+{{< img src="images/s3-bucket-create.png" alt="AWS console shows an S3 bucket with the name upbound-bucket-45eed4ae0 that matches the bucket created by Crossplane." size="xtiny" >}}
 
 <br />
 
