@@ -2,7 +2,8 @@
 title: "Upbound Documentation"
 weight: 0
 cascade:
-    type: "user-docs"
+    product: "Upbound"
+    type: user-docs
 ---
 
 Upbound is the industry's first platform for building internal cloud platforms. Designed around control planes, Upbound offers a new way for building an internal cloud platform, purpose-built for your organization. Customers can build, deploy, manage, secure, and use their platforms all from a single point of control. 

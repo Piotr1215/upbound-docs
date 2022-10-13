@@ -1,7 +1,7 @@
 <div id="product-nav">
   <div class="container">
     {{ if .MenuEnabled }}
-    <label for="menu-control" class="gdoc-nav__control sidebar" tabindex="0">
+    <label for="menu-control" class="gdoc-nav__control sidebar"  tabindex="0">
       <svg class="gdoc-icon gdoc_menu">
         <title>{{ i18n "button_nav_open" }}</title>
         <use xlink:href="#gdoc_menu"></use>
@@ -15,29 +15,28 @@
     
     <div class="sub-nav">
       <ul>
-        {{- $product := .Page.Params.product | default "Upbound" -}}
-        <li {{- if eq $product "Upbound" }} class="active" {{- end -}}>
-          <a href="/">Upbound</a>
-        </li>
+        {{- $currentproduct := .Root.Page.Params.product | default "Upbound" -}}
+        {{range .Root.Site.Params.products }}
+          <li
+          {{- if eq $currentproduct .name }} class="active" {{- end -}}
+          >
+            <a href="{{ .path }}">{{ .name }}</a>
+          </li>
+       {{ end }}
       </ul>
     </div>
 
     <div class="header-right-items d-flex">
       <div class="gdoc-search flex align-center">
         <svg class="gdoc-icon gdoc_search"><use xlink:href="#gdoc_search"></use></svg>
-        <input type="text" style="visibility: visible" id="gdoc-search-input" class="gdoc-search__input" placeholder="" aria-label="" maxlength="64" data-site-base-url="{{ .Site.BaseURL }}/" data-site-lang="en">
+        <input type="text" id="gdoc-search-input" class="gdoc-search__input" placeholder="Search" aria-label="Search the Docs" maxlength="64" data-site-base-url="{{ .Site.BaseURL }}/" data-site-lang="en">
         <div class="gdoc-search__spinner spinner hidden"></div>
         <ul id="gdoc-search-results" class="gdoc-search__list"></ul>
       </div>
       <div class="switcher-header">
         <div class="gdoc-menu-header">
           <span class="gdoc-menu-header__items">
-            <!-- {{ if .Site.Data.menu.extra.header }}
-            {{ partial "menu-extra" (dict "current" . "source" .Site.Data.menu.extra.header "target" "header") }}
-            {{ end }} -->
-
-
-            <span id="gdoc-dark-mode">
+            <span id="gdoc-color-theme">
               <svg class="gdoc-icon gdoc_brightness_dark">
                 <title>{{ i18n "button_toggle_dark" }}</title>
                 <use xlink:href="#gdoc_brightness_dark"></use>
@@ -51,40 +50,15 @@
                 <use xlink:href="#gdoc_brightness_auto"></use>
               </svg>
             </span>
-
-            <!-- <span class="gdoc-menu-header__home">
-              <a href="{{ .Site.BaseURL }}" class="gdoc-header__link">
-                <svg class="gdoc-icon gdoc_home">
-                  <title>{{ i18n "button_homepage" }}</title>
-                  <use xlink:href="#gdoc_home"></use>
-                </svg>
-              </a>
-            </span> -->
-
-            <!-- {{ partial "language" . }}
-
-
-            <span class="gdoc-menu-header__control">
-              <label for="menu-header-control">
-                <svg class="gdoc-icon gdoc_keyboard_arrow_right">
-                  <use xlink:href="#gdoc_keyboard_arrow_right"></use>
-                  <title>{{ i18n "button_menu_close" }}</title>
-                </svg>
-              </label>
-            </span>
-          </span>
-          <label for="menu-header-control" class="gdoc-menu-header__control">
-            <svg class="gdoc-icon gdoc_keyboard_arrow_left">
-              <use xlink:href="#gdoc_keyboard_arrow_left"></use>
-              <title>{{ i18n "button_menu_open" }}</title>
-            </svg>
-          </label> -->
         </div>
       </div>
     </div>
-
     {{ if .ToCEnabled }}
-    <label for="menu-toc-control" class="gdoc-nav__control toc" tabindex="0">
+      {{ $hide_toc_class := "" }}
+      {{ if lt (len .Root.TableOfContents) 100 }}
+      {{ $hide_toc_class = "d-none" }}
+    {{ end }}
+    <label for="menu-toc-control" class="gdoc-nav__control toc {{$hide_toc_class}}" tabindex="0">
       <svg class="gdoc-icon gdoc_menu">
         <title>{{ i18n "button_nav_open" }}</title>
         <use xlink:href="#gdoc_menu"></use>

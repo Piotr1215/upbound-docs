@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.Language.Lang }}" class="color-toggle-light">
+<html lang="{{ .Site.Language.Lang }}" class="color-toggle-hidden" {{ if default false .Site.Params.GeekdocDarkModeCode }}code-theme="dark"{{ end }} >
   <head>
     {{ partial "head/meta" . }}
-    {{ partial "head/google-analytics" . }}
 
     <title>
       {{- if eq .Kind "home" -}}
@@ -11,23 +10,19 @@
         {{ printf "%s | %s" (partial "utils/title" .) .Site.Title }}
       {{- end -}}
     </title>
-
+    {{ partial "head/styles" . }}
     {{ partial "head/favicons" . }}
-    {{ partial "head/rel-me" . }}
+  {{ if hugo.IsProduction }}
+    {{ partial "head/trackers" . }}
+  {{ end }}
     {{ partial "head/microformats" . }}
-    {{ partial "head/custom" . }}
-    {{ partial "head/others" . }}
   </head>
 
   <body itemscope itemtype="https://schema.org/WebPage">
-    {{ partial "svg-icon-symbols" . }}
-
-    <div
-      class="wrapper {{ if default false .Site.Params.GeekdocDarkModeDim }}dark-mode-dim{{ end }}"
-    >
-    <input type="checkbox" class="hidden checkbox" id="menu-control" />
-    <input type="checkbox" class="hidden checkbox" id="menu-header-control" />
-    <input type="checkbox" class="hidden checkbox" id="menu-toc-control" />
+    <div class="wrapper {{ if default false .Site.Params.GeekdocDarkModeDim }}dark-mode-dim{{ end }}" >
+      <input type="checkbox" class="hidden checkbox" id="menu-control" />
+      <input type="checkbox" class="hidden checkbox" id="menu-header-control" />
+      <input type="checkbox" class="hidden checkbox" id="menu-toc-control" />
       {{ partial "site-header" }}
 
       {{ $navEnabled := default true .Page.Params.GeekdocNav }}
@@ -50,17 +45,16 @@
             {{ partial "menu-nextprev" . }}
           </div>
         </div>
-
-        {{ if $tocLevels }}
+        {{ if and $tocLevels (gt (len .TableOfContents) 100) }}
         <aside class="gdoc-toc">
           {{ .TableOfContents }}
         </aside>
         {{ end }}
       </main>
-
       {{ partial "site-footer" . }}
     </div>
 
-    {{ partial "foot" . }}
+    {{ partial "end-of-page-js" . }}
+    {{ partial "svg-icon-symbols" . }}
   </body>
 </html>

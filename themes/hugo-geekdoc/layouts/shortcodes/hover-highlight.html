@@ -1,7 +1,5 @@
 {{- $rand_id := now.UnixNano -}}
-<code><mousover id="{{$rand_id}}">{{ .Inner }}</id></code>
-{{- $script := resources.Get "hover-highlight-element.js" | minify | fingerprint  -}}
-<script src="{{$script.RelPermalink}}" rand_id="{{$rand_id}}" label={{.Get "label" }} line={{.Get "line" }}  defer></script>
+<code><highlight-term id="{{$rand_id}}" data-label={{.Get "label" }} data-line={{.Get "line" }}>{{ .Inner }}</highlight-term></code>
 
 {{/*
 How to Use
