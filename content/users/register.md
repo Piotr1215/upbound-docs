@@ -35,6 +35,6 @@ After submitting your pin your account is now ready.
 
 Clicking `Finish` will send you to the [Upbound Marketplace](http://marketplace.upbound.io). 
 
-To make changes to your account login to [cloud.upbound.io](https://cloud.upbound.io)
+To make changes to your account login to [accounts.upbound.io](https://accounts.upbound.io)
 {{< /tab >}}
 {{< /tabs >}}
