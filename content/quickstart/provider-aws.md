@@ -1,7 +1,8 @@
 ---
-title: Official Provider AWS 
-weight: 10
+title: AWS Quickstart
 ---
+
+Connect Crossplane to AWS to create and manage cloud resources from Kubernetes with the [AWS Official Provider](https://marketplace.upbound.io/providers/upbound/provider-aws).
 
 This guide walks you through the steps required to get started with the AWS Official Provider. This includes installing Upbound Universal Crossplane, configuring the provider to authenticate to AWS and creating a _Managed Resource_ in AWS directly from your Kubernetes cluster.
 
@@ -20,7 +21,6 @@ This guide walks you through the steps required to get started with the AWS Offi
 
 ## Prerequisites
 This quickstart requires:
-* an [Upbound user account]({{<ref "users/register" >}})
 * a Kubernetes cluster with at least 3 GB of RAM
 * permissions to create pods and secrets in the Kubernetes cluster
 * an AWS account with permissions to create an S3 storage bucket
@@ -45,14 +45,8 @@ All commands use the current `kubeconfig` context and configuration.
 {{< /hint >}}
 
 You need your:
-* Upbound username
-* Upbound password
 * AWS Access Key ID
 * AWS Secret Access Key
-
-{{< hint type="note" >}}
-The [create a new account]({{<ref "users/register" >}}) section has directions for creating an Upbound account.
-{{< /hint >}}
 
 ### Bash script
 Download the script with `wget`.
@@ -77,44 +71,48 @@ kubectl delete bucket upbound-bucket-$VAR
 {{< /expand >}}
 
 ## Guided tour
-These steps are the same as the preceding quickstart, but provides more information for each action.
+These steps are the same as the preceding script, but provides more information for each action.
 
 {{< hint type="note" >}}
 All commands use the current `kubeconfig` context and configuration. 
 {{< /hint >}}
 
 You need your:
-* Upbound username
-* Upbound password
 * AWS Access Key ID
 * AWS Secret Access Key
 
-{{< hint type="note" >}}
-The [create a new account]({{<ref "users/register" >}}) section has directions for creating an Upbound account.
-{{< /hint >}}
-
-{{< include file="quickstart/scripts/quickstart-common.md" type="page" >}}
+{{< include file="quickstart/quickstart-common.md" type="page" >}}
 
 ### Install the official AWS provider
 
-Install the official provider into the Kubernetes cluster with a Kubernetes configuration file. 
+Install the official provider into the Kubernetes cluster with the `up` command-line or a Kubernetes configuration file. 
+{{< tabs "provider-install" >}}
 
-```shell {label="provider"}
+{{< tab "with the Up command-line" >}}
+```shell {copy-lines="all"}
+up controlplane \
+provider install \
+xpkg.upbound.io/upbound/provider-aws:v0.17.0
+```
+{{< /tab >}}
+
+{{< tab "with a Kubernetes manifest" >}}
+```shell {label="provider",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-aws
+  name: upbound-provider-aws
 spec:
-  package: xpkg.upbound.io/upbound/provider-aws:v0.15.0
-  packagePullSecrets:
-    - name: package-pull-secret
+  package: xpkg.upbound.io/upbound/provider-aws:v0.17.0
 EOF
 ```
 
-The {{< hover-highlight label="provider" line="3">}}kind: Provider{{< /hover-highlight >}} uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.  
+The {{< hover label="provider" line="3">}}kind: Provider{{< /hover >}} uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.  
 
-The {{< hover-highlight label="provider" line="8">}}packagePullSecrets{{</ hover-highlight >}} uses the Kubernetes image pull secret to authenticate to the Upbound Marketplace repository at {{< hover-highlight label="provider" line="7">}}xpkg.upbound.io{{< /hover-highlight >}}.
+{{< /tab >}}
+
+{{< /tabs >}}
 
 Verify the provider installed with `kubectl get providers`. 
 
@@ -124,8 +122,8 @@ It may take up to five minutes for the provider to list `HEALTHY` as `True`.
 
 ```shell 
 kubectl get providers
-NAME           INSTALLED   HEALTHY   PACKAGE                                        AGE
-provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.15.0   73s
+NAME                   INSTALLED   HEALTHY   PACKAGE                                        AGE
+upbound-provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.17.0   73s
 ```
 
 A provider installs their own Kubernetes _Custom Resource Definitions_ (CRDs). These CRDs allow you to create AWS resources directly inside Kubernetes.
@@ -528,7 +526,7 @@ The [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-con
 
 Create a text file containing the AWS account `aws_access_key_id` and `aws_secret_access_key`.  
 
-```ini
+```ini {copy-lines="all"}
 [default]
 aws_access_key_id = <aws_access_key>
 aws_secret_access_key = <aws_secret_key>
@@ -541,10 +539,10 @@ The [Configuration](https://marketplace.upbound.io/providers/upbound/provider-aw
 {{< /hint >}}
 
 #### Create a Kubernetes secret with the AWS credentials
-A Kubernetes generic secret has a name and contents. Use `kubectl create secret -n upbound-system` to generate the secret object named _aws-secret_ in the _upbound-system_ namespace.  
-Use the `--from-file=` argument to set the value to the contents of the _aws-credentials.txt_ file.
+A Kubernetes generic secret has a name and contents. Use {{< hover label="kube-create-secret" line="1">}}kubectl create secret{{< /hover >}} to generate the secret object named {{< hover label="kube-create-secret" line="2">}}aws-secret{{< /hover >}} in the {{< hover label="kube-create-secret" line="3">}}upbound-system{{</ hover >}} namespace.  
+Use the {{< hover label="kube-create-secret" line="4">}}--from-file={{</hover>}} argument to set the value to the contents of the  {{< hover label="kube-create-secret" line="4">}}aws-credentials.txt{{< /hover >}} file.
 
-```shell
+```shell {label="kube-create-secret",copy-lines="all"}
 kubectl create secret \
 generic aws-secret \
 -n upbound-system \
@@ -554,7 +552,7 @@ generic aws-secret \
 View the secret with `kubectl describe secret`
 
 {{< hint type="note" >}}
-The size may be larger if there are extra blank space in your text file.
+The size may be larger if there are extra blank spaces in your text file.
 {{< /hint >}}
 
 ```shell
@@ -574,8 +572,8 @@ creds:  114 bytes
 ### Create a ProviderConfig
 A `ProviderConfig` customizes the settings of the AWS Provider.  
 
-Apply the `ProviderConfig` with the command:
-```yaml {label="providerconfig"}
+Apply the {{< hover label="providerconfig" line="2">}}ProviderConfig{{</ hover >}} with the command:
+```yaml {label="providerconfig",copy-lines="all"}
 cat <<EOF | kubectl apply -f -
 apiVersion: aws.upbound.io/v1beta1
 kind: ProviderConfig
@@ -591,9 +589,9 @@ spec:
 EOF
 ```
 
-This attaches the AWS credentials, saved as a Kubernetes secret, as a `secretRef`.
+This attaches the AWS credentials, saved as a Kubernetes secret, as a {{< hover label="providerconfig" line="9">}}secretRef{{</ hover>}}.
 
-The {{< hover-highlight label="providerconfig" line="11">}}spec.credentials.secretRef.name{{< /hover-highlight >}} value is the name of the Kubernetes secret containing the AWS credentials in the {{< hover-highlight label="providerconfig" line="10">}}spec.credentials.secretRef.namespace{{< /hover-highlight >}}.
+The {{< hover label="providerconfig" line="11">}}spec.credentials.secretRef.name{{< /hover >}} value is the name of the Kubernetes secret containing the AWS credentials in the {{< hover label="providerconfig" line="10">}}spec.credentials.secretRef.namespace{{< /hover >}}.
 
 
 ### Create a managed resource
@@ -604,7 +602,7 @@ AWS S3 bucket names must be globally unique. To generate a unique name the examp
 Any unique name is acceptable.
 {{< /hint >}}
 
-```yaml {label="bucket"}
+```yaml {label="xr"}
 bucket=$(echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10))
 cat <<EOF | kubectl apply -f -
 apiVersion: s3.aws.upbound.io/v1beta1
@@ -619,13 +617,13 @@ spec:
 EOF
 ```
 
-Notice the {{< hover-highlight label="bucket" line="3">}}apiVersion{{< /hover-highlight >}} and {{< hover-highlight label="bucket" line="4">}}kind{{</hover-highlight >}} are from the `Provider's` CRDs.
+Notice the {{< hover label="xr" line="3">}}apiVersion{{< /hover >}} and {{< hover label="xr" line="4">}}kind{{</hover >}} are from the `Provider's` CRDs.
 
 
-The {{< hover-highlight label="bucket" line="6">}}metadata.name{{< /hover-highlight >}} value is the name of the created S3 bucket in AWS.  
-This example uses the generated name `upbound-bucket-<hash>` in the `$bucket` variable.
+The {{< hover label="xr" line="6">}}metadata.name{{< /hover >}} value is the name of the created S3 bucket in AWS.  
+This example uses the generated name `upbound-bucket-<hash>` in the {{< hover label="xr" line="6">}}`$bucket`{{</hover >}} variable.
 
-The {{< hover-highlight label="bucket" line="9">}}spec.forProvider.region{{< /hover-highlight >}} tells AWS which AWS region to use when deploying resources. The region can be any [AWS Regional endpoint](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints) code.
+The {{< hover label="xr" line="9">}}spec.forProvider.region{{< /hover >}} tells AWS which AWS region to use when deploying resources. The region can be any [AWS Regional endpoint](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints) code.
 
 Use `kubectl get buckets` to verify Crossplane created the bucket.
 
@@ -642,7 +640,7 @@ upbound-bucket-45eed4ae0   True    True     upbound-bucket-45eed4ae0   61s
 
 Optionally, log into the [AWS Console](https://s3.console.aws.amazon.com/s3/buckets) and see the bucket inside AWS.
 
-{{< img src="images/s3-bucket-create.png" alt="AWS console shows an S3 bucket with the name upbound-bucket-45eed4ae0 that matches the bucket created by Crossplane." >}}
+{{< img src="images/s3-bucket-create.png" alt="AWS console shows an S3 bucket with the name upbound-bucket-45eed4ae0 that matches the bucket created by Crossplane." size="xtiny" >}}
 
 <br />
 
@@ -656,7 +654,7 @@ A common issue is incorrect AWS credentials or not having permissions to create 
 
 The following output is an example of the `kubectl describe bucket` output when using the wrong AWS credentials.
 
-```shell
+```shell {label="bad-auth"}
 kubectl describe bucket
 Name:         upbound-bucket-ff2ce7e86
 Annotations:  crossplane.io/external-name: upbound-bucket-ff2ce7e86
@@ -686,9 +684,11 @@ Events:
   ----     ------                           ----              ----                                            -------
   Warning  CannotConnectToProvider          0s (x12 over 2s)  managed/s3.aws.upbound.io/v1beta1, kind=bucket  (combined from similar events): cannot get terraform setup: cannot get the caller identity: GetCallerIdentity query failed: GetCallerIdentity query failed: operation error STS: GetCallerIdentity, https response error StatusCode: 403, RequestID: bc190d08-20fc-40c2-82ba-875ecb98bef6, api error InvalidClientTokenId: The security token included in the request is invalid.
   ```
-
+<!-- vale alex.Ablist = NO --> 
+<!-- allow "invalid" since it quotes the error -->
 The error message in the _Events_ log indicates the problem.  
-`api error InvalidClientTokenId: The security token included in the request is invalid.`
+{{< hover label="bad-auth" line="28">}}api error InvalidClientTokenId: The security token included in the request is invalid.{{< /hover >}}
+<!-- vale alex.Ablist = YES --> 
 
 To fix the problem:
 

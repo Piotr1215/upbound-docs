@@ -18,7 +18,7 @@ Use the `up uxp install` command to install UXP into the current Kubernetes clus
 up uxp install
 ```
 
-Up installs the latest stable [UXP release](https://github.com/upbound/universal-crossplane/releases/tag/v1.8.1-up.2) into the `upbound-system` namespace.
+Up installs the latest stable [UXP release](https://github.com/upbound/universal-crossplane/releases/) into the `upbound-system` namespace.
 
 ### Install a specific Upbound Universal Crossplane version
 Install a specific version of UXP with `up uxp install <version>`. 
@@ -65,22 +65,32 @@ A configuration file is the recommended method to customize the UXP install.
 
 Provide file-based configurations as a [Helm values file](https://helm.sh/docs/chart_template_guide/values_files/). 
 
-For example to configure two Crossplane pod replicas and increase the pod memory limit to 1 Gigabyte with `--set`:
+For example to configure two Crossplane pod replicas with `--set`:
 
-`up uxp install --set image.pullPolicy=IfNotPresent,replicas=2`
+`up uxp install --set replicas=2`
 
-To provide a `customAnnotation` of `a8r.io/owner: "@upbound"` with `-f`
+or with a file:  
 
 ```shell
 cat settings.yaml
 replicas: 2
-
-image:
-    pullPolicy: IfNotPresent
 ```
 ```shell
 up uxp install -f settings.yaml
 ```
+
+View the `upbound-system` pods to see two Crossplane pods deployed.
+```shell {hl_lines="3-4"}
+kubectl get pods -n upbound-system
+NAME                                         READY   STATUS    RESTARTS        AGE
+crossplane-75556d97b6-gpzq7                  1/1     Running   0               4m23s
+crossplane-75556d97b6-xm8bj                  1/1     Running   0               4m23s
+crossplane-rbac-manager-8f5c76d46-kvmpm      1/1     Running   0               4m23s
+provider-aws-a1113cd136a1-59b8587f6f-q8bpt   1/1     Running   0               4h55m
+upbound-bootstrapper-5dd76c4fb-g2fv5         1/1     Running   0               4m23s
+xgql-7c4b74c458-rdsfb                        1/1     Running   2 (4m21s ago)   4m23s
+```
+
 <!-- vale off -->
 {{< expand "Optional install configurations">}}
 | **Parameter**                                       | **Description**                                                                                                                                                                                                                                                                           | **Default**                                                                                                                                                                                                                                                                                                                                                        |

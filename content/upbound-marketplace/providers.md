@@ -3,58 +3,40 @@ title: "Official Providers"
 weight: 20
 ---
 Upbound creates, maintains and supports a set of Crossplane providers called *official providers*.  
-Only [Universal Crossplane (`UXP`)]({{<ref "uxp/" >}}) supports official providers.   
-
-{{<hint type="caution">}}
-Official providers aren't supported with open source Crossplane.
-{{< /hint >}}
 
 ## Find official providers
 Identify official providers in the marketplace with the `by Upbound` gold seal.
-{{< figure src="/images/marketplace/provider-by-upbound.png" alt="example official provider with a by Upbound seal" >}}
+
+{{<img src="images/provider-by-upbound.png" alt="example official provider with a by Upbound seal" size="xtiny">}}
 
 Also find official providers by filtering a [search in the marketplace](https://marketplace.upbound.io/providers?tier=official) to just `Official`.
 
-{{< figure src="/images/marketplace/official-provider-search-filter.png" alt="a marketplace search filter with Providers and Official filters set" >}}
-## Required Universal Crossplane versions
-UXP supports official providers on the following [releases](https://github.com/upbound/up/releases) or later:
-* v1.8.1-up.2
-* v1.7.2-up.2
-* v1.6.7-up.2
-
-Inspect the `crossplane` deployment to confirm the version of Universal Crossplane.
-
-```shell
-kubectl get deployment crossplane -n upbound-system -o 'jsonpath={@.spec.template.spec.containers.*.image}{"\n"}'
-upbound/crossplane:v1.8.1-up.2
-```
+{{<img src="images/official-provider-search-filter.png" alt="a marketplace search filter with Providers and Official filters set" size="xtiny" >}}
 
 ## Install an official provider
-The [Upbound Marketplace](https://marketplace.upbound.io/) hosts official providers. Official providers are only available to registered Upbound users. Official providers require a _robot token_ to authenticate to the Upbound Marketplace and install.
-
-{{< hint type="tip" >}}
-If you already installed an official provider using an `imagePullSecret` a new secret isn't required.
-{{< /hint >}}
-
-### Authenticate to the Upbound Marketplace
-Installing providers requires your Kubernetes cluster to authenticate to the Upbound Marketplace with an `image pull secret`. 
-
-Instructions for creating an `image pull secret` are in the [authentication]({{<ref "authentication" >}}) section. 
+The [Upbound Marketplace](https://marketplace.upbound.io/) hosts official providers. 
 
 ### Install the provider resource
-Install a provider by creating a `Provider` Kubernetes resource. 
+Install a provider with the creating a `Provider` Kubernetes resource with the [Up command-line]({{<ref "cli">}}) or manually.
 
-{{<hint type="important" >}}
-Create a Kubernetes `secret` for the Upbound Marketplace before installing an official provider.
+{{< tabs "provider-install" >}}
 
-How to install the Kubernetes secret is in the [authentication]({{<ref "authentication" >}}) section.
-{{< /hint >}}
+{{< tab "With the Up command-line" >}}
+Install the provider directly into Kubernetes using the Up command-line.  
+Provide the package source of the provider to install. This example installs the [AWS official provider version 0.17.0](https://marketplace.upbound.io/providers/upbound/provider-aws/v0.17.0).
+```shell {copy-lines="all"}
+up controlplane \
+provider install \
+xpkg.upbound.io/upbound/provider-aws:v0.17.0
+```
+{{< /tab >}}
+
+{{< tab "Using a Kubernetes manifest" >}}
+Create a `kind: Provider` Kubernetes manifest.  
 
 Provide the `spec.package` location of the official provider from the Upbound Marketplace listing. 
 
-Provide `spec.packagePullSecrets.name` of the Kubernetes `secret` object to use in authenticating to the Upbound Marketplace.
-
-For example, install the AWS provider with the following Kubernetes configuration file.
+This example installs the [AWS official provider version 0.17.0](https://marketplace.upbound.io/providers/upbound/provider-aws/v0.17.0).
 
 ```yaml
 apiVersion: pkg.crossplane.io/v1
@@ -62,16 +44,18 @@ kind: Provider
 metadata:
     name: provider-aws
 spec:
-  package: xpkg.upbound.io/upbound/provider-aws:v0.5.0
+  package: xpkg.upbound.io/upbound/provider-aws:v0.17.0
   packagePullSecrets:
     - name: package-pull-secret
 ```
+{{< /tab >}}
 
-Find provider specific instructions and configurations in their individual documentation pages within the Upbound Marketplace.
+{{< /tabs >}}
 
+Find provider specific instructions and configurations in their individual documentation pages within the [Upbound Marketplace](https://marketplace.upbound.io/providers).
 ## Versions and releases
 Official providers have two relevant release numbers:
-* Provider release, for example, `provider-aws:v0.5.0`
+* Provider release, for example, `provider-aws:v0.17.0`
 * Custom Resource Definition (*CRD*) API version, for example `v1beta1`
 
 ### Provider releases
