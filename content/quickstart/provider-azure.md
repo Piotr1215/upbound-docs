@@ -1,9 +1,8 @@
 ---
 title: Azure Quickstart 
-weight: 10
 ---
 
-Connect Crossplane to Microsoft Azure to create and manage cloud resources from Kubernetes with the Azure Official Provider.
+Connect Crossplane to Microsoft Azure to create and manage cloud resources from Kubernetes with the [Azure Official Provider](https://marketplace.upbound.io/providers/upbound/provider-azure).
 
 This guide walks you through the steps required to get started with the Azure Official Provider. This includes installing Upbound Universal Crossplane, configuring the provider to authenticate to Azure and creating a _Managed Resource_ in Azure directly from your Kubernetes cluster.
 
@@ -36,7 +35,7 @@ If you don't have a Kubernetes cluster create one locally with [minikube](https:
 All commands use the current `kubeconfig` context and configuration. 
 {{< /hint >}}
 
-{{< include file="quickstart/scripts/quickstart-common.md" type="page" >}}
+{{< include file="quickstart/quickstart-common.md" type="page" >}}
 
 ### Install the official Azure provider
 
