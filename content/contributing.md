@@ -384,7 +384,9 @@ Include a page inside other pages with the `include` [shortcode from Geekdocs](h
 
 For example, to include the contents of `child_page.md` inside `parent_page.md`, use this shortcode in `parent_page.md`.
 
-{{< include file="child_page.md" type="page" >}}
+```shell
+{{</* include file="child_page.md" type="page" */>}}
+```
 
 Inside `child_page.md` include front matter to hide it from the table of contents
 
