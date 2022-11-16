@@ -20,6 +20,32 @@ up uxp install
 
 Up installs the latest stable [UXP release](https://github.com/upbound/universal-crossplane/releases/) into the `upbound-system` namespace.
 
+### Configure Upbound Universal Crossplane installed as an EKS Addon
+
+If you have installed `uxp` as an EKS Addon, you need to grant `crossplane` and any `provider` additional cluster level roles.
+
+First grant `crossplane` a _cluster-admin_ role.
+
+```bash
+kubectl create clusterrolebinding cluster-crossplane-admin \
+        --clusterrole=cluster-admin \
+        --serviceaccount upbound-system:crossplane
+```
+
+Next, for each installed provider, add _cluster-admin_ role binding. Here is an example for provider `AWS`.
+
+```bash
+# Retrieve provider pod name
+provider_aws=$(kubectl get pods -n upbound-system \
+              | grep aws \
+              | awk '{print $1}')
+
+# Grant cluster-admin role
+kubectl create clusterrolebinding cluster-provider-admin \
+        --clusterrole=cluster-admin \
+        --serviceaccount upbound-system:"$provider_aws"
+```
+
 ### Install a specific Upbound Universal Crossplane version
 Install a specific version of UXP with `up uxp install <version>`. 
 
