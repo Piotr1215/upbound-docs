@@ -20,32 +20,6 @@ up uxp install
 
 Up installs the latest stable [UXP release](https://github.com/upbound/universal-crossplane/releases/) into the `upbound-system` namespace.
 
-### Configure Upbound Universal Crossplane installed as an EKS Addon
-
-If you have installed `uxp` as an EKS Addon, you need to grant `crossplane` and any `provider` additional cluster level roles.
-
-First grant `crossplane` a _cluster-admin_ role.
-
-```bash
-kubectl create clusterrolebinding cluster-crossplane-admin \
-        --clusterrole=cluster-admin \
-        --serviceaccount upbound-system:crossplane
-```
-
-Next, for each installed provider, add _cluster-admin_ role binding. Here is an example for provider `AWS`.
-
-```bash
-# Retrieve provider pod name
-provider_aws=$(kubectl get pods -n upbound-system \
-              | grep aws \
-              | awk '{print $1}')
-
-# Grant cluster-admin role
-kubectl create clusterrolebinding cluster-provider-admin \
-        --clusterrole=cluster-admin \
-        --serviceaccount upbound-system:"$provider_aws"
-```
-
 ### Install a specific Upbound Universal Crossplane version
 Install a specific version of UXP with `up uxp install <version>`. 
 
@@ -115,6 +89,47 @@ crossplane-rbac-manager-8f5c76d46-kvmpm      1/1     Running   0               4
 provider-aws-a1113cd136a1-59b8587f6f-q8bpt   1/1     Running   0               4h55m
 upbound-bootstrapper-5dd76c4fb-g2fv5         1/1     Running   0               4m23s
 xgql-7c4b74c458-rdsfb                        1/1     Running   2 (4m21s ago)   4m23s
+```
+
+### Configure Upbound Universal Crossplane installed as an EKS Addon
+
+If you have installed `uxp` as an EKS Addon, you need to grant `crossplane` and any `provider` additional cluster level roles.
+
+Why are those actions needed? The `uxp` installation has been tailored to fit AWS requirements and the `crossplane-rbac-manager` has been disabled for the installation.
+
+This means that in order to install and use any provider, you will need to configure `uxp` by granting additional cluster scope permissions to the `crossplane` pod and `provider` pods.
+
+> These steps are necessary only for the installations without `crossplane-rbac-manager.`
+
+First grant `crossplane` a _cluster-admin_ role.
+
+```bash {copy-lines="all"} 
+kubectl create clusterrolebinding cluster-crossplane-admin \
+        --clusterrole=cluster-admin \
+        --serviceaccount upbound-system:crossplane
+```
+
+Next, for each installed provider, add _cluster-admin_ role binding. Here is an example for provider `AWS`.
+
+```bash {copy-lines="all"} 
+# Retrieve provider sa name
+provider_aws=$(kubectl get sa -n upbound-system \
+              | grep provider-aws \
+              | awk '{print $1}')
+# Grant cluster-admin role
+kubectl create clusterrolebinding cluster-provider-aws-admin \
+        --clusterrole=cluster-admin \
+        --serviceaccount upbound-system:"$provider_aws"
+```
+
+Restart `crossplane` and `provider aws` pods for the changes to take effect
+
+```bash {copy-lines="all"} 
+AWS_POD=$(kubectl get pods -n upbound-system | grep provider-aws | awk '{print $1}') && \
+          kubectl delete pod -n upbound-system $AWS_POD
+
+CROSSPLANE_POD=$(kubectl get pods -n upbound-system | grep crossplane | awk '{print $1}') && \
+          kubectl delete pod -n upbound-system $CROSSPLANE_POD
 ```
 
 <!-- vale off -->
